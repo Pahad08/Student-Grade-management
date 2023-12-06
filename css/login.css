@@ -1,0 +1,115 @@
+:root {
+    --white: #fffffe;
+    --darkblue: #094067;
+    --gray: #5f6c7b;
+    --skyblue: #3da9fc;
+    --lightblue: #90b4ce;
+    --red: #ef4565;
+    --font-1rem: 1rem;
+    --black: #000;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: url("../images/schoolbackground.jpg");
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: var(--darkblue);
+}
+
+.login-container {
+    background: rgb(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.form-header h1,
+#text-forgot {
+    font-size: var(--font-1rem);
+    color: var(--darkblue);
+}
+
+#text-forgot {
+    text-align: center;
+}
+
+.form-header img {
+    width: 40%;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--darkblue);
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-body p {
+    font-size: 0.8rem;
+    color: var(--red);
+}
+
+label::after {
+    content: ' *';
+    color: var(--red);
+}
+
+input,
+select,
+button {
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+button {
+    color: var(--white);
+    background: var(--skyblue);
+    cursor: pointer;
+    font-size: var(--font-1rem);
+}
+
+#forgot-pass {
+    margin: auto;
+    transition: 0.1s;
+}
+
+#forgot-pass:hover {
+    color: var(--gray);
+}
