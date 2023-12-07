@@ -20,6 +20,7 @@ body {
     background: url("../images/schoolbackground.jpg");
     background-position: center;
     background-attachment: fixed;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;

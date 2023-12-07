@@ -27,74 +27,113 @@ function redirect($conn, $location, $user_id)
     exit();
 }
 
+function CleanData($conn, $data)
+{
+    $data = stripslashes($data);
+    $data = trim($data);
+    $data = htmlspecialchars($data);
+    $data = mysqli_real_escape_string($conn, $data);
+    return $data;
+}
+
 if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     require 'conn.php';
 
-    switch ($_POST['usertype']) {
-        case '1':
+    if (empty($_POST['username']) || empty($_POST['password'])) {
+        $mess_failed = "Username or password cannot be empty.";
+        $conn->close();
+    } else {
+        switch ($_POST['usertype']) {
+            case '1':
 
-            $user = SelectUser($conn, "admins", $_POST['username']);
-            $user_info = $user->fetch_assoc();
-            $user_id = ($user->num_rows > 0) ? $user_info['admin_id'] : "";
-            $username = ($user->num_rows > 0) ? $user_info['username'] : "";
-            $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
+                $user = SelectUser($conn, "admins", CleanData($conn, $_POST['username']));
+                $user_info = $user->fetch_assoc();
+                $user_id = ($user->num_rows > 0) ? $user_info['admin_id'] : "";
+                $username = ($user->num_rows > 0) ? $user_info['username'] : "";
+                $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
-            if ($user->num_rows > 0 && password_verify($_POST['password'], $hashed_pass)) {
-                redirect($conn, "admin.php", $user_id);
-            } else {
-                $mess_failed = "Incorrect Username or Password";
-                $conn->close();
-            }
+                if ($user->num_rows > 0 && password_verify(CleanData($conn, $_POST['password']), $hashed_pass)) {
+                    redirect($conn, "admin.php", $user_id);
+                } else {
+                    $mess_failed = "Incorrect Username or Password";
+                    $conn->close();
+                }
 
-            break;
+                break;
 
-        case '2':
+            case '2':
 
-            $user = SelectUser($conn, "students", $_POST['username']);
-            $user_info = $user->fetch_assoc();
-            $user_id = ($user->num_rows > 0) ? $user_info['admin_id'] : "";
-            $username = ($user->num_rows > 0) ? $user_info['username'] : "";
-            $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
+                $user = SelectUser($conn, "students", CleanData($conn, $_POST['username']));
+                $user_info = $user->fetch_assoc();
+                $user_id = ($user->num_rows > 0) ? $user_info['admin_id'] : "";
+                $username = ($user->num_rows > 0) ? $user_info['username'] : "";
+                $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
-            if ($user->num_rows > 0 && password_verify($_POST['password'], $hashed_pass)) {
-                redirect($conn, "student.php", $user_id);
-            } else {
-                $mess_failed = "Incorrect Username or Password";
-                $conn->close();
-            }
+                if ($user->num_rows > 0 && password_verify(CleanData($conn, $_POST['password']), $hashed_pass)) {
+                    redirect($conn, "student.php", $user_id);
+                } else {
+                    $mess_failed = "Incorrect Username or Password";
+                    $conn->close();
+                }
 
-            break;
+                break;
+        }
     }
 }
 
 if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $token = bin2hex(random_bytes(32));
-    $resetLink = "localhost/studentmanagement/reset_password.php?token=" . $token;
+    require 'conn.php';
 
-    try {
-        $mail = new PHPMailer(true);
+    $query = $conn->prepare("SELECT admins.email FROM admins where email = ?
+    UNION SELECT students.email FROM students where email = ?;");
+    $query->bind_param("ss", $_POST['email'],  $_POST['email']);
+    $query->execute();
+    $result = $query->get_result();
+    $row = $result->fetch_array();
 
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'mastahpahad@gmail.com';
-        $mail->Password   = 'gaocjcwwezyylzvk';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port = 465;
+    if ($result->num_rows == 0) {
+        $mess_failed = "Email not found";
+        $conn->close();
+        echo "<script>alert('Email not found!')
+        window.location.href = 'login.php?r=forgotpass'</script>";
+    } else {
 
-        $mail->setFrom('mastahpahad@gmail.com');
-        $mail->addAddress($_POST['email']);
+        $email = $row['email'];
+        $token = bin2hex(random_bytes(32));
+        $expiration_date = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+        $sql = "INSERT into token(token, expiration_date, email) values(?,?,?);";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $token, $expiration_date, $email);
+        $stmt->execute();
+        $conn->close();
+        $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : "resetpassword.com";
+        $resetLink = $base_url . "/reset_password.php?token=" . $token;
 
-        $mail->isHTML(true);
-        $mail->Subject = 'Reset Password';
-        $mail->Body =  "<a href='$resetLink'>Click here to reset your password</a>";
+        try {
+            $mail = new PHPMailer(true);
 
-        $mail->send();
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'mastahpahad@gmail.com';
+            $mail->Password   = 'gaocjcwwezyylzvk';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port = 465;
 
-        echo "<script>alert('Check Your Email!')</script>";
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $mail->setFrom('mastahpahad@gmail.com');
+            $mail->addAddress($_POST['email']);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Reset Password';
+            $mail->Body =  "<a href='$resetLink'>Click here to reset your password</a>";
+
+            $mail->send();
+
+            echo "<script>alert('Check Your Email!')</script>";
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     }
 }
 
@@ -172,7 +211,7 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
         <hr>
 
         <?php if (!isset($_GET['r'])) { ?>
-            <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?r=forgotpass" ?>" id="forgot-pass">Forgot
+            <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?r=forgotpass")  ?>" id="forgot-pass">Forgot
                 Password</a>
         <?php } else { ?>
             <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="forgot-pass">Login Here</a>
