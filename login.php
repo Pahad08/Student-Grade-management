@@ -9,9 +9,17 @@ require 'PHPMailer/src/SMTP.php';
 
 session_start();
 
+if (isset($_SESSION['admin_id'])) {
+    header("location: admin.php");
+} elseif (isset($_SESSION['student_id'])) {
+    header("location: student.php");
+}
+
 function SelectUser($conn, $usertype, $username)
 {
-    $stmt = $conn->prepare("SELECT * from $usertype WHERE username = ?");
+    $stmt = $conn->prepare("SELECT * from accounts
+    join $usertype on accounts.account_id = $usertype.account_id
+    where username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -19,9 +27,9 @@ function SelectUser($conn, $usertype, $username)
     return $result;
 }
 
-function redirect($conn, $location, $user_id)
+function redirect($conn, $location, $user_id, $usertype)
 {
-    $_SESSION['id'] = $user_id;
+    $_SESSION[$usertype . "_id"] = $user_id;
     $conn->close();
     header("location:" . $location);
     exit();
@@ -53,7 +61,7 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
                 if ($user->num_rows > 0 && password_verify(CleanData($conn, $_POST['password']), $hashed_pass)) {
-                    redirect($conn, "admin.php", $user_id);
+                    redirect($conn, "admin.php", $user_id, "admin");
                 } else {
                     $mess_failed = "Incorrect Username or Password";
                     $conn->close();
@@ -70,69 +78,13 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
                 if ($user->num_rows > 0 && password_verify(CleanData($conn, $_POST['password']), $hashed_pass)) {
-                    redirect($conn, "student.php", $user_id);
+                    redirect($conn, "student.php", $user_id, "student");
                 } else {
                     $mess_failed = "Incorrect Username or Password";
                     $conn->close();
                 }
 
                 break;
-        }
-    }
-}
-
-if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
-
-    require 'conn.php';
-
-    $query = $conn->prepare("SELECT admins.email FROM admins where email = ?
-    UNION SELECT students.email FROM students where email = ?;");
-    $query->bind_param("ss", $_POST['email'],  $_POST['email']);
-    $query->execute();
-    $result = $query->get_result();
-    $row = $result->fetch_array();
-
-    if ($result->num_rows == 0) {
-        $mess_failed = "Email not found";
-        $conn->close();
-        echo "<script>alert('Email not found!')
-        window.location.href = 'login.php?r=forgotpass'</script>";
-    } else {
-
-        $email = $row['email'];
-        $token = bin2hex(random_bytes(32));
-        $expiration_date = date('Y-m-d H:i:s', strtotime('+5 minutes'));
-        $sql = "INSERT into token(token, expiration_date, email) values(?,?,?);";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $token, $expiration_date, $email);
-        $stmt->execute();
-        $conn->close();
-        $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : "resetpassword.com";
-        $resetLink = $base_url . "/reset_password.php?token=" . $token;
-
-        try {
-            $mail = new PHPMailer(true);
-
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'mastahpahad@gmail.com';
-            $mail->Password   = 'gaocjcwwezyylzvk';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port = 465;
-
-            $mail->setFrom('mastahpahad@gmail.com');
-            $mail->addAddress($_POST['email']);
-
-            $mail->isHTML(true);
-            $mail->Subject = 'Reset Password';
-            $mail->Body =  "<a href='$resetLink'>Click here to reset your password</a>";
-
-            $mail->send();
-
-            echo "<script>alert('Check Your Email!')</script>";
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 }
@@ -151,6 +103,10 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+
+    <div class="loader-body">
+        <div id="loader"></div>
+    </div>
 
     <div class="login-container">
 
@@ -196,7 +152,7 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         <?php } else { ?>
 
-            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="login-form" method="POST">
+            <form id="login-form" method="POST">
 
                 <div class="input-body">
                     <label for="Email">Email</label>
@@ -220,5 +176,7 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
 </body>
+
+<script src="js/login.js"></script>
 
 </html>

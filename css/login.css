@@ -41,6 +41,44 @@ a {
     gap: 20px;
 }
 
+.loader-body {
+    display: none;
+}
+
+.loader-body-show {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#loader {
+
+    position: relative;
+    z-index: 1;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--skyblue);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 1s linear infinite;
+    top: 45%;
+    left: 47.5%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .form-header {
     display: flex;
     flex-direction: column;
