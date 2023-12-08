@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2023 at 05:54 AM
+-- Generation Time: Dec 08, 2023 at 03:56 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -34,6 +34,14 @@ CREATE TABLE `accounts` (
   `password` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`account_id`, `username`, `email`, `password`) VALUES
+(1, 'admin', 'mastahpahad@gmail.com', '$2y$10$vtPVSS0KuRwV85cuxzH2TuL22WbXDWpRyDkiGdQgpaXYCWr133Axa'),
+(2, 'fahad', 'fmbagundang.stjohn@gmail.com', '$2y$10$8cQsmcIv/ZQOlmwrhc9yiOYrnqAUIUuwIO.Tp7HdRr/tcwyUwCq16');
+
 -- --------------------------------------------------------
 
 --
@@ -42,11 +50,17 @@ CREATE TABLE `accounts` (
 
 CREATE TABLE `admins` (
   `admin_id` int(11) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `account_id` int(11) NOT NULL
+  `account_id` int(11) NOT NULL,
+  `f_name` varchar(200) NOT NULL,
+  `l_name` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admins`
+--
+
+INSERT INTO `admins` (`admin_id`, `account_id`, `f_name`, `l_name`) VALUES
+(2, 1, 'Admin', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -77,6 +91,13 @@ CREATE TABLE `students` (
   `account_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`student_id`, `f_name`, `l_name`, `contact_number`, `section`, `grade_level`, `profile_pic`, `account_id`) VALUES
+(3, 'Fahad', 'Bagundang', '09365896124', 'A', '3rd-year', '', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -100,7 +121,7 @@ CREATE TABLE `token` (
   `token_id` int(11) NOT NULL,
   `token` varchar(200) NOT NULL,
   `expiration_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `email` varchar(100) NOT NULL
+  `email` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -119,8 +140,6 @@ ALTER TABLE `accounts`
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`admin_id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `account_id` (`account_id`);
 
 --
@@ -159,13 +178,13 @@ ALTER TABLE `token`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `grades`
@@ -177,7 +196,7 @@ ALTER TABLE `grades`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `subjects`
@@ -189,7 +208,7 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `token`
 --
 ALTER TABLE `token`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Constraints for dumped tables

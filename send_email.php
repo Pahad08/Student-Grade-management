@@ -1,5 +1,13 @@
 <?php
-if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
+if (isset($_POST['email'])) {
 
     require 'conn.php';
 
@@ -10,10 +18,7 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $row = $result->fetch_array();
 
     if ($result->num_rows == 0) {
-        $mess_failed = "Email not found";
-        $conn->close();
-        echo "<script>alert('Email not found!')
-        window.location.href = 'login.php?r=forgotpass'</script>";
+        echo json_encode(['error' => 'Theres an error, please try again']);
     } else {
 
         $email = $row['email'];
@@ -24,8 +29,9 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sss", $token, $expiration_date, $email);
         $stmt->execute();
         $conn->close();
-        $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : "resetpassword.com";
-        $resetLink =  urlencode($base_url . "/reset_password.php?token=" . $token);
+        $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : "domainwebsite.com";
+        $resetLink =  $base_url . "/reset_password.php?token=" . urlencode($token);
+        $conn->close();
 
         try {
             $mail = new PHPMailer(true);
@@ -45,11 +51,11 @@ if (isset($_POST['submit']) && $_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Subject = 'Reset Password';
             $mail->Body =  "<a href='$resetLink'>Click here to reset your password</a>";
 
-            $mail->send();
-
-            echo "<script>alert('Check Your Email!')</script>";
+            if ($mail->send()) {
+                echo json_encode(['status' => 'OK', 'message' => 'Check your email!']);
+            }
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo json_encode(['error' => 'Theres an error, please try again']);
         }
     }
 }

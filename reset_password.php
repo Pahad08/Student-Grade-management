@@ -10,27 +10,6 @@ $data = $result->fetch_assoc();
 $current_time = time();
 $token = $data['token'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // $sql1 = "DELETE from token where token = ?;";
-    // $stmt1 = $conn->prepare($sql1);
-    // $stmt1->bind_param("s", $token);
-    // $stmt1->execute();
-
-    // $sql2 = "SELECT email from token where token = ?";
-    // $stmt2 = $conn->prepare($sql2);
-    // $stmt2->bind_param("s", $token);
-    // $stmt2->execute();
-
-    // $sql2 = "UPDATE ";
-    // $stmt2 = $conn->prepare($sql2);
-    // $stmt2->bind_param("s", $token);
-    // $stmt2->execute();
-
-    echo "<script>alert('Your password has been reset successfully!')
-    window.location.href = 'login.php'</script>";
-}
-
 if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
     $conn->close();
     header("location: login.php");
@@ -51,6 +30,10 @@ if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
 
 <body>
 
+    <div class="loader-body">
+        <div id="loader"></div>
+    </div>
+
     <div class="login-container">
 
         <div class="form-header">
@@ -58,17 +41,21 @@ if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
             <h2>Reset Password</h2>
         </div>
 
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?token=" . $token); ?>" id="login-form">
+        <form class="form" id="reset-form">
 
             <div class="input-body">
                 <label for="password">New Password</label>
-                <input type="password" name="password" required placeholder="Enter new password"><br>
+                <input type="password" name="password" required placeholder="Enter new password">
             </div>
+
+            <input type="text" name="token" value="<?php echo $token; ?>" hidden>
 
             <button id="reset-pass" value="password" name="password">Reset Password</button>
         </form>
     </div>
 
 </body>
+
+<script src="js/login.js"></script>
 
 </html>

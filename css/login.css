@@ -53,10 +53,12 @@ a {
     top: 0;
     left: 0;
     z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #loader {
-
     position: relative;
     z-index: 1;
     border: 4px solid #f3f3f3;
@@ -65,8 +67,6 @@ a {
     width: 100px;
     height: 100px;
     animation: spin 1s linear infinite;
-    top: 45%;
-    left: 47.5%;
 }
 
 @keyframes spin {
@@ -100,7 +100,7 @@ a {
     width: 40%;
 }
 
-#login-form {
+.form {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -111,6 +111,15 @@ a {
     flex-direction: column;
     gap: 4px;
     color: var(--darkblue);
+    position: relative;
+}
+
+.input-body img {
+    width: 20px;
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    cursor: pointer;
 }
 
 label {
@@ -136,6 +145,11 @@ button {
     border-radius: 4px;
     outline: none;
 }
+
+input[type="password"] {
+    padding-right: 32px;
+}
+
 
 button {
     color: var(--white);
