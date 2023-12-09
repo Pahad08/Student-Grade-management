@@ -2,7 +2,6 @@ const email_form = document.querySelector("#email-form");
 const reset_form = document.querySelector("#reset-form");
 const show_password = document.querySelector("#eye");
 const loader = document.querySelector(".loader-body");
-console.log(email_form)
 
 function ShowLoader() {
 

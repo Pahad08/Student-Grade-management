@@ -18,7 +18,7 @@ if (isset($_POST['email'])) {
     $row = $result->fetch_array();
 
     if ($result->num_rows == 0) {
-        echo json_encode(['error' => 'Theres an error, please try again']);
+        echo json_encode(['error' => 'No Email Found']);
     } else {
 
         $email = $row['email'];
@@ -28,7 +28,6 @@ if (isset($_POST['email'])) {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $token, $expiration_date, $email);
         $stmt->execute();
-        $conn->close();
         $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : "domainwebsite.com";
         $resetLink =  $base_url . "/reset_password.php?token=" . urlencode($token);
         $conn->close();
