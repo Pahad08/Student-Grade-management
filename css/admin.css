@@ -76,28 +76,25 @@ a {
     color: var(--white);
 }
 
-.active a {
+.active a,
+.dropdown-text {
     color: var(--white);
 }
 
 ul a,
-.add-student {
+.dropdown-text {
+    color: var(--gray);
     padding: 10px;
     cursor: pointer;
 }
 
-ul a {
-    color: var(--black);
-}
-
 ul a:hover,
-.add-student:hover {
+.dropdown-text:hover {
     color: white;
-
 }
 
 ul a:not(.active):hover,
-.add-student:hover {
+.dropdown-text:hover {
     background: var(--gray);
 }
 
@@ -106,12 +103,45 @@ ul a:not(.active):hover,
     justify-content: space-between;
 }
 
-.dropdown-text img {
+.dropdown-text .arrow {
+    margin-left: 50px;
+}
+
+.arrow {
     width: 10%;
 }
 
 .dropdown {
     display: none;
+    margin-left: 5px;
+}
+
+.dropdown li {
+    display: flex;
+}
+
+.dropdown li img {
+    margin-left: 10px;
+}
+
+/*
+.dropdown li p {
+    flex-grow: 1;
+} */
+
+.dropdown li img {
+    transform: rotate(-90deg);
+    object-fit: contain;
+}
+
+.show {
+    display: block;
+}
+
+.dropdown>ul:nth-child(1) :hover,
+.dropdown>ul:nth-child(2) :hover {
+    background: var(--gray);
+    /* color: var(--white); */
 }
 
 /* body */

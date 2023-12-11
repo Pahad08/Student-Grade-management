@@ -1,5 +1,7 @@
 const menu_icon = document.querySelector("#menu-icon");
 
+
+//sidebar function
 if (menu_icon) {
     menu_icon.addEventListener("click", () => {
         const body = document.querySelector(".body");

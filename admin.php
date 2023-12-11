@@ -49,18 +49,23 @@ if (!isset($_SESSION['admin_id'])) {
                 <li><a href="subject.php">Subjects</a></li>
             </ul>
 
-            <ul class="add-student">
-                <li>
-                    <div class="dropdown-text">
-                        <p>Students</p>
-                        <img src="images/arrow.png" alt="arrow">
-                    </div>
+            <ul class="dropdown-text">
+                <p>Students</p>
+                <img src="images/arrow.png" alt="arrow" class="arrow">
+            </ul>
 
-                    <ul class="dropdown">
-                        <li><a href="view_students.php">Add Students</a></li>
-                        <li><a href="add_students.php">View Students</a></li>
-                    </ul>
-                </li>
+            <ul class="dropdown">
+                <ul>
+                    <li> <img src="images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
+                            Students</a>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li> <img src="images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
+                            Students</a>
+                    </li>
+                </ul>
             </ul>
 
             <ul class="sections">
