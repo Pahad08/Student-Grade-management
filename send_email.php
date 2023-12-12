@@ -28,7 +28,7 @@ if (isset($_POST['email'])) {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $token, $expiration_date, $email);
         $stmt->execute();
-        $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : "domainwebsite.com";
+        $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : $_SERVER['HTTP_HOST'] . ".com";
         $resetLink =  $base_url . "/reset_password.php?token=" . urlencode($token);
         $conn->close();
 

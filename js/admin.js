@@ -1,21 +1,24 @@
-const dropdown = document.querySelector(".dropdown-text");
+const dropdown = document.querySelectorAll(".dropdown-text");
 const arrow = document.querySelector(".arrow");
 
 //toggle drowdown
 if (dropdown) {
-    dropdown.addEventListener("click", () => {
-        const dropdown_menu = document.querySelector(".dropdown-text+.dropdown");
-        const arrow = document.querySelector(".arrow");
 
-        if (dropdown_menu.classList.contains("show")) {
+    dropdown.forEach((element) => {
+        element.addEventListener("click", () => {
 
-            dropdown_menu.classList.toggle("show");
-            arrow.style.transform = "rotate(0deg)";
+            const dropdown_body = element.nextElementSibling;
+            const arrow = element.lastElementChild;
 
-        } else if (dropdown_menu.classList.contains("dropdown")) {
-            arrow.style.transform = "rotate(-180deg)";
-            dropdown_menu.classList.toggle("show");
-        }
+            if (dropdown_body.classList.contains("show")) {
+                dropdown_body.classList.toggle("show");
+                arrow.style.transform = "rotate(0deg)";
 
+            } else if (dropdown_body.classList.contains("dropdown")) {
+                arrow.style.transform = "rotate(-180deg)";
+                dropdown_body.classList.toggle("show");
+            }
+        })
     })
+
 }
