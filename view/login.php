@@ -7,24 +7,20 @@ if (isset($_SESSION['admin_id'])) {
     header("location: student.php");
 }
 
-require_once 'controller.php';
+require_once '../controller/controller.php';
 
 if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST['username']) || empty($_POST['password'])) {
         $mess_failed = "Username or password cannot be empty.";
     } else {
-
         $controller = new controller("localhost", "root", "", "school");
-
         if ($_POST['usertype'] == 1) {
-            $controller->login("admins", $_POST['username'], $_POST['password']);
+            $mess_failed = $controller->login("admins", $_POST['username'], $_POST['password']);
         } else {
-            $controller->login("students", $_POST['username'], $_POST['password']);
+            $mess_failed = $controller->login("students", $_POST['username'], $_POST['password']);
         }
     }
-} else {
-    echo "<script>alert('ERROR')</script>";
 }
 
 ?>
@@ -35,8 +31,8 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <title>Login</title>
 </head>
 
@@ -49,7 +45,7 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-container">
 
         <div class="form-header">
-            <img src="images/logo.png" alt="school">
+            <img src="../images/logo.png" alt="school">
             <?php if (!isset($_GET['r'])) { ?>
                 <h1>School Management System</h1>
             <?php } else { ?>
@@ -72,7 +68,7 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-body">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter Your Password">
-                    <img src="images/close-eye.png" id="eye">
+                    <img src="../images/close-eye.png" id="eye">
                     <?php if (isset($mess_failed)) { ?>
                         <p><?php echo $mess_failed; ?></p>
                     <?php unset($mess_failed);
@@ -103,10 +99,19 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
         <?php } ?>
 
+        <hr>
+
+        <?php if (!isset($_GET['r'])) { ?>
+            <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?r=forgotpass")  ?>" id="forgot-pass">Forgot
+                Password</a>
+        <?php } else { ?>
+            <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="forgot-pass">Login Here</a>
+        <?php } ?>
+
     </div>
 
 </body>
 
-<script src="js/login.js"></script>
+<script src="../js/login.js"></script>
 
 </html>
