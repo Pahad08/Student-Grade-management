@@ -13,7 +13,12 @@ class Model
         }
     }
 
-    function SelectUser($usertype, $username)
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    public function SelectUser($usertype, $username)
     {
         $stmt = $this->db->prepare("SELECT * from accounts
         join $usertype on accounts.account_id = $usertype.account_id
@@ -25,8 +30,20 @@ class Model
         return $result;
     }
 
-    function getDb()
+    public function SelectEmail($email)
     {
-        return $this->db;
+        $query = $this->db->prepare("SELECT email from accounts where email = ?;");
+        $query->bind_param("s", $email);
+        $query->execute();
+        $result = $query->get_result();
+
+        return $result->num_rows;
+    }
+
+    public function InsertToken($token, $expiration_date, $email)
+    {
+        $query = $this->db->prepare("INSERT into token(token, expiration_date, email) values(?,?,?);");
+        $query->bind_param("sss", $token, $expiration_date, $email);
+        $query->execute();
     }
 }

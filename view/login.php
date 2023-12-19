@@ -7,7 +7,7 @@ if (isset($_SESSION['admin_id'])) {
     header("location: student.php");
 }
 
-require_once '../controller/controller.php';
+require_once dirname(__DIR__) . "\\controller\\controller.php";
 
 if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -86,7 +86,6 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                 <button name="login" id="login-btn" value="login">Login</button>
             </form>
         <?php } else { ?>
-
             <form id="email-form" method="POST" class="form">
 
                 <div class="input-body">
@@ -102,6 +101,7 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
         <hr>
 
         <?php if (!isset($_GET['r'])) { ?>
+
             <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?r=forgotpass")  ?>" id="forgot-pass">Forgot
                 Password</a>
         <?php } else { ?>

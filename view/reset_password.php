@@ -1,5 +1,4 @@
 <?php
-require 'conn.php';
 
 $sql = "SELECT * from token where token = ?;";
 $stmt = $conn->prepare($sql);
