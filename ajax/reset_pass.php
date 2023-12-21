@@ -1,7 +1,7 @@
 <?php
 
 if (isset($_POST['password']) && isset($_POST['token'])) {
-    require 'conn.php';
+
     $sql1 = "SELECT email from token where token = ?";
     $stmt1 = $conn->prepare($sql1);
     $stmt1->bind_param("s", $_POST['token']);

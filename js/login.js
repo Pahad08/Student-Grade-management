@@ -23,7 +23,7 @@ if (email_form) {
 
         ShowLoader();
 
-        ajax.open("POST", "send_email.php");
+        ajax.open("POST", "../ajax/send_email.php");
 
         ajax.onreadystatechange = () => {
 
@@ -32,10 +32,12 @@ if (email_form) {
                 const response = JSON.parse(ajax.responseText);
                 HideLoader();
                 if (response.status == 'OK') {
-
                     alert(response.message);
-                } else {
+                } else if (response.status == 'error') {
                     alert(response.error);
+                }
+                else {
+                    alert(response.empty);
                 }
             }
 

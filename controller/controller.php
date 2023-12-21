@@ -1,6 +1,13 @@
 <?php
 
-require_once '../model/model.php';
+require '../model/model.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../PHPMailer/src/Exception.php';
+require '../PHPMailer/src/PHPMailer.php';
+require '../PHPMailer/src/SMTP.php';
 
 class controller
 {
@@ -44,7 +51,8 @@ class controller
                 if ($user->num_rows > 0 && password_verify($this->CleanData($conn, $password), $hashed_pass)) {
                     $this->redirect($conn, "admin.php", $user_id, $usertype);
                 } else {
-                    return "Incorrect Username or Password";
+                    $conn->close();
+                    return $mess_failed = "Incorrect Username or Password";
                 }
 
                 break;
@@ -61,15 +69,11 @@ class controller
 
                     $this->redirect($conn, "student.php", $user_id, $usertype);
                 } else {
-                    return "Incorrect Username or Password";
+                    $conn->close();
+                    return $mess_failed = "Incorrect Username or Password";
                 }
 
                 break;
         }
-    }
-
-    public function GetSubjects($num_perpage, $offset)
-    {
-        return $this->model->SelectUser($num_perpage, $offset);
     }
 }
