@@ -76,4 +76,14 @@ class controller
                 break;
         }
     }
+
+    public function GetSubjects($num_perpage, $offset)
+    {
+        return $this->model->SelectSubject($num_perpage, $offset);
+    }
+
+    public function GetTotalpages($num_perpage)
+    {
+        return $this->model->TotalPages($num_perpage);
+    }
 }

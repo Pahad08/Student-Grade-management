@@ -30,7 +30,6 @@ class Model
         return $result;
     }
 
-<<<<<<< HEAD
     public function SelectSubject($num_perpage, $offset)
     {
         $query = "SELECT * from subjects LIMIT $num_perpage OFFSET $offset";
@@ -51,7 +50,8 @@ class Model
         $total_pages = ceil($count['total_pages'] / $num_perpage);
 
         return $total_pages;
-=======
+    }
+
     public function SelectEmail($email)
     {
         $query = $this->db->prepare("SELECT email from accounts where email = ?;");
@@ -67,6 +67,5 @@ class Model
         $query = $this->db->prepare("INSERT into token(token, expiration_date, email) values(?,?,?);");
         $query->bind_param("sss", $token, $expiration_date, $email);
         $query->execute();
->>>>>>> 11a1f3435159c47c1fe3c85e95cc476dab46215f
     }
 }
