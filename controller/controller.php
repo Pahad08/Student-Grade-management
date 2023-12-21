@@ -44,8 +44,7 @@ class controller
                 if ($user->num_rows > 0 && password_verify($this->CleanData($conn, $password), $hashed_pass)) {
                     $this->redirect($conn, "admin.php", $user_id, $usertype);
                 } else {
-                    $conn->close();
-                    return $mess_failed = "Incorrect Username or Password";
+                    return "Incorrect Username or Password";
                 }
 
                 break;
@@ -62,11 +61,15 @@ class controller
 
                     $this->redirect($conn, "student.php", $user_id, $usertype);
                 } else {
-                    $conn->close();
-                    return $mess_failed = "Incorrect Username or Password";
+                    return "Incorrect Username or Password";
                 }
 
                 break;
         }
+    }
+
+    public function GetSubjects($num_perpage, $offset)
+    {
+        return $this->model->SelectUser($num_perpage, $offset);
     }
 }

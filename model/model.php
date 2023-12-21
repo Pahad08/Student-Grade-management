@@ -6,14 +6,19 @@ class Model
 
     public function __construct($host, $username, $password, $dbname)
     {
-        $this->db = new mysqli("localhost", "root", "", "school");
+        $this->db = new mysqli($host, $username, $password, $dbname);
 
         if ($this->db->connect_error) {
             die("Connection failed: " . $this->db->connect_error);
         }
     }
 
-    function SelectUser($usertype, $username)
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    public function SelectUser($usertype, $username)
     {
         $stmt = $this->db->prepare("SELECT * from accounts
         join $usertype on accounts.account_id = $usertype.account_id
@@ -25,8 +30,25 @@ class Model
         return $result;
     }
 
-    function getDb()
+    public function SelectSubject($num_perpage, $offset)
     {
-        return $this->db;
+        $query = "SELECT * from subjects LIMIT $num_perpage OFFSET $offset";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    public function TotalPages($num_perpage)
+    {
+        $sql = "SELECT count(subject_id) as total_pages from subjects";
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $count_result = $statement->get_result();
+        $count = $count_result->fetch_assoc();
+        $total_pages = ceil($count['total_pages'] / $num_perpage);
+
+        return $total_pages;
     }
 }

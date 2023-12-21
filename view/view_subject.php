@@ -2,10 +2,10 @@
 
 session_start();
 
-if (!isset($_SESSION['admin_id'])) {
+if (!isset($_SESSION['admins_id'])) {
     header("location: login.php");
 } else {
-    require 'conn.php';
+    require_once __DIR__;
 }
 
 if (!isset($_GET['page_num']) || $_GET['page_num'] <= 0) {
@@ -18,19 +18,6 @@ $next_page =  $_GET['page_num'] + 1;
 $prev_page =  $_GET['page_num'] - 1;
 $offset = ($page_num * $num_perpage) - $num_perpage;
 
-$query = "SELECT * from subjects LIMIT $num_perpage OFFSET $offset";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$sql = "SELECT count(subject_id) as total_pages from subjects";
-$statement = $conn->prepare($sql);
-$statement->execute();
-$count_result = $statement->get_result();
-$count = $count_result->fetch_assoc();
-
-$total_pages = ceil($count['total_pages'] / $num_perpage);
-
 ?>
 
 <!DOCTYPE html>
@@ -39,8 +26,8 @@ $total_pages = ceil($count['total_pages'] / $num_perpage);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <title>Subjects</title>
 </head>
 
@@ -49,7 +36,7 @@ $total_pages = ceil($count['total_pages'] / $num_perpage);
     <div class="sidebar">
 
         <div class="logo-header">
-            <img src="images/logo.png" alt="logo">
+            <img src="../images/logo.png" alt="logo">
         </div>
 
         <hr>
@@ -68,18 +55,18 @@ $total_pages = ceil($count['total_pages'] / $num_perpage);
 
             <ul class="dropdown-text active">
                 <p>Subjects</p>
-                <img src="images/arrow.png" alt="arrow" class="arrow">
+                <img src="../images/arrow.png" alt="arrow" class="arrow">
             </ul>
 
             <ul class="dropdown">
                 <ul>
-                    <li> <img src="images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
                             Subjects</a>
                     </li>
                 </ul>
 
                 <ul>
-                    <li> <img src="images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
                             Subjects</a>
                     </li>
                 </ul>
@@ -87,18 +74,18 @@ $total_pages = ceil($count['total_pages'] / $num_perpage);
 
             <ul class="dropdown-text">
                 <p>Students</p>
-                <img src="images/arrow.png" alt="arrow" class="arrow">
+                <img src="../images/arrow.png" alt="arrow" class="arrow">
             </ul>
 
             <ul class="dropdown">
                 <ul>
-                    <li> <img src="images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
                             Students</a>
                     </li>
                 </ul>
 
                 <ul>
-                    <li> <img src="images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
                             Students</a>
                     </li>
                 </ul>
@@ -120,7 +107,7 @@ $total_pages = ceil($count['total_pages'] / $num_perpage);
 
         <div class="header">
             <div class="menu-icon">
-                <img src="images/menu.png" alt="menu" id="menu-icon">
+                <img src="../images/menu.png" alt="menu" id="menu-icon">
             </div>
         </div>
 
@@ -196,7 +183,7 @@ $total_pages = ceil($count['total_pages'] / $num_perpage);
 
 </body>
 
-<script src="js/admin.js"></script>
-<script src="js/nav.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/nav.js"></script>
 
 </html>
