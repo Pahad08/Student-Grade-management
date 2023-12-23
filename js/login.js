@@ -58,7 +58,7 @@ if (reset_form) {
 
         ShowLoader();
 
-        ajax.open("POST", "reset_pass.php");
+        ajax.open("POST", "../ajax/reset_pass.php");
 
         ajax.onreadystatechange = () => {
 

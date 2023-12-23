@@ -18,6 +18,12 @@ class controller
         $this->model = new Model($host, $username, $password, $dbname);
     }
 
+    public function CloseDB()
+    {
+        $conn = $this->model->getDb();
+        return $conn->close();
+    }
+
     public function CleanData($conn, $data)
     {
         $data = stripslashes($data);
@@ -89,7 +95,7 @@ class controller
             $expiration_date = date('Y-m-d H:i:s', time() + (5 * 60));
             $this->model->InsertToken($token, $expiration_date, $email);
             $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : $_SERVER['HTTP_HOST'] . ".com";
-            $resetLink =  $base_url . "/reset_password.php?token=" . urlencode($token);
+            $resetLink =  $base_url . "/view/reset_password.php?token=" . urlencode($token);
 
             try {
                 $mail = new PHPMailer(true);
@@ -125,5 +131,19 @@ class controller
     public function GetTotalpages($num_perpage)
     {
         return $this->model->TotalPages($num_perpage);
+    }
+
+    public function SelectToken()
+    {
+        return $this->model->SelectToken();
+    }
+
+    public function ResetPass($token, $new_pass)
+    {
+        if ($this->model->ResetPass($token, $new_pass)) {
+            return 'success';
+        } else {
+            return 'fail';
+        }
     }
 }

@@ -180,6 +180,7 @@ nav ul a:not(.active):hover,
 
 .main-body {
     display: flex;
+    /* overflow-x: auto; */
 }
 
 .info-card {
@@ -251,6 +252,10 @@ nav ul a:not(.active):hover,
     outline: none;
 }
 
+.table-body {
+    overflow-x: auto;
+}
+
 #table-subject,
 .subject-row,
 .subject-header,
@@ -264,6 +269,10 @@ nav ul a:not(.active):hover,
     margin: auto;
 }
 
+.subject-header {
+    color: var(--darkblue);
+}
+
 .subject-header,
 .subject-data {
     padding: 5px;
@@ -271,6 +280,8 @@ nav ul a:not(.active):hover,
 
 .subject-data {
     text-align: center;
+    color: var(--gray);
+    font-size: 1.2rem;
 }
 
 .action {
@@ -289,7 +300,7 @@ nav ul a:not(.active):hover,
     background: var(--red);
 }
 
-.btn-delete :hover {
+.btn-delete:hover {
     background: var(--darkred);
 }
 
@@ -297,7 +308,40 @@ nav ul a:not(.active):hover,
     background: var(--skyblue);
 }
 
+.btn-edit:hover {
+    background: var(--darkblue);
+}
+
 .edit-sub,
 .delete-sub {
     width: 20px;
+}
+
+/* pagination */
+
+.pagination {
+    padding: 10px 7px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--gray);
+    font-weight: 600;
+}
+
+.pagination-body {
+    display: flex;
+    border: 1px solid var(--gray);
+}
+
+.pages,
+#previous,
+#next {
+    padding: 5px 10px;
+}
+
+#previous {
+    border-right: 1px solid var(--gray);
+}
+
+.pages {
+    border-right: 1px solid var(--gray);
 }

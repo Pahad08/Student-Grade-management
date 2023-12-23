@@ -1,16 +1,15 @@
 <?php
 
-$sql = "SELECT * from token where token = ?;";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $_GET["token"]);
-$stmt->execute();
-$result = $stmt->get_result();
-$data = $result->fetch_assoc();
-$current_time = time();
-$token = $data['token'];
+require_once dirname(__DIR__) . "\\controller\\controller.php";
 
-if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
-    $conn->close();
+$controller = new controller("localhost", "root", "", "school");
+$token_data = $controller->SelectToken();
+$expiration_date = $token_data['expiration_date'];
+$token = $token_data['token'];
+$current_time = time();
+
+if (strtotime($token_data['expiration_date']) < $current_time || empty($token)) {
+    $controller->CloseDB();
     header("location: login.php");
 }
 
@@ -22,7 +21,7 @@ if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="../css/login.css">
     <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
     <title>Reset Password</title>
 </head>
@@ -36,7 +35,7 @@ if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
     <div class="login-container">
 
         <div class="form-header">
-            <img src="images/logo.png" alt="school">
+            <img src="../images/logo.png" alt="school">
             <h2>Reset Password</h2>
         </div>
 
@@ -55,6 +54,6 @@ if (strtotime($data['expiration_date']) < $current_time || empty($token)) {
 
 </body>
 
-<script src="js/login.js"></script>
+<script src="../js/login.js"></script>
 
 </html>

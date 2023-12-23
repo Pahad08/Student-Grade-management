@@ -68,4 +68,42 @@ class Model
         $query->bind_param("sss", $token, $expiration_date, $email);
         $query->execute();
     }
+
+    public function SelectToken()
+    {
+        $sql = "SELECT * from token where token = ?;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("s", $_GET["token"]);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_assoc();
+
+        return $data;
+    }
+
+    public function ResetPass($token, $new_pass)
+    {
+        $sql1 = "SELECT email from token where token = ?";
+        $stmt1 = $this->db->prepare($sql1);
+        $stmt1->bind_param("s", $token);
+        $stmt1->execute();
+        $result1 = $stmt1->get_result();
+        $row = $result1->fetch_assoc();
+        $email = $row['email'];
+        $password = password_hash($new_pass, PASSWORD_BCRYPT);
+
+        $sql2 = "UPDATE accounts SET `password` = ? where email = ?";
+        $stmt2 = $this->db->prepare($sql2);
+        $stmt2->bind_param("ss", $password, $email);
+
+        $sql3 = "DELETE from token where token = ?;";
+        $stmt3 = $this->db->prepare($sql3);
+        $stmt3->bind_param("s", $token);
+
+        if ($stmt3->execute() && $stmt2->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
