@@ -52,7 +52,7 @@ class controller
                     $this->redirect($conn, "admin.php", $user_id, $usertype);
                 } else {
                     $conn->close();
-                    return $mess_failed = "Incorrect Username or Password";
+                    return "Incorrect Username or Password";
                 }
 
                 break;
@@ -70,10 +70,50 @@ class controller
                     $this->redirect($conn, "student.php", $user_id, $usertype);
                 } else {
                     $conn->close();
-                    return $mess_failed = "Incorrect Username or Password";
+                    return "Incorrect Username or Password";
                 }
 
                 break;
+        }
+    }
+
+    public function SelectEmail($email)
+    {
+        $result = $this->model->SelectEmail($email);
+
+        if ($result == 0) {
+            return 'error';
+        } else {
+
+            $token = bin2hex(random_bytes(32));
+            $expiration_date = date('Y-m-d H:i:s', time() + (5 * 60));
+            $this->model->InsertToken($token, $expiration_date, $email);
+            $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : $_SERVER['HTTP_HOST'] . ".com";
+            $resetLink =  $base_url . "/reset_password.php?token=" . urlencode($token);
+
+            try {
+                $mail = new PHPMailer(true);
+
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'mastahpahad@gmail.com';
+                $mail->Password   = 'gaocjcwwezyylzvk';
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->Port = 465;
+
+                $mail->setFrom('mastahpahad@gmail.com');
+                $mail->addAddress($email);
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Reset Password';
+                $mail->Body =  "<a href='$resetLink'>Click here to reset your password</a>";
+                if ($mail->send()) {
+                    return 'success';
+                }
+            } catch (Exception $e) {
+                return 'fail';
+            }
         }
     }
 

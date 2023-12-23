@@ -151,12 +151,12 @@ $total_pages = $controller->GetTotalpages($num_perpage);
                                 <td class="subject-data"><?php echo $subjects['code']  ?></td>
                                 <td class="subject-data"><?php echo $subjects['subject']  ?></td>
                                 <td class="subject-data"><?php echo $subjects['description']  ?></td>
-                                <td class="subject-data" id="action">
-                                    <button id="btn-delete" data-id="<?php echo $subjects['subject_id'] ?>">
-                                        <img src="../images/delete.png" alt="delete" id="delete-sub">
+                                <td class="subject-data action">
+                                    <button class="btn-delete" data-id="<?php echo $subjects['subject_id'] ?>">Delete
+                                        <!-- <img src="../images/delete.png" alt="delete" class="delete-sub"> -->
                                     </button>
-                                    <button id="btn-edit" data-id="<?php echo $subjects['subject_id'] ?>">
-                                        <img src="../images/edit.png" alt="Edit" id="edit-sub">
+                                    <button class="btn-edit" data-id="<?php echo $subjects['subject_id'] ?>">
+                                        <img src="../images/edit.png" alt="Edit" class="edit-sub">
                                     </button>
                                 </td>
 
@@ -167,21 +167,29 @@ $total_pages = $controller->GetTotalpages($num_perpage);
 
                         <div class="pagination">
 
-                            <ul id="previous">
-                                <li><a
-                                        <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
-                                </li>
-                            </ul>
+                            <div class="pagination-info">
+                                <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
+                            </div>
 
-                            <ul class="pages">
-                                <ul></ul>
-                            </ul>
+                            <div class="pagination-body">
+                                <ul id="previous">
+                                    <li><a
+                                            <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
+                                    </li>
+                                </ul>
 
-                            <ul id="next">
-                                <li><a
-                                        <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
-                                </li>
-                            </ul>
+                                <ul class="pages">
+                                    <ul></ul>
+                                </ul>
+
+                                <ul id="next">
+                                    <li><a
+                                            <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
 
 
                         </div>

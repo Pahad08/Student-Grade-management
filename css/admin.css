@@ -273,31 +273,31 @@ nav ul a:not(.active):hover,
     text-align: center;
 }
 
-#action {
+.action {
     display: flex;
     border: none;
     justify-content: center;
 }
 
-#action button {
+.action button {
     border: none;
     padding: 5px;
     cursor: pointer;
 }
 
-#btn-delete {
+.btn-delete {
     background: var(--red);
 }
 
-#btn-delete :hover {
+.btn-delete :hover {
     background: var(--darkred);
 }
 
-#btn-edit {
+.btn-edit {
     background: var(--skyblue);
 }
 
-#edit-sub,
-#delete-sub {
+.edit-sub,
+.delete-sub {
     width: 20px;
 }
