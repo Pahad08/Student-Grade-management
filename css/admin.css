@@ -281,7 +281,7 @@ nav ul a:not(.active):hover,
 .subject-data {
     text-align: center;
     color: var(--gray);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .action {
@@ -329,19 +329,44 @@ nav ul a:not(.active):hover,
 
 .pagination-body {
     display: flex;
-    border: 1px solid var(--gray);
+    align-items: center;
+    gap: 5px;
 }
 
-.pages,
-#previous,
-#next {
+.pagination-body a {
+    color: var(--gray);
+}
+
+#previous a,
+#next a,
+.active-page a,
+.next-page a {
     padding: 5px 10px;
+    color: var(--gray);
+    border: 1px solid var(--gray);
+    border-radius: 5px;
 }
 
-#previous {
-    border-right: 1px solid var(--gray);
+.active-page a {
+    color: var(--black);
+    background: var(--lightblue);
+    transition: 0.3s;
 }
 
-.pages {
-    border-right: 1px solid var(--gray);
+.active-page a:hover {
+    background: var(--skyblue);
+    color: var(--white);
+}
+
+.next-page a,
+#next a,
+#previous a {
+    transition: 0.3s;
+}
+
+.next-page a:hover,
+#next a:hover,
+#previous a:hover {
+    background: var(--lightblue);
+    color: var(--black);
 }

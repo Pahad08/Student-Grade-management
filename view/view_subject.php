@@ -24,132 +24,136 @@ $controller = new controller("localhost", "root", "", "school");
 $get_subjects = $controller->GetSubjects($num_perpage, $offset);
 $total_pages = $controller->GetTotalpages($num_perpage);
 
+function Checkpage($total_pages, $page_num)
+{
+    return $total_pages == 1 || $page_num == $total_pages;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/admin.css">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <title>Subjects</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/admin.css">
+        <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
+        <title>Subjects</title>
+    </head>
 
-<body>
+    <body>
 
-    <div class="sidebar">
+        <div class="sidebar">
 
-        <div class="logo-header">
-            <img src="../images/logo.png" alt="logo">
-        </div>
-
-        <hr>
-
-        <div class="user-info">
-            <p>Administrator</p>
-        </div>
-
-        <hr>
-
-        <nav id="nav-bar" class="nav-bar">
-
-            <ul class="dashboard">
-                <li> <a href="admin.php">Dashboard</a></li>
-            </ul>
-
-            <ul class="dropdown-text active">
-                <p>Subjects</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
-                            Subjects</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
-                            Subjects</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Students</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
-                            Students</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
-                            Students</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="sections">
-                <li> <a href="sections.php">Sections</a></li>
-            </ul>
-
-            <ul class="logout">
-                <li><a href="logout.php">Logout</a></a></li>
-            </ul>
-
-        </nav>
-
-    </div>
-
-    <div class="body">
-
-        <div class="header">
-            <div class="menu-icon">
-                <img src="../images/menu.png" alt="menu" id="menu-icon">
-            </div>
-        </div>
-
-        <div class="info">
-
-            <div class="text">
-                <h1>Subjects</h1>
+            <div class="logo-header">
+                <img src="../images/logo.png" alt="logo">
             </div>
 
             <hr>
 
-            <div class="main-body">
+            <div class="user-info">
+                <p>Administrator</p>
+            </div>
 
-                <div class="table-container">
+            <hr>
 
-                    <div class="table-header">
-                        <a href="add_subject.php">Add New</a>
-                    </div>
+            <nav id="nav-bar" class="nav-bar">
 
-                    <div class="search-bar">
-                        <label for="search">Search: </label>
-                        <input type="text" id="search">
-                    </div>
+                <ul class="dashboard">
+                    <li> <a href="admin.php">Dashboard</a></li>
+                </ul>
 
-                    <div class="table-body">
+                <ul class="dropdown-text active">
+                    <p>Subjects</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
 
-                        <table id="table-subject">
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
+                                Subjects</a>
+                        </li>
+                    </ul>
 
-                            <tr class="subject-row">
-                                <th class="subject-header">Code</th>
-                                <th class="subject-header">Subject</th>
-                                <th class="subject-header">Description</th>
-                                <th class="subject-header">Action</th>
-                            </tr>
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
+                                Subjects</a>
+                        </li>
+                    </ul>
+                </ul>
 
-                            <?php while ($subjects = $get_subjects->fetch_assoc()) { ?>
+                <ul class="dropdown-text">
+                    <p>Students</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
+
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
+                                Students</a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
+                                Students</a>
+                        </li>
+                    </ul>
+                </ul>
+
+                <ul class="sections">
+                    <li> <a href="sections.php">Sections</a></li>
+                </ul>
+
+                <ul class="logout">
+                    <li><a href="logout.php">Logout</a></a></li>
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <div class="body">
+
+            <div class="header">
+                <div class="menu-icon">
+                    <img src="../images/menu.png" alt="menu" id="menu-icon">
+                </div>
+            </div>
+
+            <div class="info">
+
+                <div class="text">
+                    <h1>Subjects</h1>
+                </div>
+
+                <hr>
+
+                <div class="main-body">
+
+                    <div class="table-container">
+
+                        <div class="table-header">
+                            <a href="add_subject.php">Add New</a>
+                        </div>
+
+                        <div class="search-bar">
+                            <label for="search">Search: </label>
+                            <input type="text" id="search">
+                        </div>
+
+                        <div class="table-body">
+
+                            <table id="table-subject">
+
+                                <tr class="subject-row">
+                                    <th class="subject-header">Code</th>
+                                    <th class="subject-header">Subject</th>
+                                    <th class="subject-header">Description</th>
+                                    <th class="subject-header">Action</th>
+                                </tr>
+
+                                <?php while ($subjects = $get_subjects->fetch_assoc()) { ?>
                                 <tr class="subject-row">
 
                                     <td class="subject-data"><?php echo $subjects['code']  ?></td>
@@ -165,52 +169,55 @@ $total_pages = $controller->GetTotalpages($num_perpage);
                                     </td>
 
                                 </tr>
-                            <?php } ?>
+                                <?php } ?>
 
-                        </table>
+                            </table>
 
-                    </div>
-
-
-                    <div class="pagination">
-
-                        <div class="pagination-info">
-                            <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
-                        </div>
-
-                        <div class="pagination-body">
-                            <ul id="previous">
-                                <li><a <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
-                                </li>
-                            </ul>
-
-                            <ul class="pages">
-                                <ul> <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}"  ?>"></a><?php echo $min ?> </ul>
-                                <ul> <a href="<?php echo ($total_pages == 1) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}" ?>"><?php echo ($total_pages == 1) ? "" : $max ?></a> </ul>
-                            </ul>
-
-                            <ul id="next">
-                                <li><a <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
-                                </li>
-                            </ul>
                         </div>
 
 
+                        <div class="pagination">
 
+                            <div class="pagination-info">
+                                <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
+                            </div>
+
+                            <ul class="pagination-body">
+                                <li id="previous"><a
+                                        <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
+                                </li>
+
+                                <li class="active-page">
+                                    <a
+                                        href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}"  ?>"><?php echo $min ?></a>
+                                </li>
+
+                                <?php if ($page_num != $total_pages) { ?>
+                                <li class="next-page">
+                                    <a
+                                        href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
+                                </li>
+                                <?php } ?>
+
+                                <li id="next">
+                                    <a
+                                        <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
+                                </li>
+                            </ul>
+
+                        </div>
 
                     </div>
-
                 </div>
-            </div>
 
+
+            </div>
 
         </div>
 
-    </div>
+    </body>
 
-</body>
-
-<script src="../js/admin.js"></script>
-<script src="../js/nav.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/nav.js"></script>
 
 </html>
