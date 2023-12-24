@@ -106,4 +106,12 @@ class Model
             return false;
         }
     }
+
+        public function AddSubject($code, $subject, $description)
+    {
+        $sql = "UPDATE INTO subjects (code, `subject`, `description`) VALUES(?,?,?)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("sss", $code, $subject, $description);
+        $stmt->execute();
+    }
 }

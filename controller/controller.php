@@ -146,4 +146,12 @@ class controller
             return 'fail';
         }
     }
+
+    public function AddSubject($code, $subject, $description){
+        if($this->model->AddSubject($code, $subject, $description)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
