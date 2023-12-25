@@ -7,7 +7,7 @@ if (isset($_POST['code']) && isset($_POST['subject']) && isset($_POST['descripti
 
     $add_subject = $controller->AddSubject($_POST['code'], $_POST['subject'], $_POST['description']);
 
-    if ($add_subject) {
+    if ($add_subject =='success') {
         echo json_encode(['status' => 'OK', 'message' => 'Subject added!']);
     } else  {
         echo json_encode(['error' => 'Theres an error, please try again']);

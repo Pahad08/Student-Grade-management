@@ -72,12 +72,12 @@ a {
 /*sidebar navigation */
 
 .sidebar {
-  position: fixed;
   background: var(--white);
+  position: fixed;
   top: 0;
   left: 0;
   width: 230px;
-  height: 100vh;
+  height: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -185,7 +185,7 @@ nav ul a:not(.active):hover,
   transition: 0.5s;
 }
 
-.body-grow {
+.grow {
   margin-left: 0px;
   transition: 0.5s;
 }
@@ -462,6 +462,8 @@ nav ul a:not(.active):hover,
   padding: 15px 0px;
   background-color: #f2f2f2;
   gap: 10px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .addbtn-body button,
@@ -490,4 +492,62 @@ nav ul a:not(.active):hover,
 .addbtn-body input:hover {
   background: var(--darkblue);
   color: var(--white);
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .sidebar {
+    left: -230px;
+    z-index: 1;
+  }
+
+  .body {
+    margin-left: 0;
+  }
+
+  .show-nav {
+    left: 0;
+    transition: 0.5s;
+  }
+
+  .menu-icon {
+    justify-content: flex-end;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .sidebar {
+    left: -230px;
+    z-index: 0;
+  }
+  .body {
+    margin-left: 0;
+  }
+
+  .show-nav {
+    left: 0;
+    transition: 0.5s;
+  }
+  .menu-icon {
+    justify-content: flex-end;
+  }
+}
+
+/* Extra small devices (phones, 575px and down) */
+@media (max-width: 575px) {
+  .sidebar {
+    left: -230px;
+    z-index: 1;
+  }
+  .body {
+    margin-left: 0;
+  }
+  .show-nav {
+    left: 0;
+    transition: 0.5s;
+  }
+  .menu-icon {
+    justify-content: flex-end;
+  }
 }

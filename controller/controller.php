@@ -149,9 +149,9 @@ class controller
 
     public function AddSubject($code, $subject, $description){
         if($this->model->AddSubject($code, $subject, $description)){
-            return true;
+            return 'success';
         }else{
-            return false;
+            return 'fail';
         }
     }
 }

@@ -109,9 +109,13 @@ class Model
 
         public function AddSubject($code, $subject, $description)
     {
-        $sql = "UPDATE INTO subjects (code, `subject`, `description`) VALUES(?,?,?)";
+        $sql = "INSERT INTO subjects (code, `subject`, `description`) VALUES(?,?,?)";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("sss", $code, $subject, $description);
-        $stmt->execute();
+        if($stmt->execute()){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
