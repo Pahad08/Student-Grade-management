@@ -35,6 +35,7 @@ class controller
 
     public function redirect($conn, $location, $user_id, $usertype)
     {
+        session_regenerate_id(true);
         $_SESSION[$usertype . "_id"] = $user_id;
         $conn->close();
         header("location: ../view/" . $location);
@@ -147,10 +148,20 @@ class controller
         }
     }
 
-    public function AddSubject($code, $subject, $description){
-        if($this->model->AddSubject($code, $subject, $description)){
+    public function AddSubject($code, $subject, $description)
+    {
+        if ($this->model->AddSubject($code, $subject, $description)) {
             return 'success';
-        }else{
+        } else {
+            return 'fail';
+        }
+    }
+
+    public function DeleteSub($id)
+    {
+        if ($this->model->DeleteSubject($id)) {
+            return 'success';
+        } else {
             return 'fail';
         }
     }

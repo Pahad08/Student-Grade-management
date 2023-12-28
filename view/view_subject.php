@@ -33,127 +33,131 @@ function Checkpage($total_pages, $page_num)
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/admin.css">
-        <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-        <title>Subjects</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
+    <title>Subjects</title>
+</head>
 
-    <body>
+<body>
 
-        <div class="sidebar">
+    <div class="loader-body">
+        <div id="loader"></div>
+    </div>
 
-            <div class="logo-header">
-                <img src="../images/logo.png" alt="logo">
-            </div>
+    <div class="sidebar">
 
-            <hr>
-
-            <div class="user-info">
-                <p>Administrator</p>
-            </div>
-
-            <hr>
-
-            <nav id="nav-bar" class="nav-bar">
-
-                <ul class="dashboard">
-                    <li> <a href="admin.php">Dashboard</a></li>
-                </ul>
-
-                <ul class="dropdown-text active">
-                    <p>Subjects</p>
-                    <img src="../images/arrow.png" alt="arrow" class="arrow">
-                </ul>
-
-                <ul class="dropdown">
-                    <ul>
-                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
-                                Subjects</a>
-                        </li>
-                    </ul>
-
-                    <ul>
-                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
-                                Subjects</a>
-                        </li>
-                    </ul>
-                </ul>
-
-                <ul class="dropdown-text">
-                    <p>Students</p>
-                    <img src="../images/arrow.png" alt="arrow" class="arrow">
-                </ul>
-
-                <ul class="dropdown">
-                    <ul>
-                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
-                                Students</a>
-                        </li>
-                    </ul>
-
-                    <ul>
-                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
-                                Students</a>
-                        </li>
-                    </ul>
-                </ul>
-
-                <ul class="sections">
-                    <li> <a href="sections.php">Sections</a></li>
-                </ul>
-
-                <ul class="logout">
-                    <li><a href="logout.php">Logout</a></a></li>
-                </ul>
-
-            </nav>
-
+        <div class="logo-header">
+            <img src="../images/logo.png" alt="logo">
         </div>
 
-        <div class="body">
+        <hr>
 
-            <div class="header">
-                <div class="menu-icon">
-                    <img src="../images/menu.png" alt="menu" id="menu-icon">
-                </div>
+        <div class="user-info">
+            <p>Administrator</p>
+        </div>
+
+        <hr>
+
+        <nav id="nav-bar" class="nav-bar">
+
+            <ul class="dashboard">
+                <li> <a href="admin.php">Dashboard</a></li>
+            </ul>
+
+            <ul class="dropdown-text active">
+                <p>Subjects</p>
+                <img src="../images/arrow.png" alt="arrow" class="arrow">
+            </ul>
+
+            <ul class="dropdown">
+                <ul>
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
+                            Subjects</a>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
+                            Subjects</a>
+                    </li>
+                </ul>
+            </ul>
+
+            <ul class="dropdown-text">
+                <p>Students</p>
+                <img src="../images/arrow.png" alt="arrow" class="arrow">
+            </ul>
+
+            <ul class="dropdown">
+                <ul>
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
+                            Students</a>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
+                            Students</a>
+                    </li>
+                </ul>
+            </ul>
+
+            <ul class="sections">
+                <li> <a href="sections.php">Sections</a></li>
+            </ul>
+
+            <ul class="logout">
+                <li><a href="logout.php">Logout</a></a></li>
+            </ul>
+
+        </nav>
+
+    </div>
+
+    <div class="body">
+
+        <div class="header">
+            <div class="menu-icon">
+                <img src="../images/menu.png" alt="menu" id="menu-icon">
+            </div>
+        </div>
+
+        <div class="info">
+
+            <div class="text">
+                <h1>Subjects</h1>
             </div>
 
-            <div class="info">
+            <hr>
 
-                <div class="text">
-                    <h1>Subjects</h1>
-                </div>
+            <div class="main-body">
 
-                <hr>
+                <div class="table-container">
 
-                <div class="main-body">
+                    <div class="table-header">
+                        <a href="add_subject.php">Add New</a>
+                    </div>
 
-                    <div class="table-container">
+                    <div class="search-bar">
+                        <label for="search">Search: </label>
+                        <input type="text" id="search">
+                    </div>
 
-                        <div class="table-header">
-                            <a href="add_subject.php">Add New</a>
-                        </div>
+                    <div class="table-body">
 
-                        <div class="search-bar">
-                            <label for="search">Search: </label>
-                            <input type="text" id="search">
-                        </div>
+                        <table id="table-subject">
 
-                        <div class="table-body">
+                            <tr class="subject-row">
+                                <th class="subject-header">Code</th>
+                                <th class="subject-header">Subject</th>
+                                <th class="subject-header">Description</th>
+                                <th class="subject-header">Action</th>
+                            </tr>
 
-                            <table id="table-subject">
-
-                                <tr class="subject-row">
-                                    <th class="subject-header">Code</th>
-                                    <th class="subject-header">Subject</th>
-                                    <th class="subject-header">Description</th>
-                                    <th class="subject-header">Action</th>
-                                </tr>
-
-                                <?php while ($subjects = $get_subjects->fetch_assoc()) { ?>
+                            <?php while ($subjects = $get_subjects->fetch_assoc()) { ?>
                                 <tr class="subject-row">
 
                                     <td class="subject-data"><?php echo $subjects['code']  ?></td>
@@ -169,55 +173,71 @@ function Checkpage($total_pages, $page_num)
                                     </td>
 
                                 </tr>
-                                <?php } ?>
+                            <?php } ?>
 
-                            </table>
+                        </table>
 
-                        </div>
+                        <div class="alert-body">
 
+                            <div class="alert-container">
+                                <div class="alert-header">
+                                    <p>Delete</p>
+                                </div>
 
-                        <div class="pagination">
+                                <div class="alert-text">
+                                    Are you sure you want to delete this subject?
+                                </div>
 
-                            <div class="pagination-info">
-                                <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
+                                <div class="alert-footer">
+                                    <button id="cancel-delete">Cancel</button>
+                                    <button id="delete-sub" class="delete">Delete</button>
+                                </div>
                             </div>
-
-                            <ul class="pagination-body">
-                                <li id="previous"><a
-                                        <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
-                                </li>
-
-                                <li class="active-page">
-                                    <a
-                                        href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}"  ?>"><?php echo $min ?></a>
-                                </li>
-
-                                <?php if ($page_num != $total_pages) { ?>
-                                <li class="next-page">
-                                    <a
-                                        href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
-                                </li>
-                                <?php } ?>
-
-                                <li id="next">
-                                    <a
-                                        <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
-                                </li>
-                            </ul>
 
                         </div>
 
                     </div>
+
+
+
+                    <div class="pagination">
+
+                        <div class="pagination-info">
+                            <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
+                        </div>
+
+                        <ul class="pagination-body">
+                            <li id="previous"><a <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
+                            </li>
+
+                            <li class="active-page">
+                                <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}"  ?>"><?php echo $min ?></a>
+                            </li>
+
+                            <?php if ($page_num != $total_pages) { ?>
+                                <li class="next-page">
+                                    <a href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
+                                </li>
+                            <?php } ?>
+
+                            <li id="next">
+                                <a <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
+                            </li>
+                        </ul>
+
+                    </div>
+
                 </div>
-
-
             </div>
+
 
         </div>
 
-    </body>
+    </div>
 
-    <script src="../js/admin.js"></script>
-    <script src="../js/nav.js"></script>
+</body>
+
+<script src="../js/admin.js"></script>
+<script src="../js/nav.js"></script>
 
 </html>

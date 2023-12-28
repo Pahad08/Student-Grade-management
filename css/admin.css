@@ -69,6 +69,80 @@ a {
   }
 }
 
+/* alert */
+
+.alert-body {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.alert-container {
+  background: var(--white);
+  border-radius: 5px;
+  width: 400px;
+  max-width: 100%;
+  margin: 130px auto auto auto;
+}
+
+.alert-header,
+.alert-text {
+  padding: 15px;
+  border-bottom: 1px solid var(--gray);
+}
+
+.alert-header {
+  font-size: 1.5rem;
+}
+
+.alert-text {
+  font-size: 1.1rem;
+}
+
+.alert-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.alert-footer button {
+  padding: 6px;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+}
+
+#cancel-delete {
+  background-color: var(--lightblue);
+  border-radius: 5px;
+  color: var(--black);
+  transition: 0.3s;
+}
+
+#cancel-delete:hover {
+  color: var(--white);
+  background: var(--gray);
+}
+
+.delete {
+  background-color: var(--red);
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.delete:hover {
+  color: var(--white);
+  background: var(--darkred);
+}
+
 /*sidebar navigation */
 
 .sidebar {

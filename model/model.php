@@ -107,12 +107,24 @@ class Model
         }
     }
 
-        public function AddSubject($code, $subject, $description)
+    public function AddSubject($code, $subject, $description)
     {
         $sql = "INSERT INTO subjects (code, `subject`, `description`) VALUES(?,?,?)";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("sss", $code, $subject, $description);
-        if($stmt->execute()){
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function DeleteSubject($id)
+    {
+        $sql = "DELETE FROM subjects where subject_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $id);
+        if ($stmt->execute()) {
             return true;
         } else {
             return false;
