@@ -2,14 +2,16 @@
 
 require_once dirname(__DIR__) . "\\controller\\controller.php";
 
-if (isset($_GET['sub_id'])) {
-    $controller = new controller("localhost", "root", "", "school");
+$controller = new controller("localhost", "root", "", "school");
 
-    $delete_subject = $controller->DeleteSub($_GET['sub_id']);
-
+if (isset($_POST['delete_sub']) && $_SERVER["REQUEST_METHOD"] == "POST") {
+    session_start();
+    $delete_subject = $controller->DeleteSub($_POST['sub_id']);
     if ($delete_subject == 'success') {
-        echo json_encode(['status' => 'OK', 'message' => 'Subject Deleted!']);
+        $_SESSION['deleted_sub'] = 'Subject Deleted!';
+        header('location: ../view/view_subject.php');
+        exit();
     } else {
-        echo json_encode(['error' => 'Theres an error, please try again']);
+        echo "<script>alert('Theres an error, please try again')</script>";
     }
 }

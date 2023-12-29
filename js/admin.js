@@ -6,6 +6,7 @@ const btn_delete = document.querySelectorAll(".btn-delete");
 const alert_body = document.querySelector('.alert-body');
 const cancel_delete = document.querySelector('#cancel-delete');
 const delete_sub = document.querySelector('#delete-sub');
+const input_container =document.querySelector('.input-container');
 
 //showing and hiding loader
 function ShowLoader() {
@@ -36,45 +37,31 @@ if (dropdown) {
   });
 }
 
-//ajax for adding subject
-if (delete_sub) {
-  delete_sub.addEventListener("click", (event) => {
+//create paragraph
+function CreateParagraph(response, element){
 
-    event.preventDefault();
+  const paragraph = document.createElement('p');
+  const classname = document.createAttribute('class');
+  classname.value = 'error-message';
+  paragraph.setAttribute('class', classname.value);
+  paragraph.innerText = response.message;
+  paragraph.style.fontSize = '1rem';
+  paragraph.style.color = 'var(--red)';
 
-    const ajax = new XMLHttpRequest();
-    const id = delete_sub.getAttribute('data-id');
+  element.insertAdjacentElement('beforeend', paragraph);
 
-    ShowLoader();
-
-    ajax.onreadystatechange = () => {
-      if (ajax.status == 200 && ajax.readyState == 4) {
-        const response = JSON.parse(ajax.responseText);
-        HideLoader();
-
-        if (response.status == "OK") {
-          alert_body.classList.remove('show');
-          alert(response.message);
-          location.reload();
-        } else {
-          alert(response.error);
-          alert_body.classList.remove('show');
-        }
-      }
-    };
-
-    ajax.open("GET", `../ajax/delete_sub.php?sub_id=${id}`);
-    ajax.send();
-  });
 }
 
-//delete sub
+//ajax for adding subject
 if (add_sub) {
   add_sub.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const ajax = new XMLHttpRequest();
     const form_data = new FormData(add_sub);
+    const code = document.querySelector('.input-container .input-body:nth-child(1)');
+    const subject_name = document.querySelector('.input-container .input-body:nth-child(2)');
+    const description = document.querySelector('.input-container .input-body:nth-child(3)');
 
     ShowLoader();
 
@@ -85,11 +72,36 @@ if (add_sub) {
         const response = JSON.parse(ajax.responseText);
         HideLoader();
 
-        if (response.status == "OK") {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
+        console.log(response[0][0].message)
+        console.log(response[1][0])
+        console.log(response[2])
+
+        // if (response.status == "OK") {
+
+        //   alert(response.message);
+
+        // }else if(response.status=='empty_code'){
+
+        //   CreateParagraph(response, code);
+
+        // }else if(response.status=='empty_subject'){
+
+        //   CreateParagraph(response, subject_name);
+
+        // }else if(response.status=='empty_description'){
+
+        //   CreateParagraph(response, description);
+
+        // }else if(response.status=='empty_inputs'){
+
+        //   CreateParagraph(response, code);
+        //   CreateParagraph(response, description);
+        //   CreateParagraph(response, subject_name);
+          
+        // }
+        // else {
+        //   alert(response.error);
+        // }
       }
     };
 
@@ -102,23 +114,31 @@ if(btn_delete){
   btn_delete.forEach((element)=>{
     element.addEventListener('click',()=>{
       alert_body.classList.toggle('show')
-      let sub_id = element.getAttribute('data-id');
-      delete_sub.setAttribute('data-id', sub_id);
+      const sub_id = element.getAttribute('data-id');
+      const input_sub = document.querySelector('#sub-id');
+
+      input_sub.value = sub_id;
+      
     })
   
   })
 }
 
 //remove the show class in the alert body
-alert_body.addEventListener('click',(event)=>{
+if(alert_body)
+{
+  alert_body.addEventListener('click',(event)=>{
   if(event.target.className == 'alert-body show' && alert_body.classList.contains('show')){
-    delete_sub.removeAttribute('data-id');
-    alert_body.classList.remove('show');
+  delete_sub.removeAttribute('data-id');
+  alert_body.classList.remove('show');
   }
-})
+  })
+}
 
-cancel_delete.addEventListener('click', ()=>{
+if(cancel_delete)
+{
+  cancel_delete.addEventListener('click', ()=>{
   delete_sub.removeAttribute('data-id');
   alert_body.classList.remove('show')
-})
-
+  })
+}

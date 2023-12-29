@@ -28,6 +28,13 @@ function Checkpage($total_pages, $page_num)
 {
     return $total_pages == 1 || $page_num == $total_pages;
 }
+
+if (isset($_SESSION['deleted_sub'])) {
+    $deleted_sub = $_SESSION['deleted_sub'];
+    echo "<script>alert('$deleted_sub')</script>";
+    unset($_SESSION['deleted_sub']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -190,7 +197,10 @@ function Checkpage($total_pages, $page_num)
 
                                 <div class="alert-footer">
                                     <button id="cancel-delete">Cancel</button>
-                                    <button id="delete-sub" class="delete">Delete</button>
+                                    <form action='../ajax/delete_sub.php' method="post" id="sub-delete">
+                                        <input type="text" id="sub-id" name="sub_id" hidden>
+                                        <button id="delete-sub" name="delete_sub" value="delete_sub" class="delete">Delete</button>
+                                    </form>
                                 </div>
                             </div>
 
