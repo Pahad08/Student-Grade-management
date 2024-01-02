@@ -7,6 +7,9 @@ const alert_body = document.querySelector(".alert-body");
 const cancel_delete = document.querySelector("#cancel-delete");
 const delete_sub = document.querySelector("#delete-sub");
 const input_container = document.querySelector(".input-container");
+const code_body = document.querySelector("#code-body");
+const subname_body = document.querySelector("#sub-body");
+const description_body = document.querySelector("#description-body");
 
 //showing and hiding loader
 function ShowLoader() {
@@ -60,15 +63,12 @@ function RemoveParagraph(element) {
   }
 }
 
-//ajax for adding subject
 if (add_sub) {
+  //ajax for adding subject
   add_sub.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const form_data = new FormData(add_sub);
-    const code_body = document.querySelector("#code-body");
-    const subname_body = document.querySelector("#sub-body");
-    const description_body = document.querySelector("#description-body");
     const code = form_data.get("code");
     const subname = form_data.get("subject");
     const description = form_data.get("description");
@@ -118,6 +118,13 @@ if (add_sub) {
       };
       ajax.send(form_data);
     }
+  });
+
+  //remove error message if form reset
+  add_sub.addEventListener("reset", () => {
+    RemoveParagraph(code_body);
+    RemoveParagraph(subname_body);
+    RemoveParagraph(description_body);
   });
 }
 
