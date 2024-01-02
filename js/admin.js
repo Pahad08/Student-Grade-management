@@ -10,6 +10,7 @@ const input_container = document.querySelector(".input-container");
 const code_body = document.querySelector("#code-body");
 const subname_body = document.querySelector("#sub-body");
 const description_body = document.querySelector("#description-body");
+const edit_sub = document.querySelector("#edit-subform");
 
 //showing and hiding loader
 function ShowLoader() {
@@ -61,6 +62,72 @@ function RemoveParagraph(element) {
   if (element.querySelector(`.error-message`)) {
     element.removeChild(err_mess);
   }
+}
+
+if (edit_sub) {
+  //ajax for edit subject
+  edit_sub.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form_data = new FormData(edit_sub);
+    const code = form_data.get("code");
+    const subname = form_data.get("subject");
+    const description = form_data.get("description");
+
+    if (code == "" && subname == "" && description == "") {
+      CreateParagraph("Code cannot be empty", code_body);
+      CreateParagraph("Subject cannot be empty", subname_body);
+      CreateParagraph("Description cannot be empty", description_body);
+      return;
+    }
+
+    if (code == "") {
+      CreateParagraph("Code cannot be empty", code_body);
+    } else {
+      RemoveParagraph(code_body);
+    }
+
+    if (subname == "") {
+      CreateParagraph("Subject cannot be empty", subname_body);
+    } else {
+      RemoveParagraph(subname_body);
+    }
+
+    if (description == "") {
+      CreateParagraph("Description cannot be empty", description_body);
+    } else {
+      RemoveParagraph(description_body);
+    }
+
+    if (code !== "" && subname !== "" && description !== "") {
+      const ajax = new XMLHttpRequest();
+      ajax.open("POST", "../ajax/edit_sub.php");
+
+      ShowLoader();
+
+      ajax.onreadystatechange = () => {
+        if (ajax.status == 200 && ajax.readyState == 4) {
+          const response = JSON.parse(ajax.responseText);
+          HideLoader();
+
+          if (response.status == "OK") {
+            alert(response.message);
+            window.location.href = "view_subject.php";
+          } else {
+            alert(response.error);
+          }
+        }
+      };
+      ajax.send(form_data);
+    }
+  });
+
+  //remove error message if form reset
+  edit_sub.addEventListener("reset", () => {
+    RemoveParagraph(code_body);
+    RemoveParagraph(subname_body);
+    RemoveParagraph(description_body);
+  });
 }
 
 if (add_sub) {
@@ -128,7 +195,7 @@ if (add_sub) {
   });
 }
 
-//prompt the alert message
+//prompt the alert delete
 if (btn_delete) {
   btn_delete.forEach((element) => {
     element.addEventListener("click", () => {
@@ -154,6 +221,7 @@ if (alert_body) {
   });
 }
 
+//close the delete alert
 if (cancel_delete) {
   cancel_delete.addEventListener("click", () => {
     delete_sub.removeAttribute("data-id");

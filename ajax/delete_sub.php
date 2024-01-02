@@ -12,6 +12,8 @@ if (isset($_POST['delete_sub']) && $_SERVER["REQUEST_METHOD"] == "POST") {
         header('location: ../view/view_subject.php');
         exit();
     } else {
-        echo "<script>alert('Theres an error, please try again')</script>";
+        $_SESSION['delete_err'] = 'Theres an error, please try again!';
+        header('location: ../view/view_subject.php');
+        exit();
     }
 }

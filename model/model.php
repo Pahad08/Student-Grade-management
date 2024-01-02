@@ -30,7 +30,7 @@ class Model
         return $result;
     }
 
-    public function SelectSubject($num_perpage, $offset)
+    public function SelectSubjects($num_perpage, $offset)
     {
         $query = "SELECT * from subjects LIMIT $num_perpage OFFSET $offset";
         $stmt = $this->db->prepare($query);
@@ -39,6 +39,18 @@ class Model
 
         return $result;
     }
+
+    public function SelectSubject($sub_id)
+    {
+        $query = "SELECT * from subjects where subject_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $sub_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
 
     public function TotalPages($num_perpage)
     {
@@ -124,6 +136,18 @@ class Model
         $sql = "DELETE FROM subjects where subject_id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function EditSubject($code, $subject, $description, $sub_id)
+    {
+        $sql = "UPDATE subjects SET code = ?, `subject` = ?, `description` = ? where subject_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("sssi", $code, $subject, $description, $sub_id);
         if ($stmt->execute()) {
             return true;
         } else {

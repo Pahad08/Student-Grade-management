@@ -126,7 +126,12 @@ class controller
 
     public function GetSubjects($num_perpage, $offset)
     {
-        return $this->model->SelectSubject($num_perpage, $offset);
+        return $this->model->SelectSubjects($num_perpage, $offset);
+    }
+
+    public function GetSubject($sub_id)
+    {
+        return $this->model->SelectSubject($sub_id);
     }
 
     public function GetTotalpages($num_perpage)
@@ -168,6 +173,15 @@ class controller
     public function DeleteSub($id)
     {
         if ($this->model->DeleteSubject($id)) {
+            return 'success';
+        } else {
+            return 'fail';
+        }
+    }
+
+    public function EditSub($code, $subject, $description, $sub_id)
+    {
+        if ($this->model->EditSubject($code, $subject, $description, $sub_id)) {
             return 'success';
         } else {
             return 'fail';

@@ -529,7 +529,8 @@ nav ul a:not(.active):hover,
   outline: 1px solid var(--darkblue);
 }
 
-.addbtn-body {
+.addbtn-body,
+.editbtn-body {
   border-top: 2px solid var(--darkblue);
   display: flex;
   justify-content: center;
@@ -541,29 +542,39 @@ nav ul a:not(.active):hover,
 }
 
 .addbtn-body button,
-.addbtn-body input {
+.addbtn-body input,
+.editbtn-body button,
+.editbtn-body input,
+.editbtn-body a {
   padding: 8px 20px;
   border: none;
   cursor: pointer;
   font-size: 1.1rem;
 }
 
-.addbtn-body button {
+.addbtn-body button,
+.editbtn-body button,
+.editbtn-body a {
+  color: var(--black);
   background: var(--skyblue);
   transition: 0.3s;
 }
 
-.addbtn-body button:hover {
+.addbtn-body button:hover,
+.editbtn-body button:hover,
+.editbtn-body a:hover {
   background: var(--darkblue);
   color: var(--white);
 }
 
-.addbtn-body input {
+.addbtn-body input,
+.editbtn-body input {
   background: var(--gray);
   transition: 0.3s;
 }
 
-.addbtn-body input:hover {
+.addbtn-body input:hover,
+.editbtn-body input:hover {
   background: var(--darkblue);
   color: var(--white);
 }
