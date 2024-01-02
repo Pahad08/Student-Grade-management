@@ -3,10 +3,10 @@ const arrow = document.querySelector(".arrow");
 const add_sub = document.querySelector("#sub-form");
 const loader = document.querySelector(".loader-body");
 const btn_delete = document.querySelectorAll(".btn-delete");
-const alert_body = document.querySelector('.alert-body');
-const cancel_delete = document.querySelector('#cancel-delete');
-const delete_sub = document.querySelector('#delete-sub');
-const input_container =document.querySelector('.input-container');
+const alert_body = document.querySelector(".alert-body");
+const cancel_delete = document.querySelector("#cancel-delete");
+const delete_sub = document.querySelector("#delete-sub");
+const input_container = document.querySelector(".input-container");
 
 //showing and hiding loader
 function ShowLoader() {
@@ -38,18 +38,26 @@ if (dropdown) {
 }
 
 //create paragraph
-function CreateParagraph(response, element){
+function CreateParagraph(message, element) {
+  if (!element.querySelector(`.error-message`)) {
+    const paragraph = document.createElement("p");
+    const classname = document.createAttribute("class");
+    classname.value = "error-message";
+    paragraph.setAttribute("class", classname.value);
+    paragraph.innerText = message;
+    paragraph.style.fontSize = "1rem";
+    paragraph.style.color = "var(--red)";
+    element.insertAdjacentElement("beforeend", paragraph);
+  }
+}
 
-  const paragraph = document.createElement('p');
-  const classname = document.createAttribute('class');
-  classname.value = 'error-message';
-  paragraph.setAttribute('class', classname.value);
-  paragraph.innerText = response.message;
-  paragraph.style.fontSize = '1rem';
-  paragraph.style.color = 'var(--red)';
-
-  element.insertAdjacentElement('beforeend', paragraph);
-
+//remove paragraph
+function RemoveParagraph(element) {
+  const element_id = element.id;
+  const err_mess = document.querySelector(`#${element_id} .error-message`);
+  if (element.querySelector(`.error-message`)) {
+    element.removeChild(err_mess);
+  }
 }
 
 //ajax for adding subject
@@ -57,88 +65,91 @@ if (add_sub) {
   add_sub.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const ajax = new XMLHttpRequest();
     const form_data = new FormData(add_sub);
-    const code = document.querySelector('.input-container .input-body:nth-child(1)');
-    const subject_name = document.querySelector('.input-container .input-body:nth-child(2)');
-    const description = document.querySelector('.input-container .input-body:nth-child(3)');
+    const code_body = document.querySelector("#code-body");
+    const subname_body = document.querySelector("#sub-body");
+    const description_body = document.querySelector("#description-body");
+    const code = form_data.get("code");
+    const subname = form_data.get("subject");
+    const description = form_data.get("description");
 
-    ShowLoader();
+    if (code == "" && subname == "" && description == "") {
+      CreateParagraph("Code cannot be empty", code_body);
+      CreateParagraph("Subject cannot be empty", subname_body);
+      CreateParagraph("Description cannot be empty", description_body);
+      return;
+    }
 
-    ajax.open("POST", "../ajax/add_sub.php");
+    if (code == "") {
+      CreateParagraph("Code cannot be empty", code_body);
+    } else {
+      RemoveParagraph(code_body);
+    }
 
-    ajax.onreadystatechange = () => {
-      if (ajax.status == 200 && ajax.readyState == 4) {
-        const response = JSON.parse(ajax.responseText);
-        HideLoader();
+    if (subname == "") {
+      CreateParagraph("Subject cannot be empty", subname_body);
+    } else {
+      RemoveParagraph(subname_body);
+    }
 
-        console.log(response[0][0].message)
-        console.log(response[1][0])
-        console.log(response[2])
+    if (description == "") {
+      CreateParagraph("Description cannot be empty", description_body);
+    } else {
+      RemoveParagraph(description_body);
+    }
 
-        // if (response.status == "OK") {
+    if (code !== "" && subname !== "" && description !== "") {
+      const ajax = new XMLHttpRequest();
+      ajax.open("POST", "../ajax/add_sub.php");
 
-        //   alert(response.message);
+      ShowLoader();
 
-        // }else if(response.status=='empty_code'){
+      ajax.onreadystatechange = () => {
+        if (ajax.status == 200 && ajax.readyState == 4) {
+          const response = JSON.parse(ajax.responseText);
+          HideLoader();
 
-        //   CreateParagraph(response, code);
-
-        // }else if(response.status=='empty_subject'){
-
-        //   CreateParagraph(response, subject_name);
-
-        // }else if(response.status=='empty_description'){
-
-        //   CreateParagraph(response, description);
-
-        // }else if(response.status=='empty_inputs'){
-
-        //   CreateParagraph(response, code);
-        //   CreateParagraph(response, description);
-        //   CreateParagraph(response, subject_name);
-          
-        // }
-        // else {
-        //   alert(response.error);
-        // }
-      }
-    };
-
-    ajax.send(form_data);
+          if (response.status == "OK") {
+            alert(response.message);
+          } else {
+            alert(response.error);
+          }
+        }
+      };
+      ajax.send(form_data);
+    }
   });
 }
 
 //prompt the alert message
-if(btn_delete){
-  btn_delete.forEach((element)=>{
-    element.addEventListener('click',()=>{
-      alert_body.classList.toggle('show')
-      const sub_id = element.getAttribute('data-id');
-      const input_sub = document.querySelector('#sub-id');
+if (btn_delete) {
+  btn_delete.forEach((element) => {
+    element.addEventListener("click", () => {
+      alert_body.classList.toggle("show");
+      const sub_id = element.getAttribute("data-id");
+      const input_sub = document.querySelector("#sub-id");
 
       input_sub.value = sub_id;
-      
-    })
-  
-  })
+    });
+  });
 }
 
 //remove the show class in the alert body
-if(alert_body)
-{
-  alert_body.addEventListener('click',(event)=>{
-  if(event.target.className == 'alert-body show' && alert_body.classList.contains('show')){
-  delete_sub.removeAttribute('data-id');
-  alert_body.classList.remove('show');
-  }
-  })
+if (alert_body) {
+  alert_body.addEventListener("click", (event) => {
+    if (
+      event.target.className == "alert-body show" &&
+      alert_body.classList.contains("show")
+    ) {
+      delete_sub.removeAttribute("data-id");
+      alert_body.classList.remove("show");
+    }
+  });
 }
 
-if(cancel_delete)
-{
-  cancel_delete.addEventListener('click', ()=>{
-  delete_sub.removeAttribute('data-id');
-  alert_body.classList.remove('show')
-  })
+if (cancel_delete) {
+  cancel_delete.addEventListener("click", () => {
+    delete_sub.removeAttribute("data-id");
+    alert_body.classList.remove("show");
+  });
 }

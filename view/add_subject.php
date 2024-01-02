@@ -140,20 +140,19 @@ function Checkpage($total_pages, $page_num)
                     <form id="sub-form">
 
                         <div class="input-container">
-                            <div class="input-body">
+                            <div class="input-body" id="code-body">
                                 <label for="code">Subject Code</label>
                                 <input type="text" name="code" id="code">
                             </div>
 
-                            <div class="input-body">
+                            <div class="input-body" id="sub-body">
                                 <label for="subject">Subject</label>
                                 <input type="text" name="subject" id="subject">
                             </div>
 
-                            <div class="input-body">
+                            <div class="input-body" id="description-body">
                                 <label for="description">Description</label>
-                                <textarea name="description" id="description" cols="30" rows="10"
-                                    id="description"></textarea>
+                                <textarea name="description" id="description" cols="30" rows="10" id="description"></textarea>
                             </div>
                         </div>
 

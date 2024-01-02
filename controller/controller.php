@@ -148,9 +148,17 @@ class controller
         }
     }
 
+
+
     public function AddSubject($code, $subject, $description)
     {
-        if ($this->model->AddSubject($code, $subject, $description)) {
+        $conn = $this->model->getDb();
+
+        if ($this->model->AddSubject(
+            $this->CleanData($conn, $code),
+            $this->CleanData($conn, $subject),
+            $this->CleanData($conn, $description)
+        )) {
             return 'success';
         } else {
             return 'fail';
