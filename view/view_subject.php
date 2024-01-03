@@ -50,113 +50,113 @@ if (isset($_GET['sub_id'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/admin.css">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <title>Subjects</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/admin.css">
+        <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
+        <title>Subjects</title>
+    </head>
 
-<body>
+    <body>
 
-    <div class="loader-body">
-        <div id="loader"></div>
-    </div>
-
-    <div class="sidebar">
-
-        <div class="logo-header">
-            <img src="../images/logo.png" alt="logo">
+        <div class="loader-body">
+            <div id="loader"></div>
         </div>
 
-        <hr>
+        <div class="sidebar">
 
-        <div class="user-info">
-            <p>Administrator</p>
-        </div>
-
-        <hr>
-
-        <nav id="nav-bar" class="nav-bar">
-
-            <ul class="dashboard">
-                <li> <a href="admin.php">Dashboard</a></li>
-            </ul>
-
-            <ul class="dropdown-text active">
-                <p>Subjects</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
-                            Subjects</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
-                            Subjects</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Students</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
-                            Students</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
-                            Students</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="sections">
-                <li> <a href="sections.php">Sections</a></li>
-            </ul>
-
-            <ul class="logout">
-                <li><a href="logout.php">Logout</a></a></li>
-            </ul>
-
-        </nav>
-
-    </div>
-
-    <div class="body">
-
-        <div class="header">
-            <div class="menu-icon">
-                <img src="../images/menu.png" alt="menu" id="menu-icon">
-            </div>
-        </div>
-
-        <div class="info">
-
-            <div class="text">
-                <?php if (!isset($_GET['sub_id'])) { ?>
-                    <h1>Subjects</h1>
-                <?php } else { ?>
-                    <h1>Edit Subject</h1>
-                <?php } ?>
+            <div class="logo-header">
+                <img src="../images/logo.png" alt="logo">
             </div>
 
             <hr>
 
-            <div class="main-body">
+            <div class="user-info">
+                <p>Administrator</p>
+            </div>
 
-                <?php if (!isset($_GET['sub_id'])) { ?>
+            <hr>
+
+            <nav id="nav-bar" class="nav-bar">
+
+                <ul class="dashboard">
+                    <li> <a href="admin.php">Dashboard</a></li>
+                </ul>
+
+                <ul class="dropdown-text active">
+                    <p>Subjects</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
+
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
+                                Subjects</a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
+                                Subjects</a>
+                        </li>
+                    </ul>
+                </ul>
+
+                <ul class="dropdown-text">
+                    <p>Students</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
+
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">Add
+                                Students</a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">View
+                                Students</a>
+                        </li>
+                    </ul>
+                </ul>
+
+                <ul class="sections">
+                    <li> <a href="sections.php">Sections</a></li>
+                </ul>
+
+                <ul class="logout">
+                    <li><a href="logout.php">Logout</a></a></li>
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <div class="body">
+
+            <div class="header">
+                <div class="menu-icon">
+                    <img src="../images/menu.png" alt="menu" id="menu-icon">
+                </div>
+            </div>
+
+            <div class="info">
+
+                <div class="text">
+                    <?php if (!isset($_GET['sub_id'])) { ?>
+                    <h1>Subjects</h1>
+                    <?php } else { ?>
+                    <h1>Edit Subject</h1>
+                    <?php } ?>
+                </div>
+
+                <hr>
+
+                <div class="main-body">
+
+                    <?php if (!isset($_GET['sub_id'])) { ?>
                     <div class="table-container">
 
                         <div class="table-header">
@@ -165,7 +165,7 @@ if (isset($_GET['sub_id'])) {
 
                         <div class="search-bar">
                             <label for="search">Search: </label>
-                            <input type="text" id="search">
+                            <input type="text" id="search-sub">
                         </div>
 
                         <div class="table-body">
@@ -180,21 +180,23 @@ if (isset($_GET['sub_id'])) {
                                 </tr>
 
                                 <?php while ($subjects = $get_subjects->fetch_assoc()) { ?>
-                                    <tr class="subject-row">
+                                <tr class="subject-row">
 
-                                        <td class="subject-data"><?php echo $subjects['code']  ?></td>
-                                        <td class="subject-data"><?php echo $subjects['subject']  ?></td>
-                                        <td class="subject-data"><?php echo $subjects['description']  ?></td>
-                                        <td class="subject-data action">
-                                            <button class="btn-delete" data-id="<?php echo $subjects['subject_id'] ?>">
-                                                <img src="../images/delete.png" alt="delete" class="delete-sub">
-                                            </button>
-                                            <button class="btn-edit">
-                                                <a href=<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?sub_id=" . $subjects['subject_id']) ?>><img src="../images/edit.png" alt="Edit" class="edit-sub"></a>
-                                            </button>
-                                        </td>
+                                    <td class="subject-data"><?php echo $subjects['code']  ?></td>
+                                    <td class="subject-data"><?php echo $subjects['subject']  ?></td>
+                                    <td class="subject-data"><?php echo $subjects['description']  ?></td>
+                                    <td class="subject-data action">
+                                        <button class="btn-delete" data-id="<?php echo $subjects['subject_id'] ?>">
+                                            <img src="../images/delete.png" alt="delete" class="delete-sub">
+                                        </button>
+                                        <button class="btn-edit">
+                                            <a
+                                                href=<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?sub_id=" . $subjects['subject_id']) ?>><img
+                                                    src="../images/edit.png" alt="Edit" class="edit-sub"></a>
+                                        </button>
+                                    </td>
 
-                                    </tr>
+                                </tr>
                                 <?php } ?>
 
                             </table>
@@ -214,7 +216,8 @@ if (isset($_GET['sub_id'])) {
                                         <button id="cancel-delete">Cancel</button>
                                         <form action='../ajax/delete_sub.php' method="post" id="sub-delete">
                                             <input type="text" id="sub-id" name="sub_id" hidden>
-                                            <button id="delete-sub" name="delete_sub" value="delete_sub" class="delete">Delete</button>
+                                            <button id="delete-sub" name="delete_sub" value="delete_sub"
+                                                class="delete">Delete</button>
                                         </form>
                                     </div>
                                 </div>
@@ -230,21 +233,25 @@ if (isset($_GET['sub_id'])) {
                             </div>
 
                             <ul class="pagination-body">
-                                <li id="previous"><a <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
+                                <li id="previous"><a
+                                        <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}") ?>>Previous</a>
                                 </li>
 
                                 <li class="active-page">
-                                    <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}"  ?>"><?php echo $min ?></a>
+                                    <a
+                                        href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}"  ?>"><?php echo $min ?></a>
                                 </li>
 
                                 <?php if ($page_num != $total_pages) { ?>
-                                    <li class="next-page">
-                                        <a href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
-                                    </li>
+                                <li class="next-page">
+                                    <a
+                                        href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
+                                </li>
                                 <?php } ?>
 
                                 <li id="next">
-                                    <a <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
+                                    <a
+                                        <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}"); ?>>Next</a>
                                 </li>
                             </ul>
 
@@ -252,13 +259,14 @@ if (isset($_GET['sub_id'])) {
 
                     </div>
 
-                <?php } else { ?>
+                    <?php } else { ?>
 
                     <div class="form-body">
 
                         <form id="edit-subform">
 
-                            <input type="text" name="sub_id" id="sub_id" value="<?php echo $result['subject_id'] ?>" hidden>
+                            <input type="text" name="sub_id" id="sub_id" value="<?php echo $result['subject_id'] ?>"
+                                hidden>
 
                             <div class="input-container">
                                 <div class="input-body" id="code-body">
@@ -268,18 +276,21 @@ if (isset($_GET['sub_id'])) {
 
                                 <div class="input-body" id="sub-body">
                                     <label for="subject">Subject</label>
-                                    <input type="text" name="subject" id="subject" value="<?php echo $result['subject'] ?>">
+                                    <input type="text" name="subject" id="subject"
+                                        value="<?php echo $result['subject'] ?>">
                                 </div>
 
                                 <div class="input-body" id="description-body">
                                     <label for="description">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="10" id="description"><?php echo $result['description'] ?></textarea>
+                                    <textarea name="description" id="description" cols="30" rows="10"
+                                        id="description"><?php echo $result['description'] ?></textarea>
                                 </div>
                             </div>
 
                             <div class="editbtn-body">
                                 <button id="edit-btn" name="add" value="add">Edit</button>
-                                <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="cancel-edit">Cancel</a>
+                                <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>"
+                                    id="cancel-edit">Cancel</a>
                                 <input type="reset" id="reset-btn" value="Reset">
                             </div>
 
@@ -287,18 +298,18 @@ if (isset($_GET['sub_id'])) {
 
                     </div>
 
-                <?php } ?>
+                    <?php } ?>
+
+                </div>
+
 
             </div>
 
-
         </div>
 
-    </div>
+    </body>
 
-</body>
-
-<script src="../js/admin.js"></script>
-<script src="../js/nav.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/nav.js"></script>
 
 </html>

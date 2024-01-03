@@ -153,8 +153,6 @@ class controller
         }
     }
 
-
-
     public function AddSubject($code, $subject, $description)
     {
         $conn = $this->model->getDb();
@@ -186,5 +184,11 @@ class controller
         } else {
             return 'fail';
         }
+    }
+
+    public function SearchSubjects($subject)
+    {
+        $conn = $this->model->getDb();
+        return $this->model->SearchSubjects($this->CleanData($conn, $subject));
     }
 }

@@ -2,7 +2,6 @@ const dropdown = document.querySelectorAll(".dropdown-text");
 const arrow = document.querySelector(".arrow");
 const add_sub = document.querySelector("#sub-form");
 const loader = document.querySelector(".loader-body");
-const btn_delete = document.querySelectorAll(".btn-delete");
 const alert_body = document.querySelector(".alert-body");
 const cancel_delete = document.querySelector("#cancel-delete");
 const delete_sub = document.querySelector("#delete-sub");
@@ -11,6 +10,72 @@ const code_body = document.querySelector("#code-body");
 const subname_body = document.querySelector("#sub-body");
 const description_body = document.querySelector("#description-body");
 const edit_sub = document.querySelector("#edit-subform");
+const search_sub = document.querySelector("#search-sub");
+
+//function for adding and editing subject
+function EditAdd(form, filename) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form_data = new FormData(form);
+    const code = form_data.get("code");
+    const subname = form_data.get("subject");
+    const description = form_data.get("description");
+
+    if (code == "" && subname == "" && description == "") {
+      CreateParagraph("Code cannot be empty", code_body);
+      CreateParagraph("Subject cannot be empty", subname_body);
+      CreateParagraph("Description cannot be empty", description_body);
+      return;
+    }
+
+    if (code == "") {
+      CreateParagraph("Code cannot be empty", code_body);
+    } else {
+      RemoveParagraph(code_body);
+    }
+
+    if (subname == "") {
+      CreateParagraph("Subject cannot be empty", subname_body);
+    } else {
+      RemoveParagraph(subname_body);
+    }
+
+    if (description == "") {
+      CreateParagraph("Description cannot be empty", description_body);
+    } else {
+      RemoveParagraph(description_body);
+    }
+
+    if (code !== "" && subname !== "" && description !== "") {
+      const ajax = new XMLHttpRequest();
+      ajax.open("POST", `../ajax/${filename}`);
+
+      ShowLoader();
+
+      ajax.onreadystatechange = () => {
+        if (ajax.status == 200 && ajax.readyState == 4) {
+          const response = JSON.parse(ajax.responseText);
+          HideLoader();
+
+          if (response.status == "OK") {
+            alert(response.message);
+          } else {
+            alert(response.error);
+          }
+        }
+      };
+      ajax.send(form_data);
+    }
+  });
+
+  //remove error message if form reset
+  form.addEventListener("reset", () => {
+    RemoveParagraph(code_body);
+    RemoveParagraph(subname_body);
+    RemoveParagraph(description_body);
+  });
+}
 
 //showing and hiding loader
 function ShowLoader() {
@@ -66,147 +131,49 @@ function RemoveParagraph(element) {
 
 if (edit_sub) {
   //ajax for edit subject
-  edit_sub.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const form_data = new FormData(edit_sub);
-    const code = form_data.get("code");
-    const subname = form_data.get("subject");
-    const description = form_data.get("description");
-
-    if (code == "" && subname == "" && description == "") {
-      CreateParagraph("Code cannot be empty", code_body);
-      CreateParagraph("Subject cannot be empty", subname_body);
-      CreateParagraph("Description cannot be empty", description_body);
-      return;
-    }
-
-    if (code == "") {
-      CreateParagraph("Code cannot be empty", code_body);
-    } else {
-      RemoveParagraph(code_body);
-    }
-
-    if (subname == "") {
-      CreateParagraph("Subject cannot be empty", subname_body);
-    } else {
-      RemoveParagraph(subname_body);
-    }
-
-    if (description == "") {
-      CreateParagraph("Description cannot be empty", description_body);
-    } else {
-      RemoveParagraph(description_body);
-    }
-
-    if (code !== "" && subname !== "" && description !== "") {
-      const ajax = new XMLHttpRequest();
-      ajax.open("POST", "../ajax/edit_sub.php");
-
-      ShowLoader();
-
-      ajax.onreadystatechange = () => {
-        if (ajax.status == 200 && ajax.readyState == 4) {
-          const response = JSON.parse(ajax.responseText);
-          HideLoader();
-
-          if (response.status == "OK") {
-            alert(response.message);
-            window.location.href = "view_subject.php";
-          } else {
-            alert(response.error);
-          }
-        }
-      };
-      ajax.send(form_data);
-    }
-  });
-
-  //remove error message if form reset
-  edit_sub.addEventListener("reset", () => {
-    RemoveParagraph(code_body);
-    RemoveParagraph(subname_body);
-    RemoveParagraph(description_body);
-  });
+  EditAdd(edit_sub, "edit_sub.php");
 }
 
 if (add_sub) {
   //ajax for adding subject
-  add_sub.addEventListener("submit", (event) => {
-    event.preventDefault();
+  EditAdd(add_sub, "add_sub.php");
+}
 
-    const form_data = new FormData(add_sub);
-    const code = form_data.get("code");
-    const subname = form_data.get("subject");
-    const description = form_data.get("description");
+//search subject
+if (search_sub) {
+  search_sub.addEventListener("input", () => {
+    const ajax = new XMLHttpRequest();
+    const sub_value = search_sub.value;
 
-    if (code == "" && subname == "" && description == "") {
-      CreateParagraph("Code cannot be empty", code_body);
-      CreateParagraph("Subject cannot be empty", subname_body);
-      CreateParagraph("Description cannot be empty", description_body);
-      return;
-    }
+    ajax.onload = () => {
+      if (ajax.status == 200 && ajax.readyState == 4) {
+        const table = document.querySelector("#table-subject");
+        table.innerHTML = ajax.responseText;
+        ShowDelete();
+      }
+    };
 
-    if (code == "") {
-      CreateParagraph("Code cannot be empty", code_body);
-    } else {
-      RemoveParagraph(code_body);
-    }
-
-    if (subname == "") {
-      CreateParagraph("Subject cannot be empty", subname_body);
-    } else {
-      RemoveParagraph(subname_body);
-    }
-
-    if (description == "") {
-      CreateParagraph("Description cannot be empty", description_body);
-    } else {
-      RemoveParagraph(description_body);
-    }
-
-    if (code !== "" && subname !== "" && description !== "") {
-      const ajax = new XMLHttpRequest();
-      ajax.open("POST", "../ajax/add_sub.php");
-
-      ShowLoader();
-
-      ajax.onreadystatechange = () => {
-        if (ajax.status == 200 && ajax.readyState == 4) {
-          const response = JSON.parse(ajax.responseText);
-          HideLoader();
-
-          if (response.status == "OK") {
-            alert(response.message);
-          } else {
-            alert(response.error);
-          }
-        }
-      };
-      ajax.send(form_data);
-    }
-  });
-
-  //remove error message if form reset
-  add_sub.addEventListener("reset", () => {
-    RemoveParagraph(code_body);
-    RemoveParagraph(subname_body);
-    RemoveParagraph(description_body);
+    ajax.open("GET", `../ajax/search_sub.php?sub=${sub_value}`);
+    ajax.send();
   });
 }
 
 //prompt the alert delete
-if (btn_delete) {
-  btn_delete.forEach((element) => {
-    element.addEventListener("click", () => {
-      alert_body.classList.toggle("show");
-      const sub_id = element.getAttribute("data-id");
-      const input_sub = document.querySelector("#sub-id");
-
-      input_sub.value = sub_id;
+function ShowDelete() {
+  const btn_delete = document.querySelectorAll(".btn-delete");
+  const input_sub = document.querySelector("#sub-id");
+  if (btn_delete) {
+    btn_delete.forEach((element) => {
+      element.addEventListener("click", () => {
+        alert_body.classList.toggle("show");
+        const sub_id = element.getAttribute("data-id");
+        input_sub.value = sub_id;
+      });
     });
-  });
+  }
 }
+
+ShowDelete();
 
 //remove the show class in the alert body
 if (alert_body) {

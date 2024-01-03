@@ -6,6 +6,7 @@ if (isset($_POST['code']) && isset($_POST['subject']) && isset($_POST['descripti
     $controller = new controller("localhost", "root", "", "school");
 
     $add_subject = $controller->AddSubject($_POST['code'], $_POST['subject'], $_POST['description']);
+    $controller->CloseDB();
 
     if ($add_subject == 'success') {
         echo json_encode(['status' => 'OK', 'message' => 'Subject added!']);

@@ -154,4 +154,16 @@ class Model
             return false;
         }
     }
+
+    public function SearchSubjects($subject)
+    {
+        $sub = "%" . $subject . "%";
+        $query = "SELECT * from subjects WHERE `subject` LIKE ? LIMIT 5";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $sub);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
 }
