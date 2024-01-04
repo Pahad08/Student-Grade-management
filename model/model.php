@@ -121,13 +121,20 @@ class Model
 
     public function AddSubject($code, $subject, $description)
     {
+
+
         $sql = "INSERT INTO subjects (code, `subject`, `description`) VALUES(?,?,?)";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("sss", $code, $subject, $description);
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
+
+        try {
+            if ($stmt->execute()) {
+                return true;
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                return false;
+            }
         }
     }
 
@@ -148,10 +155,15 @@ class Model
         $sql = "UPDATE subjects SET code = ?, `subject` = ?, `description` = ? where subject_id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("sssi", $code, $subject, $description, $sub_id);
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
+
+        try {
+            if ($stmt->execute()) {
+                return true;
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                return false;
+            }
         }
     }
 

@@ -13,8 +13,6 @@ if (
     if ($add_subject == 'success') {
         echo json_encode(['status' => 'OK', 'message' => 'Subject Edited!']);
     } else {
-        echo json_encode(['error' => 'Theres an error, please try again']);
+        echo json_encode(['error' => 'Subject already exist']);
     }
-} else {
-    echo json_encode(['error' => 'no data']);
 }

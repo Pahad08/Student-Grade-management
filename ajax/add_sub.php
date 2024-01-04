@@ -11,6 +11,6 @@ if (isset($_POST['code']) && isset($_POST['subject']) && isset($_POST['descripti
     if ($add_subject == 'success') {
         echo json_encode(['status' => 'OK', 'message' => 'Subject added!']);
     } else {
-        echo json_encode(['error' => 'Theres an error, please try again']);
+        echo json_encode(['error' => 'Subject already exist']);
     }
 }
