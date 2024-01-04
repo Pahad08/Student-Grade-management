@@ -191,4 +191,9 @@ class controller
         $conn = $this->model->getDb();
         return $this->model->SearchSubjects($this->CleanData($conn, $subject));
     }
+
+    public function SelectStudents($num_perpage, $offset)
+    {
+        return $this->model->SelectStudents($num_perpage, $offset);
+    }
 }

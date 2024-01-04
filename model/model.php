@@ -78,7 +78,18 @@ class Model
     {
         $query = $this->db->prepare("INSERT into token(token, expiration_date, email) values(?,?,?);");
         $query->bind_param("sss", $token, $expiration_date, $email);
-        $query->execute();
+
+        try {
+            if ($query->execute()) {
+                return;
+            } else {
+                throw new mysqli_sql_exception("Inserting token failed");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "Inserting token failed") {
+                return false;
+            }
+        }
     }
 
     public function SelectToken()
@@ -112,16 +123,21 @@ class Model
         $stmt3 = $this->db->prepare($sql3);
         $stmt3->bind_param("s", $token);
 
-        if ($stmt3->execute() && $stmt2->execute()) {
-            return true;
-        } else {
-            return false;
+        try {
+            if ($stmt3->execute() && $stmt2->execute()) {
+                return true;
+            } else {
+                throw new mysqli_sql_exception("Error Query");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "Error Query") {
+                return false;
+            }
         }
     }
 
     public function AddSubject($code, $subject, $description)
     {
-
 
         $sql = "INSERT INTO subjects (code, `subject`, `description`) VALUES(?,?,?)";
         $stmt = $this->db->prepare($sql);
@@ -130,6 +146,8 @@ class Model
         try {
             if ($stmt->execute()) {
                 return true;
+            } else {
+                throw new mysqli_sql_exception("Duplicate subject");
             }
         } catch (mysqli_sql_exception $e) {
             if ($e->getCode() == 1062) {
@@ -143,10 +161,17 @@ class Model
         $sql = "DELETE FROM subjects where subject_id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
+
+        try {
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                throw new mysqli_sql_exception("Deleting Subject Failed");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "Deleting Subject Failed") {
+                return false;
+            }
         }
     }
 
@@ -173,6 +198,16 @@ class Model
         $query = "SELECT * from subjects WHERE `subject` LIKE ? LIMIT 5";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("s", $sub);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    public function SelectStudents($num_perpage, $offset)
+    {
+        $query = "SELECT * from students LIMIT $num_perpage OFFSET $offset";
+        $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
 

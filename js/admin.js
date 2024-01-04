@@ -18,9 +18,9 @@ function EditAdd(form, filename) {
     event.preventDefault();
 
     const form_data = new FormData(form);
-    const code = form_data.get("code");
-    const subname = form_data.get("subject");
-    const description = form_data.get("description");
+    const code = form_data.get("code").trim();
+    const subname = form_data.get("subject").trim();
+    const description = form_data.get("description").trim();
 
     if (code == "" && subname == "" && description == "") {
       CreateParagraph("Code cannot be empty", code_body);

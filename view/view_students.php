@@ -41,7 +41,7 @@ if (isset($_GET['sub_id'])) {
     $min = $page_num;
     $max = $page_num + 1;
     $offset = ($page_num * $num_perpage) - $num_perpage;
-    $get_subjects = $controller->GetSubjects($num_perpage, $offset);
+    $get_students = $controller->SelectStudents($num_perpage, $offset);
     $total_pages = $controller->GetTotalpages($num_perpage);
 }
 
@@ -56,7 +56,7 @@ $controller->CloseDB();
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/admin.css">
         <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-        <title>Subjects</title>
+        <title>Students</title>
     </head>
 
     <body>
@@ -85,7 +85,7 @@ $controller->CloseDB();
                     <li> <a href="admin.php">Dashboard</a></li>
                 </ul>
 
-                <ul class="dropdown-text active">
+                <ul class="dropdown-text">
                     <p>Subjects</p>
                     <img src="../images/arrow.png" alt="arrow" class="arrow">
                 </ul>
@@ -104,7 +104,7 @@ $controller->CloseDB();
                     </ul>
                 </ul>
 
-                <ul class="dropdown-text">
+                <ul class="dropdown-text active">
                     <p>Students</p>
                     <img src="../images/arrow.png" alt="arrow" class="arrow">
                 </ul>
@@ -117,7 +117,7 @@ $controller->CloseDB();
                     </ul>
 
                     <ul>
-                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">View
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="">View
                                 Students</a>
                         </li>
                     </ul>
@@ -147,9 +147,9 @@ $controller->CloseDB();
 
                 <div class="text">
                     <?php if (!isset($_GET['sub_id'])) { ?>
-                    <h1>Subjects</h1>
+                    <h1>Students</h1>
                     <?php } else { ?>
-                    <h1>Edit Subject</h1>
+                    <h1>Edit Students</h1>
                     <?php } ?>
                 </div>
 
@@ -174,25 +174,31 @@ $controller->CloseDB();
                             <table id="table-subject">
 
                                 <tr class="subject-row">
-                                    <th class="subject-header">Code</th>
-                                    <th class="subject-header">Subject</th>
-                                    <th class="subject-header">Description</th>
-                                    <th class="subject-header">Action</th>
+                                    <th class="subject-header">Name</th>
+                                    <th class="subject-header">Contact Number</th>
+                                    <th class="subject-header">Section</th>
+                                    <th class="subject-header">Grade Level</th>
+                                    <th class="subject-header">Profile Pic</th>
                                 </tr>
 
-                                <?php while ($subjects = $get_subjects->fetch_assoc()) { ?>
+                                <?php while ($students = $get_students->fetch_assoc()) { ?>
                                 <tr class="subject-row">
 
-                                    <td class="subject-data"><?php echo $subjects['code']  ?></td>
-                                    <td class="subject-data"><?php echo $subjects['subject']  ?></td>
-                                    <td class="subject-data"><?php echo $subjects['description']  ?></td>
+                                    <td class="subject-data">
+                                        <?php echo $students['f_name'] . " " . $students['l_name']  ?></td>
+                                    <td class="subject-data"><?php echo $students['contact_number']  ?></td>
+                                    <td class="subject-data"><?php echo $students['section']  ?></td>
+                                    <td class="subject-data"><?php echo $students['grade_level']  ?></td>
+                                    <td class="subject-data"><img
+                                            src="../profile_pics/<?php echo $students['profile_pic']  ?>">
+                                    </td>
                                     <td class="subject-data action">
-                                        <button class="btn-delete" data-id="<?php echo $subjects['subject_id'] ?>">
+                                        <button class="btn-delete" data-id="<?php echo $students['student_id'] ?>">
                                             <img src="../images/delete.png" alt="delete" class="delete-sub">
                                         </button>
                                         <button class="btn-edit">
                                             <a
-                                                href=<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?sub_id=" . $subjects['subject_id']) ?>><img
+                                                href=<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?sub_id=" . $students['student_id']) ?>><img
                                                     src="../images/edit.png" alt="Edit" class="edit-sub"></a>
                                         </button>
                                     </td>

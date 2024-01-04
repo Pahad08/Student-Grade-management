@@ -9,7 +9,7 @@ if (
     $controller = new controller("localhost", "root", "", "school");
 
     $add_subject = $controller->EditSub($_POST['code'], $_POST['subject'], $_POST['description'], $_POST['sub_id']);
-
+    $controller->CloseDB();
     if ($add_subject == 'success') {
         echo json_encode(['status' => 'OK', 'message' => 'Subject Edited!']);
     } else {

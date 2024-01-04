@@ -6,6 +6,7 @@ if (isset($_POST['email'])) {
     $controller = new controller("localhost", "root", "", "school");
 
     $send_email = $controller->SelectEmail($_POST['email']);
+    $controller->CloseDB();
 
     if ($send_email == 'success') {
         echo json_encode(['status' => 'OK', 'message' => 'Check your email!']);
