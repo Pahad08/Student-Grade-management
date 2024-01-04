@@ -137,42 +137,47 @@ function Checkpage($total_pages, $page_num)
 
                 <div class="form-body">
 
-                    <form id="sub-form">
+                    <form id="student-form">
 
                         <div class="input-container">
-                            <div class="input-body" id="code-body">
+                            <div class="input-body" id="fname-body">
                                 <label for="fname">First Name</label>
                                 <input type="text" name="fname" id="fname">
                             </div>
 
-                            <div class="input-body" id="code-body">
+                            <div class="input-body" id="lname-body">
                                 <label for="lname">Last Name</label>
                                 <input type="text" name="lname" id="lname">
                             </div>
 
-                            <div class="input-body" id="sub-body">
+                            <div class="input-body" id="number-body">
                                 <label for="number">Contact Number</label>
                                 <input type="number" name="number" id="number" inputmode="numeric">
                             </div>
 
-                            <div class="input-body" id="sub-body">
+                            <div class="input-body" id="section-body">
                                 <label for="section">Section</label>
                                 <input type="text" name="section" id="section" maxlength="1">
                             </div>
 
-                            <div class="input-body" id="sub-body">
+                            <div class="input-body" id="glevel-body">
                                 <label for="g-level">Grade Level</label>
                                 <input type="text" name="g-level" id="g-level">
                             </div>
 
-                            <div class="input-body" id="sub-body">
+                            <div class="input-body" id="image-body">
                                 <label for="image">Image</label>
                                 <input type="file" name="image" id="image" accept="image/*">
                             </div>
 
-                            <div class="input-body" id="sub-body">
-                                <label for="acc-id">Grade Level</label>
-                                <input type="text" name="g-level" id="g-level">
+                            <div class="input-body" id="username-body">
+                                <label for="username">Username</label>
+                                <input type="text" name="username" id="username">
+                            </div>
+
+                            <div class="input-body" id="email-body">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" id="email">
                             </div>
 
                         </div>

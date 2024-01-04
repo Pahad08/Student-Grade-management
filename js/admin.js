@@ -11,9 +11,17 @@ const subname_body = document.querySelector("#sub-body");
 const description_body = document.querySelector("#description-body");
 const edit_sub = document.querySelector("#edit-subform");
 const search_sub = document.querySelector("#search-sub");
+const add_student = document.querySelector("#student-form");
+const fname_body = document.querySelector("#fname-body");
+const lname_body = document.querySelector("#lname-body");
+const number_body = document.querySelector("#number-body");
+const section_body = document.querySelector("#section-body");
+const glevel_body = document.querySelector("#glevel-body");
+const username_body = document.querySelector("#username-body");
+const email_body = document.querySelector("#email-body");
 
 //function for adding and editing subject
-function EditAdd(form, filename) {
+function EditAddSubject(form, filename) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -77,6 +85,123 @@ function EditAdd(form, filename) {
   });
 }
 
+//adding and editing Student
+function EditAddStudent(form) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form_data = new FormData(form);
+    const fname = form_data.get("fname").trim();
+    const lname = form_data.get("lname").trim();
+    const number = form_data.get("number").trim();
+    const section = form_data.get("section").trim();
+    const g_level = form_data.get("g-level").trim();
+    const username = form_data.get("username").trim();
+    const email = form_data.get("email").trim();
+
+    if (
+      fname == "" &&
+      lname == "" &&
+      number == "" &&
+      section == "" &&
+      g_level == "" &&
+      username == "" &&
+      email == ""
+    ) {
+      CreateParagraph("First Name cannot be empty", fname_body);
+      CreateParagraph("Last Name cannot be empty", lname_body);
+      CreateParagraph("Contact number cannot be empty", number_body);
+      CreateParagraph("Section cannot be empty", section_body);
+      CreateParagraph("Grade level cannot be empty", glevel_body);
+      CreateParagraph("Username cannot be empty", username_body);
+      CreateParagraph("Email cannot be empty", email_body);
+      return;
+    }
+
+    if (fname == "") {
+      CreateParagraph("First Name cannot be empty", fname_body);
+    } else {
+      RemoveParagraph(fname_body);
+    }
+
+    if (lname == "") {
+      CreateParagraph("Last Name be empty", lname_body);
+    } else {
+      RemoveParagraph(lname_body);
+    }
+
+    if (number == "") {
+      CreateParagraph("Contact number cannot be empty", number_body);
+    } else {
+      RemoveParagraph(number_body);
+    }
+
+    if (section == "") {
+      CreateParagraph("Contact number cannot be empty", section_body);
+    } else {
+      RemoveParagraph(section_body);
+    }
+
+    if (g_level == "") {
+      CreateParagraph("Contact number cannot be empty", glevel_body);
+    } else {
+      RemoveParagraph(glevel_body);
+    }
+
+    if (username == "") {
+      CreateParagraph("Contact number cannot be empty", username_body);
+    } else {
+      RemoveParagraph(username_body);
+    }
+
+    if (email == "") {
+      CreateParagraph("Contact number cannot be empty", email_body);
+    } else {
+      RemoveParagraph(email_body);
+    }
+
+    if (
+      fname == "" &&
+      lname !== "" &&
+      number !== "" &&
+      section !== "" &&
+      g_level !== "" &&
+      username !== "" &&
+      email !== ""
+    ) {
+      const ajax = new XMLHttpRequest();
+      ajax.open("POST", `../ajax/${filename}`);
+
+      ShowLoader();
+
+      ajax.onreadystatechange = () => {
+        if (ajax.status == 200 && ajax.readyState == 4) {
+          const response = JSON.parse(ajax.responseText);
+          HideLoader();
+
+          if (response.status == "OK") {
+            alert(response.message);
+          } else {
+            alert(response.error);
+          }
+        }
+      };
+      ajax.send(form_data);
+    }
+  });
+
+  //remove error message if form reset
+  form.addEventListener("reset", () => {
+    RemoveParagraph(fname_body);
+    RemoveParagraph(lname_body);
+    RemoveParagraph(number_body);
+    RemoveParagraph(section_body);
+    RemoveParagraph(glevel_body);
+    RemoveParagraph(username_body);
+    RemoveParagraph(email_body);
+  });
+}
+
 //showing and hiding loader
 function ShowLoader() {
   loader.classList.toggle("loader-body");
@@ -131,12 +256,12 @@ function RemoveParagraph(element) {
 
 if (edit_sub) {
   //ajax for edit subject
-  EditAdd(edit_sub, "edit_sub.php");
+  EditAddSubject(edit_sub, "edit_sub.php");
 }
 
 if (add_sub) {
   //ajax for adding subject
-  EditAdd(add_sub, "add_sub.php");
+  EditAddSubject(add_sub, "add_sub.php");
 }
 
 //search subject
