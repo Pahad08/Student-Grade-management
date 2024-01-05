@@ -4,6 +4,7 @@ class Model
 {
     private $db;
 
+    //Database Connection
     public function __construct($host, $username, $password, $dbname)
     {
         $this->db = new mysqli($host, $username, $password, $dbname);
@@ -13,11 +14,13 @@ class Model
         }
     }
 
+    //return the connection
     public function getDb()
     {
         return $this->db;
     }
 
+    //Retrieve User
     public function SelectUser($usertype, $username)
     {
         $stmt = $this->db->prepare("SELECT * from accounts
@@ -30,6 +33,7 @@ class Model
         return $result;
     }
 
+    //Retrieve 5 Subjects
     public function SelectSubjects($num_perpage, $offset)
     {
         $query = "SELECT * from subjects LIMIT $num_perpage OFFSET $offset";
@@ -40,6 +44,7 @@ class Model
         return $result;
     }
 
+    //Retrieve Subject
     public function SelectSubject($sub_id)
     {
         $query = "SELECT * from subjects where subject_id = ?";
@@ -51,7 +56,7 @@ class Model
         return $result;
     }
 
-
+    //Get All total Pages
     public function TotalPages($num_perpage)
     {
         $sql = "SELECT count(subject_id) as total_pages from subjects";
@@ -64,6 +69,7 @@ class Model
         return $total_pages;
     }
 
+    //Select User Email
     public function SelectEmail($email)
     {
         $query = $this->db->prepare("SELECT email from accounts where email = ?;");
@@ -74,6 +80,7 @@ class Model
         return $result->num_rows;
     }
 
+    //Insert Token to the Token Table
     public function InsertToken($token, $expiration_date, $email)
     {
         $query = $this->db->prepare("INSERT into token(token, expiration_date, email) values(?,?,?);");
@@ -92,6 +99,7 @@ class Model
         }
     }
 
+    //Select Token
     public function SelectToken()
     {
         $sql = "SELECT * from token where token = ?;";
@@ -104,6 +112,7 @@ class Model
         return $data;
     }
 
+    //Reset user password
     public function ResetPass($token, $new_pass)
     {
         $sql1 = "SELECT email from token where token = ?";
@@ -136,6 +145,7 @@ class Model
         }
     }
 
+    //Add Subject
     public function AddSubject($code, $subject, $description)
     {
 
@@ -156,6 +166,7 @@ class Model
         }
     }
 
+    //Delete Subject
     public function DeleteSubject($id)
     {
         $sql = "DELETE FROM subjects where subject_id = ?";
@@ -175,6 +186,7 @@ class Model
         }
     }
 
+    //Edit subject
     public function EditSubject($code, $subject, $description, $sub_id)
     {
         $sql = "UPDATE subjects SET code = ?, `subject` = ?, `description` = ? where subject_id = ?";
@@ -192,6 +204,7 @@ class Model
         }
     }
 
+    //Search subject
     public function SearchSubjects($subject)
     {
         $sub = "%" . $subject . "%";
@@ -204,6 +217,7 @@ class Model
         return $result;
     }
 
+    //Select 5 students
     public function SelectStudents($num_perpage, $offset)
     {
         $query = "SELECT * from students LIMIT $num_perpage OFFSET $offset";
@@ -212,5 +226,44 @@ class Model
         $result = $stmt->get_result();
 
         return $result;
+    }
+
+    //Add student
+    public function AddStudent($username, $email, $fname, $lname, $number, $section, $g_level, $pic)
+    {
+
+        $default_password = password_hash("12345", PASSWORD_BCRYPT);
+        $sql1 = "INSERT INTO accounts (username, email, `password`) VALUES(?,?,?)";
+        $stmt1 = $this->db->prepare($sql1);
+        $stmt1->bind_param("sss", $username, $email, $default_password);
+
+        try {
+            if ($stmt1->execute()) {
+                $acc_id = $this->db->insert_id;
+            } else {
+                throw new mysqli_sql_exception("Duplicate Email");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                return 'duplicate email';
+            }
+        }
+
+        $sql2 = "INSERT INTO students (f_name, l_name, contact_number, section, grade_level, profile_pic, account_id) 
+        VALUES(?,?,?,?,?,?,?)";
+        $stmt2 = $this->db->prepare($sql2);
+        $stmt2->bind_param("ssssssi", $fname, $lname, $number, $section, $g_level, $pic, $acc_id);
+
+        try {
+            if ($stmt2->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("Error adding student");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() === "Error adding student") {
+                return 'error';
+            }
+        }
     }
 }

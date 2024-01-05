@@ -13,7 +13,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Poppins;
 }
 
 body {
@@ -388,13 +388,24 @@ nav ul a:not(.active):hover,
 
 .subject-header,
 .subject-data {
-  padding: 5px;
+  padding: 15px;
 }
 
 .subject-data {
   text-align: center;
   color: var(--gray);
-  font-size: 1.1rem;
+}
+
+.subject-row .subject-data:nth-child(5) {
+  width: 150px;
+}
+
+.description {
+  text-align: justify;
+}
+
+#profile-pic {
+  width: 100%;
 }
 
 .action {
@@ -403,7 +414,13 @@ nav ul a:not(.active):hover,
   justify-content: center;
 }
 
-.action button {
+.action-img {
+  border: none;
+  height: 100%;
+}
+
+.action button,
+.action-img button {
   border: none;
   padding: 5px;
   cursor: pointer;

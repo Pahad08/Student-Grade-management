@@ -196,4 +196,38 @@ class controller
     {
         return $this->model->SelectStudents($num_perpage, $offset);
     }
+
+    public function AddingStudent($username, $email, $fname, $lname, $number, $section, $g_level, $pic)
+    {
+        $conn = $this->model->getDb();
+        $username = $this->CleanData($conn, $username);
+        $email = $this->CleanData($conn, $email);
+        $fname = $this->CleanData($conn, $fname);
+        $lname = $this->CleanData($conn, $lname);
+        $number = $this->CleanData($conn, $number);
+        $section = $this->CleanData($conn, $section);
+        $g_level = $this->CleanData($conn, $g_level);
+        $path = '../profile_pics/';
+        if (empty($pic['name'])) {
+            $profile_pic = $path . 'user.png';
+        } else {
+            $profile_pic = $path . $this->CleanData($conn, $pic['name']);
+        }
+        $add_student = $this->model->AddStudent(
+            $username,
+            $email,
+            $fname,
+            $lname,
+            $number,
+            $section,
+            $g_level,
+            $profile_pic
+        );
+
+        if ($add_student === 'success' && move_uploaded_file($pic['tmp_name'], $path . $pic['name'])) {
+            return 'success';
+        } else {
+            return 'fail';
+        }
+    }
 }

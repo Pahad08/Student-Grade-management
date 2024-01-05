@@ -19,18 +19,50 @@ const section_body = document.querySelector("#section-body");
 const glevel_body = document.querySelector("#glevel-body");
 const username_body = document.querySelector("#username-body");
 const email_body = document.querySelector("#email-body");
+const IsLong = false;
+
+//check if the form is empty
+function EmptyInput(array) {
+  for (let i = 0; i < array.length; i++) {
+    let value = array[i][1];
+    if (value.toString().trim() !== "") {
+      return false;
+    }
+  }
+  return true;
+}
+
+//check if all inputs have values
+function CompleteForm(array) {
+  for (let i = 0; i < array.length; i++) {
+    let value = array[i][1];
+    if (value.toString().trim() === "") {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 //function for adding and editing subject
-function EditAddSubject(form, filename) {
+function EditAddSubject(
+  form,
+  filename,
+  CreateParagraph,
+  RemoveParagraph,
+  ShowLoader,
+  HideLoader
+) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const form_data = new FormData(form);
+    const arrayform = Array.from(form_data);
     const code = form_data.get("code").trim();
     const subname = form_data.get("subject").trim();
     const description = form_data.get("description").trim();
 
-    if (code == "" && subname == "" && description == "") {
+    if (EmptyInput(arrayform) === true) {
       CreateParagraph("Code cannot be empty", code_body);
       CreateParagraph("Subject cannot be empty", subname_body);
       CreateParagraph("Description cannot be empty", description_body);
@@ -55,10 +87,9 @@ function EditAddSubject(form, filename) {
       RemoveParagraph(description_body);
     }
 
-    if (code !== "" && subname !== "" && description !== "") {
+    if (CompleteForm(arrayform)) {
       const ajax = new XMLHttpRequest();
       ajax.open("POST", `../ajax/${filename}`);
-
       ShowLoader();
 
       ajax.onreadystatechange = () => {
@@ -67,6 +98,7 @@ function EditAddSubject(form, filename) {
           HideLoader();
 
           if (response.status == "OK") {
+            form.reset();
             alert(response.message);
           } else {
             alert(response.error);
@@ -85,12 +117,44 @@ function EditAddSubject(form, filename) {
   });
 }
 
+if (edit_sub) {
+  //ajax for edit subject
+  EditAddSubject(
+    edit_sub,
+    "edit_sub.php",
+    CreateParagraph,
+    RemoveParagraph,
+    ShowLoader,
+    HideLoader
+  );
+}
+
+if (add_sub) {
+  //ajax for adding subject
+  EditAddSubject(
+    add_sub,
+    "add_sub.php",
+    CreateParagraph,
+    RemoveParagraph,
+    ShowLoader,
+    HideLoader
+  );
+}
+
 //adding and editing Student
-function EditAddStudent(form) {
+function EditAddStudent(
+  form,
+  filename,
+  CreateParagraph,
+  RemoveParagraph,
+  ShowLoader,
+  HideLoader
+) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const form_data = new FormData(form);
+    const formarray = Array.from(form_data);
     const fname = form_data.get("fname").trim();
     const lname = form_data.get("lname").trim();
     const number = form_data.get("number").trim();
@@ -99,15 +163,7 @@ function EditAddStudent(form) {
     const username = form_data.get("username").trim();
     const email = form_data.get("email").trim();
 
-    if (
-      fname == "" &&
-      lname == "" &&
-      number == "" &&
-      section == "" &&
-      g_level == "" &&
-      username == "" &&
-      email == ""
-    ) {
+    if (EmptyInput(formarray) === true) {
       CreateParagraph("First Name cannot be empty", fname_body);
       CreateParagraph("Last Name cannot be empty", lname_body);
       CreateParagraph("Contact number cannot be empty", number_body);
@@ -131,7 +187,14 @@ function EditAddStudent(form) {
     }
 
     if (number == "") {
+      RemoveParagraph(number_body);
       CreateParagraph("Contact number cannot be empty", number_body);
+    } else if (number.length > 11) {
+      RemoveParagraph(number_body);
+      CreateParagraph("Contact number only contain 11 numbers", number_body);
+    } else if (number.length < 11) {
+      RemoveParagraph(number_body);
+      CreateParagraph("Contact number must contain 11 numbers", number_body);
     } else {
       RemoveParagraph(number_body);
     }
@@ -160,26 +223,16 @@ function EditAddStudent(form) {
       RemoveParagraph(email_body);
     }
 
-    if (
-      fname == "" &&
-      lname !== "" &&
-      number !== "" &&
-      section !== "" &&
-      g_level !== "" &&
-      username !== "" &&
-      email !== ""
-    ) {
+    if (CompleteForm(formarray) === true) {
       const ajax = new XMLHttpRequest();
       ajax.open("POST", `../ajax/${filename}`);
-
       ShowLoader();
-
       ajax.onreadystatechange = () => {
         if (ajax.status == 200 && ajax.readyState == 4) {
           const response = JSON.parse(ajax.responseText);
           HideLoader();
-
           if (response.status == "OK") {
+            form.reset();
             alert(response.message);
           } else {
             alert(response.error);
@@ -200,6 +253,18 @@ function EditAddStudent(form) {
     RemoveParagraph(username_body);
     RemoveParagraph(email_body);
   });
+}
+
+//Add Student
+if (add_student) {
+  EditAddStudent(
+    add_student,
+    "../ajax/add_student.php",
+    CreateParagraph,
+    RemoveParagraph,
+    ShowLoader,
+    HideLoader
+  );
 }
 
 //showing and hiding loader
@@ -252,16 +317,6 @@ function RemoveParagraph(element) {
   if (element.querySelector(`.error-message`)) {
     element.removeChild(err_mess);
   }
-}
-
-if (edit_sub) {
-  //ajax for edit subject
-  EditAddSubject(edit_sub, "edit_sub.php");
-}
-
-if (add_sub) {
-  //ajax for adding subject
-  EditAddSubject(add_sub, "add_sub.php");
 }
 
 //search subject
