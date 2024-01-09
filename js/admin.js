@@ -4,7 +4,7 @@ const add_sub = document.querySelector("#sub-form");
 const loader = document.querySelector(".loader-body");
 const alert_body = document.querySelector(".alert-body");
 const cancel_delete = document.querySelector("#cancel-delete");
-const delete_sub = document.querySelector("#delete-sub");
+const delete_data = document.querySelector(".delete");
 const input_container = document.querySelector(".input-container");
 const code_body = document.querySelector("#code-body");
 const subname_body = document.querySelector("#sub-body");
@@ -19,7 +19,9 @@ const section_body = document.querySelector("#section-body");
 const glevel_body = document.querySelector("#glevel-body");
 const username_body = document.querySelector("#username-body");
 const email_body = document.querySelector("#email-body");
-const IsLong = false;
+const input_sub = document.querySelector("#sub-id");
+const input_student = document.querySelector("#acc-id");
+const edit_student = document.querySelector("#edit-studentform");
 
 //check if the form is empty
 function EmptyInput(array) {
@@ -200,25 +202,25 @@ function EditAddStudent(
     }
 
     if (section == "") {
-      CreateParagraph("Contact number cannot be empty", section_body);
+      CreateParagraph("Section cannot be empty", section_body);
     } else {
       RemoveParagraph(section_body);
     }
 
     if (g_level == "") {
-      CreateParagraph("Contact number cannot be empty", glevel_body);
+      CreateParagraph("Grade level cannot be empty", glevel_body);
     } else {
       RemoveParagraph(glevel_body);
     }
 
     if (username == "") {
-      CreateParagraph("Contact number cannot be empty", username_body);
+      CreateParagraph("Username cannot be empty", username_body);
     } else {
       RemoveParagraph(username_body);
     }
 
     if (email == "") {
-      CreateParagraph("Contact number cannot be empty", email_body);
+      CreateParagraph("Email cannot be empty", email_body);
     } else {
       RemoveParagraph(email_body);
     }
@@ -233,6 +235,10 @@ function EditAddStudent(
           HideLoader();
           if (response.status == "OK") {
             form.reset();
+            alert(response.message);
+          } else if (response.status == "duplicate") {
+            alert(response.message);
+          } else if (response.status == "fail") {
             alert(response.message);
           } else {
             alert(response.error);
@@ -260,6 +266,18 @@ if (add_student) {
   EditAddStudent(
     add_student,
     "../ajax/add_student.php",
+    CreateParagraph,
+    RemoveParagraph,
+    ShowLoader,
+    HideLoader
+  );
+}
+
+//Edit Student
+if (edit_student) {
+  EditAddStudent(
+    edit_student,
+    "../ajax/edit_student.php",
     CreateParagraph,
     RemoveParagraph,
     ShowLoader,
@@ -339,21 +357,26 @@ if (search_sub) {
 }
 
 //prompt the alert delete
-function ShowDelete() {
+function ShowDelete(id) {
   const btn_delete = document.querySelectorAll(".btn-delete");
-  const input_sub = document.querySelector("#sub-id");
   if (btn_delete) {
     btn_delete.forEach((element) => {
       element.addEventListener("click", () => {
         alert_body.classList.toggle("show");
         const sub_id = element.getAttribute("data-id");
-        input_sub.value = sub_id;
+        id.value = sub_id;
       });
     });
   }
 }
 
-ShowDelete();
+if (input_sub) {
+  ShowDelete(input_sub);
+}
+
+if (input_student) {
+  ShowDelete(input_student);
+}
 
 //remove the show class in the alert body
 if (alert_body) {
@@ -362,7 +385,7 @@ if (alert_body) {
       event.target.className == "alert-body show" &&
       alert_body.classList.contains("show")
     ) {
-      delete_sub.removeAttribute("data-id");
+      delete_data.removeAttribute("data-id");
       alert_body.classList.remove("show");
     }
   });
@@ -371,7 +394,7 @@ if (alert_body) {
 //close the delete alert
 if (cancel_delete) {
   cancel_delete.addEventListener("click", () => {
-    delete_sub.removeAttribute("data-id");
+    delete_data.removeAttribute("data-id");
     alert_body.classList.remove("show");
   });
 }

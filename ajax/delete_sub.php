@@ -1,6 +1,7 @@
 <?php
 
-require_once dirname(__DIR__) . "\\controller\\controller.php";
+$root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 
 $controller = new controller("localhost", "root", "", "school");
 

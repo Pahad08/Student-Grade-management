@@ -5,7 +5,8 @@ session_start();
 if (!isset($_SESSION['admins_id'])) {
     header("location: login.php");
 } else {
-    require_once dirname(__DIR__) . "\\controller\\controller.php";
+    $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+    require_once $root . 'controller' . DIRECTORY_SEPARATOR . 'controller.php';
 }
 
 if (!isset($_GET['page_num']) || $_GET['page_num'] <= 0) {
@@ -14,25 +15,33 @@ if (!isset($_GET['page_num']) || $_GET['page_num'] <= 0) {
 
 $controller = new controller("localhost", "root", "", "school");
 
-
 function Checkpage($total_pages, $page_num)
 {
     return $total_pages == 1 || $page_num == $total_pages;
 }
 
-if (isset($_SESSION['deleted_sub'])) {
-    $deleted_sub = $_SESSION['deleted_sub'];
-    echo "<script>alert('$deleted_sub')</script>";
-    unset($_SESSION['deleted_sub']);
+if (isset($_SESSION['deleted_student'])) {
+
+    $deleted_student = $_SESSION['deleted_student'];
+    echo "<script>alert('$deleted_student')</script>";
+    unset($_SESSION['deleted_student']);
 } elseif (isset($_SESSION['delete_err'])) {
+
     $error_del = $_SESSION['delete_err'];
     echo "<script>alert('$error_del')</script>";
     unset($_SESSION['delete_err']);
+} elseif (isset($_SESSION['img_err'])) {
+
+    $error_img = $_SESSION['img_err'];
+    echo "<script>alert('$error_img')</script>";
+    unset($_SESSION['img_err']);
 }
 
-if (isset($_GET['sub_id'])) {
-    $get_subject = $controller->GetSubject($_GET['sub_id']);
-    $result = $get_subject->fetch_assoc();
+if (isset($_GET['acc_id'])) {
+    $get_student = $controller->GetStudent($_GET['acc_id']);
+    $student = $get_student->fetch_assoc();
+    $get_acc = $controller->GetAccount($_GET['acc_id']);
+    $account = $get_acc->fetch_assoc();
 } else {
     $page_num = $_GET['page_num'];
     $num_perpage = 5;
@@ -118,7 +127,7 @@ $controller->CloseDB();
                 </ul>
 
                 <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="">View
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">View
                             Students</a>
                     </li>
                 </ul>
@@ -158,11 +167,11 @@ $controller->CloseDB();
 
             <div class="main-body">
 
-                <?php if (!isset($_GET['sub_id'])) { ?>
+                <?php if (!isset($_GET['acc_id'])) { ?>
                     <div class="table-container">
 
                         <div class="table-header">
-                            <a href="add_subject.php">Add New</a>
+                            <a href="add_students.php">Add New</a>
                         </div>
 
                         <div class="search-bar">
@@ -193,12 +202,12 @@ $controller->CloseDB();
                                         <td class="subject-data"><?php echo $students['grade_level']  ?></td>
                                         <td class="subject-data"><img src="../profile_pics/<?php echo $students['profile_pic']  ?>" id="profile-pic">
                                         </td>
-                                        <td class="subject-data action-img">
-                                            <button class="btn-delete" data-id="<?php echo $students['student_id'] ?>">
+                                        <td class="subject-data action">
+                                            <button class="btn-delete" data-id="<?php echo $students['account_id'] ?>">
                                                 <img src="../images/delete.png" alt="delete" class="delete-sub">
                                             </button>
                                             <button class="btn-edit">
-                                                <a href=<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?sub_id=" . $students['student_id']) ?>><img src="../images/edit.png" alt="Edit" class="edit-sub"></a>
+                                                <a href=<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?acc_id=" . $students['account_id']) ?>><img src="../images/edit.png" alt="Edit" class="edit-sub"></a>
                                             </button>
                                         </td>
 
@@ -220,9 +229,9 @@ $controller->CloseDB();
 
                                     <div class="alert-footer">
                                         <button id="cancel-delete">Cancel</button>
-                                        <form action='../ajax/delete_sub.php' method="post" id="sub-delete">
-                                            <input type="text" id="sub-id" name="sub_id" hidden>
-                                            <button id="delete-sub" name="delete_sub" value="delete_sub" class="delete">Delete</button>
+                                        <form action='../ajax/delete_student.php' method="post" id="sub-delete">
+                                            <input type="text" id="acc-id" name="acc-id" hidden>
+                                            <button id="delete-student" name="delete_student" value="delete_student" class="delete">Delete</button>
                                         </form>
                                     </div>
                                 </div>
@@ -264,25 +273,51 @@ $controller->CloseDB();
 
                     <div class="form-body">
 
-                        <form id="edit-subform">
+                        <form id="edit-studentform" enctype="multipart/form-data" action="../ajax/edit_student.php">
 
-                            <input type="text" name="sub_id" id="sub_id" value="<?php echo $result['subject_id'] ?>" hidden>
+                            <input type="text" name="acc_id" id="acc_id" value="<?php echo $student['account_id'] ?>" hidden>
 
                             <div class="input-container">
-                                <div class="input-body" id="code-body">
-                                    <label for="code">Subject Code</label>
-                                    <input type="text" name="code" id="code" value="<?php echo $result['code'] ?>">
+                                <div class="input-body" id="fname-body">
+                                    <label for="fname">First Name</label>
+                                    <input type="text" name="fname" id="fname" value="<?php echo $student['f_name'] ?>">
                                 </div>
 
-                                <div class="input-body" id="sub-body">
-                                    <label for="subject">Subject</label>
-                                    <input type="text" name="subject" id="subject" value="<?php echo $result['subject'] ?>">
+                                <div class="input-body" id="lname-body">
+                                    <label for="lname">Last Name</label>
+                                    <input type="text" name="lname" id="lname" value="<?php echo $student['l_name'] ?>">
                                 </div>
 
-                                <div class="input-body" id="description-body">
-                                    <label for="description">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="10" id="description"><?php echo $result['description'] ?></textarea>
+                                <div class="input-body" id="number-body">
+                                    <label for="number">Contact Number</label>
+                                    <input type="number" name="number" id="number" inputmode="numeric" value="<?php echo $student['contact_number'] ?>">
                                 </div>
+
+                                <div class="input-body" id="section-body">
+                                    <label for="section">Section</label>
+                                    <input type="text" name="section" id="section" maxlength="1" value="<?php echo $student['section'] ?>">
+                                </div>
+
+                                <div class="input-body" id="glevel-body">
+                                    <label for="g-level">Grade Level</label>
+                                    <input type="text" name="g-level" id="g-level" value="<?php echo $student['grade_level'] ?>">
+                                </div>
+
+                                <div class="input-body" id="image-body">
+                                    <label for="image">Image</label>
+                                    <input type="file" name="image" id="image" accept="image/*">
+                                </div>
+
+                                <div class="input-body" id="username-body">
+                                    <label for="username">Username</label>
+                                    <input type="text" name="username" id="username" value="<?php echo $account['username'] ?>">
+                                </div>
+
+                                <div class="input-body" id="email-body">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" id="email" value="<?php echo $account['email'] ?>">
+                                </div>
+
                             </div>
 
                             <div class="editbtn-body">

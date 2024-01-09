@@ -220,7 +220,7 @@ class Model
     //Select 5 students
     public function SelectStudents($num_perpage, $offset)
     {
-        $query = "SELECT * from students LIMIT $num_perpage OFFSET $offset";
+        $query = "SELECT * from students order by grade_level,l_name LIMIT $num_perpage OFFSET $offset";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -263,6 +263,120 @@ class Model
         } catch (mysqli_sql_exception $e) {
             if ($e->getMessage() === "Error adding student") {
                 return 'error';
+            }
+        }
+    }
+
+    //Select Profile Pic
+    public function SelectProfile($id)
+    {
+        $query = "SELECT profile_pic from students where account_id = ?";
+        $statement = $this->db->prepare($query);
+        $statement->bind_param("i", $id);
+        $statement->execute();
+        $result = $statement->get_result();
+        return $result;
+    }
+
+    //Delete Student
+    public function Deletestudent($id)
+    {
+
+        $sql = "DELETE FROM accounts where account_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $id);
+
+        try {
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                throw new mysqli_sql_exception("Deleting Student Failed");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "Deleting Student Failed") {
+                return false;
+            }
+        }
+    }
+
+    //Get Student
+    public function SelectStudent($acc_id)
+    {
+        $query = "SELECT * from students where account_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $acc_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Get Account
+    public function SelectAccount($acc_id)
+    {
+        $query = "SELECT * from accounts where account_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $acc_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Edit Account
+    public function EditAcc($username, $email, $password, $acc_id)
+    {
+        if (empty($password)) {
+            $sql = "UPDATE accounts SET username = ?, `email` = ? where account_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssi", $username, $email, $acc_id);
+        } else {
+            $sql = "UPDATE accounts SET username = ?, `email` = ?, `password` = ? where account_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("sssi", $username, $email, $password, $acc_id);
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("duplicate");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                return 'duplicate';
+            }
+        }
+    }
+
+    //Edit student
+    public function EditStudent($fname, $lname, $number, $section, $g_level, $pic, $id)
+    {
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        $picture = $path . $pic['name'];
+
+        if ($pic['size'] > 0) {
+            $sql = "UPDATE students SET f_name = ?, l_name = ?, contact_number = ?, 
+            section = ?, grade_level = ?, profile_pic = ? where account_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssssssi", $fname, $lname, $number, $section, $g_level, $picture, $id);
+        } else {
+            $sql = "UPDATE students SET f_name = ?, l_name = ?, contact_number = ?, 
+            section = ?, grade_level = ? where account_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("sssssi", $fname, $lname, $number, $section, $g_level, $id);
+            return $stmt->execute();
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("fail");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() === "fail") {
+                return 'fail';
             }
         }
     }

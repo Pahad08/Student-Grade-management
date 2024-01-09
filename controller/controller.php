@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 require '../model/model.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -18,13 +19,15 @@ class controller
         $this->model = new Model($host, $username, $password, $dbname);
     }
 
+    //Close the connection
     public function CloseDB()
     {
         $conn = $this->model->getDb();
         return $conn->close();
     }
 
-    public function CleanData($conn, $data)
+    //Sanitizing and cleaning data
+    public function CleanData(mysqli $conn, string $data): string
     {
         $data = stripslashes($data);
         $data = trim($data);
@@ -33,7 +36,8 @@ class controller
         return $data;
     }
 
-    public function redirect($conn, $location, $user_id, $usertype)
+    //redirect the user to a page
+    public function redirect(mysqli $conn, string $location, int $user_id, string $usertype): void
     {
         session_regenerate_id(true);
         $_SESSION[$usertype . "_id"] = $user_id;
@@ -42,7 +46,8 @@ class controller
         exit();
     }
 
-    public function login($usertype, $username, $password)
+    //Check the user data
+    public function login(string $usertype, string $username, string $password): string
     {
         $conn = $this->model->getDb();
 
@@ -73,7 +78,6 @@ class controller
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
                 if ($user->num_rows > 0 && password_verify($this->CleanData($conn, $password), $hashed_pass)) {
-
                     $this->redirect($conn, "student.php", $user_id, $usertype);
                 } else {
                     $conn->close();
@@ -84,7 +88,8 @@ class controller
         }
     }
 
-    public function SelectEmail($email)
+    //Check email if exist and it will send OTP to the email
+    public function SelectEmail(string $email): string
     {
         $result = $this->model->SelectEmail($email);
 
@@ -124,27 +129,32 @@ class controller
         }
     }
 
-    public function GetSubjects($num_perpage, $offset)
+    //Get subject
+    public function GetSubjects(int $num_perpage, int $offset): mysqli_result
     {
         return $this->model->SelectSubjects($num_perpage, $offset);
     }
 
-    public function GetSubject($sub_id)
+    //Get Specific Subject
+    public function GetSubject(int $sub_id): mysqli_result
     {
         return $this->model->SelectSubject($sub_id);
     }
 
-    public function GetTotalpages($num_perpage)
+    //Get all total pages
+    public function GetTotalpages(int $num_perpage): float
     {
         return $this->model->TotalPages($num_perpage);
     }
 
-    public function SelectToken()
+    //Select Token
+    public function SelectToken(): mixed
     {
         return $this->model->SelectToken();
     }
 
-    public function ResetPass($token, $new_pass)
+    //Reset Password
+    public function ResetPass(string $token, string $new_pass): string
     {
         if ($this->model->ResetPass($token, $new_pass)) {
             return 'success';
@@ -153,7 +163,8 @@ class controller
         }
     }
 
-    public function AddSubject($code, $subject, $description)
+    //Add subject
+    public function AddSubject(string $code, string $subject, string $description): string
     {
         $conn = $this->model->getDb();
 
@@ -168,7 +179,8 @@ class controller
         }
     }
 
-    public function DeleteSub($id)
+    //Delete Subject
+    public function DeleteSub(int $id): string
     {
         if ($this->model->DeleteSubject($id)) {
             return 'success';
@@ -177,7 +189,8 @@ class controller
         }
     }
 
-    public function EditSub($code, $subject, $description, $sub_id)
+    //Edit Subject
+    public function EditSub(string $code, string $subject, string $description, int $sub_id): string
     {
         if ($this->model->EditSubject($code, $subject, $description, $sub_id)) {
             return 'success';
@@ -186,19 +199,30 @@ class controller
         }
     }
 
-    public function SearchSubjects($subject)
+    //Search Subjects
+    public function SearchSubjects(string $subject): mysqli_result
     {
         $conn = $this->model->getDb();
         return $this->model->SearchSubjects($this->CleanData($conn, $subject));
     }
 
-    public function SelectStudents($num_perpage, $offset)
+    //Select Students
+    public function SelectStudents(int $num_perpage, int $offset): mysqli_result
     {
         return $this->model->SelectStudents($num_perpage, $offset);
     }
 
-    public function AddingStudent($username, $email, $fname, $lname, $number, $section, $g_level, $pic)
-    {
+    //Add Student
+    public function AddingStudent(
+        string $username,
+        string  $email,
+        string  $fname,
+        string  $lname,
+        string $number,
+        string $section,
+        string $g_level,
+        array $pic
+    ): string {
         $conn = $this->model->getDb();
         $username = $this->CleanData($conn, $username);
         $email = $this->CleanData($conn, $email);
@@ -207,8 +231,8 @@ class controller
         $number = $this->CleanData($conn, $number);
         $section = $this->CleanData($conn, $section);
         $g_level = $this->CleanData($conn, $g_level);
-        $path = '../profile_pics/';
-        if (empty($pic['name'])) {
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        if (empty($pic['size'])) {
             $profile_pic = $path . 'user.png';
         } else {
             $profile_pic = $path . $this->CleanData($conn, $pic['name']);
@@ -228,6 +252,101 @@ class controller
             return 'success';
         } else {
             return 'fail';
+        }
+    }
+
+    //Select student profile picture
+    public function SelectProfilePic(int $id): mysqli_result
+    {
+        return $this->model->SelectProfile($id);
+    }
+
+    public function DeleteStudent($id)
+    {
+
+        if ($this->model->Deletestudent($id)) {
+            return 'success';
+        } else {
+            return 'fail';
+        }
+    }
+
+    //Check if the student have a default profile
+    public function CheckProfile(string $delete_student, string $user_profile): void
+    {
+        if ($user_profile == '../profile_pics/user.png') {
+            if ($delete_student == 'success') {
+                $_SESSION['deleted_student'] = 'Student Deleted!';
+                header('location: ../view/view_students.php');
+                exit();
+            } else {
+                $_SESSION['delete_err'] = 'Theres an error, please try again!';
+                header('location: ../view/view_students.php');
+                exit();
+            }
+        } else {
+            if ($delete_student == 'success') {
+                if (unlink($user_profile)) {
+                    $_SESSION['deleted_student'] = 'Student Deleted!';
+                    header('location: ../view/view_students.php');
+                    exit();
+                }
+            } else {
+                $_SESSION['delete_err'] = 'Theres an error, please try again!';
+                header('location: ../view/view_students.php');
+                exit();
+            }
+        }
+    }
+
+    //Get student
+    public function GetStudent(int $id): mysqli_result
+    {
+        return $this->model->SelectStudent($id);
+    }
+
+    //Get student account
+    public function GetAccount(int $id): mysqli_result
+    {
+        return $this->model->SelectAccount($id);
+    }
+
+    //Edit Student
+    public function Editstudent(
+        string $username,
+        string $email,
+        string $password,
+        string $fname,
+        string $lname,
+        string $number,
+        string $section,
+        string $g_level,
+        array $pic,
+        int $id
+    ): string {
+
+        $conn = $this->model->getDb();
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        $username = $this->CleanData($conn, $username);
+        $email = $this->CleanData($conn, $email);
+        $password = $this->CleanData($conn, password_hash($password, PASSWORD_BCRYPT));
+        $fname = $this->CleanData($conn, $fname);
+        $lname = $this->CleanData($conn, $lname);
+        $number = $this->CleanData($conn, $number);
+        $section = $this->CleanData($conn, $section);
+        $g_level = $this->CleanData($conn, $g_level);
+        $editstudent = $this->model->EditStudent($fname, $lname, $number, $section, $g_level, $pic, $id);
+        $editacc = $this->model->EditAcc($username, $email, $password, $id);
+
+        if ($editstudent == 'success' && $editacc == 'success') {
+            move_uploaded_file($pic['tmp_name'], $path . $pic['name']);
+            return 'success';
+        } elseif ($editacc == 'duplicate') {
+            return 'duplicate';
+        } elseif ($editstudent == 'fail' && $editacc == 'duplicate') {
+            return 'fail';
+        } else {
+            return 'error';
         }
     }
 }

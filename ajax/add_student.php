@@ -1,6 +1,7 @@
 <?php
 
-require_once dirname(__DIR__) . "\\controller\\controller.php";
+$root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
@@ -10,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $_POST['email'],
         $_POST['fname'],
         $_POST['lname'],
-        $_POST['number'],
+        (string)$_POST['number'],
         $_POST['section'],
         $_POST['g-level'],
         $_FILES['image'],

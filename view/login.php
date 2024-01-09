@@ -9,7 +9,8 @@ if (isset($_SESSION['admin_id'])) {
     header("location: student.php");
 }
 
-require_once dirname(__DIR__) . "\\controller\\controller.php";
+$root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 
 if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 

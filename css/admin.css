@@ -72,7 +72,7 @@ a {
 /* alert */
 
 .alert-body {
-  position: absolute;
+  position: fixed;
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -388,7 +388,7 @@ nav ul a:not(.active):hover,
 
 .subject-header,
 .subject-data {
-  padding: 15px;
+  padding: 10px;
 }
 
 .subject-data {
@@ -397,7 +397,8 @@ nav ul a:not(.active):hover,
 }
 
 .subject-row .subject-data:nth-child(5) {
-  width: 150px;
+  max-width: 150px;
+  min-width: 100px;
 }
 
 .description {
@@ -405,7 +406,7 @@ nav ul a:not(.active):hover,
 }
 
 #profile-pic {
-  width: 100%;
+  max-width: 100%;
 }
 
 .action {

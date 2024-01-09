@@ -5,7 +5,8 @@ session_start();
 if (!isset($_SESSION['admins_id'])) {
     header("location: login.php");
 } else {
-    require_once dirname(__DIR__) . "\\controller\\controller.php";
+    $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+    require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 }
 
 if (!isset($_GET['page_num']) || $_GET['page_num'] <= 0) {

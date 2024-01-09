@@ -2,7 +2,8 @@
 
 if (isset($_POST['password']) && isset($_POST['token'])) {
 
-    require_once dirname(__DIR__) . "\\controller\\controller.php";
+    $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+    require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
     $controller = new controller("localhost", "root", "", "school");
     $check_result = $controller->ResetPass($_POST['token'], $_POST['password']);
     $controller->CloseDB();
