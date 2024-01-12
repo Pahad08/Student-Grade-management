@@ -220,7 +220,7 @@ class Model
     //Select 5 students
     public function SelectStudents($num_perpage, $offset)
     {
-        $query = "SELECT * from students order by grade_level,l_name LIMIT $num_perpage OFFSET $offset";
+        $query = "SELECT * from students order by grade_level,l_name,f_name LIMIT $num_perpage OFFSET $offset";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -365,7 +365,6 @@ class Model
             section = ?, grade_level = ? where account_id = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("sssssi", $fname, $lname, $number, $section, $g_level, $id);
-            return $stmt->execute();
         }
 
         try {
@@ -379,5 +378,18 @@ class Model
                 return 'fail';
             }
         }
+    }
+
+    //Search subject
+    public function SearchStudents($student)
+    {
+        $student = "%" . $student . "%";
+        $query = "SELECT * from students WHERE f_name LIKE ? or l_name LIKE ? LIMIT 5";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ss", $student, $student);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
     }
 }

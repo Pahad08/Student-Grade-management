@@ -8,19 +8,19 @@ if (isset($_GET['sub'])) {
     $search_subject = $controller->SearchSubjects($_GET['sub']);
     $controller->CloseDB();
 
-    echo "<tr class='subject-row'>
-    <th class='subject-header'>Code</th>
-    <th class='subject-header'>Subject</th>
-    <th class='subject-header'>Description</th>
-    <th class='subject-header'>Action</th>
+    echo "<tr class='row'>
+    <th class='table-head'>Code</th>
+    <th class='table-head'>Subject</th>
+    <th class='table-head'>Description</th>
+    <th class='table-head'>Action</th>
 </tr>";
 
     while ($result = $search_subject->fetch_assoc()) {
-        echo "<tr class='subject-row'>";
-        echo "<td class='subject-data'>" . $result['code'] . "</td>";
-        echo "<td class='subject-data'>" . $result['subject'] . "</td>";
-        echo "<td class='subject-data'>" . $result['description'] . "</td>";
-        echo "<td class='subject-data action'>";
+        echo "<tr class='row'>";
+        echo "<td class='data'>" . $result['code'] . "</td>";
+        echo "<td class='data'>" . $result['subject'] . "</td>";
+        echo "<td class='data'>" . $result['description'] . "</td>";
+        echo "<td class='data action'>";
         echo "<button class='btn-delete' data-id='" . $result['subject_id'] . "'>";
         echo "<img src='../images/delete.png' alt='delete' class='delete-sub'>";
         echo "</button>";

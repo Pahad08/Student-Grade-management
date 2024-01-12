@@ -141,7 +141,7 @@ function Checkpage($total_pages, $page_num)
 
                     <form id="student-form" enctype="multipart/form-data">
 
-                        <div class="input-container">
+                        <div class="input-container student-form">
                             <div class="input-body" id="fname-body">
                                 <label for="fname">First Name</label>
                                 <input type="text" name="fname" id="fname">

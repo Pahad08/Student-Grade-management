@@ -24,7 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" || isset($_POST['add'])) {
     );
     $controller->CloseDB();
     if ($edit_student == 'success' && file_exists($user_profile)) {
-        unlink($user_profile);
+        if ($_FILES['image']['size'] !== 0) {
+            unlink($user_profile);
+        }
         echo json_encode(['status' => 'OK', 'message' => 'Student Edited!']);
     } elseif ($edit_student == 'duplicate') {
         echo json_encode(['status' => 'duplicate', 'message' => 'Email already exist!']);

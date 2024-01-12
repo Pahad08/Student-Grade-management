@@ -349,4 +349,11 @@ class controller
             return 'error';
         }
     }
+
+    //Search Subjects
+    public function SearchStudents(string $student): mysqli_result
+    {
+        $conn = $this->model->getDb();
+        return $this->model->SearchStudents($this->CleanData($conn, $student));
+    }
 }

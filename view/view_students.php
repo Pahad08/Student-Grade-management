@@ -176,33 +176,33 @@ $controller->CloseDB();
 
                         <div class="search-bar">
                             <label for="search">Search: </label>
-                            <input type="text" id="search-sub">
+                            <input type="text" id="search-student">
                         </div>
 
                         <div class="table-body">
 
-                            <table id="table-subject">
+                            <table id="table">
 
-                                <tr class="subject-row">
-                                    <th class="subject-header">Name</th>
-                                    <th class="subject-header">Contact Number</th>
-                                    <th class="subject-header">Section</th>
-                                    <th class="subject-header">Grade Level</th>
-                                    <th class="subject-header">Profile Pic</th>
-                                    <th class="subject-header">Action</th>
+                                <tr class="row">
+                                    <th class="table-head">Name</th>
+                                    <th class="table-head">Contact Number</th>
+                                    <th class="table-head">Section</th>
+                                    <th class="table-head">Grade Level</th>
+                                    <th class="table-head">Profile Pic</th>
+                                    <th class="table-head">Action</th>
                                 </tr>
 
                                 <?php while ($students = $get_students->fetch_assoc()) { ?>
-                                    <tr class="subject-row">
+                                    <tr class="row">
 
-                                        <td class="subject-data">
+                                        <td class="data">
                                             <?php echo $students['f_name'] . " " . $students['l_name']  ?></td>
-                                        <td class="subject-data"><?php echo $students['contact_number']  ?></td>
-                                        <td class="subject-data"><?php echo $students['section']  ?></td>
-                                        <td class="subject-data"><?php echo $students['grade_level']  ?></td>
-                                        <td class="subject-data"><img src="../profile_pics/<?php echo $students['profile_pic']  ?>" id="profile-pic">
+                                        <td class="data"><?php echo $students['contact_number']  ?></td>
+                                        <td class="data"><?php echo $students['section']  ?></td>
+                                        <td class="data"><?php echo $students['grade_level']  ?></td>
+                                        <td class="data"><img src="../profile_pics/<?php echo $students['profile_pic']  ?>" id="profile-pic">
                                         </td>
-                                        <td class="subject-data action">
+                                        <td class="data action">
                                             <button class="btn-delete" data-id="<?php echo $students['account_id'] ?>">
                                                 <img src="../images/delete.png" alt="delete" class="delete-sub">
                                             </button>

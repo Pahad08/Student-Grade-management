@@ -11,6 +11,8 @@ const subname_body = document.querySelector("#sub-body");
 const description_body = document.querySelector("#description-body");
 const edit_sub = document.querySelector("#edit-subform");
 const search_sub = document.querySelector("#search-sub");
+const input_sub = document.querySelector("#sub-id");
+const search_student = document.querySelector("#search-student");
 const add_student = document.querySelector("#student-form");
 const fname_body = document.querySelector("#fname-body");
 const lname_body = document.querySelector("#lname-body");
@@ -19,7 +21,6 @@ const section_body = document.querySelector("#section-body");
 const glevel_body = document.querySelector("#glevel-body");
 const username_body = document.querySelector("#username-body");
 const email_body = document.querySelector("#email-body");
-const input_sub = document.querySelector("#sub-id");
 const input_student = document.querySelector("#acc-id");
 const edit_student = document.querySelector("#edit-studentform");
 
@@ -345,13 +346,33 @@ if (search_sub) {
 
     ajax.onload = () => {
       if (ajax.status == 200 && ajax.readyState == 4) {
-        const table = document.querySelector("#table-subject");
+        const table = document.querySelector("#table");
         table.innerHTML = ajax.responseText;
-        ShowDelete();
+        ShowDelete(input_sub);
       }
     };
 
     ajax.open("GET", `../ajax/search_sub.php?sub=${sub_value}`);
+    ajax.send();
+  });
+}
+
+//search students
+if (search_student) {
+  search_student.addEventListener("input", () => {
+    const ajax = new XMLHttpRequest();
+    const student_value = search_student.value;
+
+    ajax.onload = () => {
+      if (ajax.status == 200 && ajax.readyState == 4) {
+        const table = document.querySelector("#table");
+        console.log(ajax.responseText);
+        table.innerHTML = ajax.responseText;
+        ShowDelete(input_student);
+      }
+    };
+
+    ajax.open("GET", `../ajax/search_student.php?student=${student_value}`);
     ajax.send();
   });
 }
