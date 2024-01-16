@@ -1,15 +1,16 @@
 <?php
 
 declare(strict_types=1);
-require '../model/model.php';
+$root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+require $root . 'model' . DIRECTORY_SEPARATOR . "model.php";
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../PHPMailer/src/Exception.php';
-require '../PHPMailer/src/PHPMailer.php';
-require '../PHPMailer/src/SMTP.php';
-
+require $root . 'PHPMailer\src\Exception.php';
+require $root . 'PHPMailer\src\PHPMailer.php';
+require $root . 'PHPMailer\src\SMTP.php';
 class controller
 {
     private $model;
@@ -135,6 +136,12 @@ class controller
         return $this->model->SelectSubjects($num_perpage, $offset);
     }
 
+    //Get all subjects
+    public function SelectSubjects(): mysqli_result
+    {
+        return $this->model->GetSubjects();
+    }
+
     //Get Specific Subject
     public function GetSubject(int $sub_id): mysqli_result
     {
@@ -142,9 +149,9 @@ class controller
     }
 
     //Get all total pages
-    public function GetTotalpages(int $num_perpage): float
+    public function GetTotalpages(string $column, int $num_perpage, string $table, string $section = "", string  $glvl = ""): float
     {
-        return $this->model->TotalPages($num_perpage);
+        return $this->model->TotalPages($column, $num_perpage, $table, $section, $glvl);
     }
 
     //Select Token
@@ -355,5 +362,11 @@ class controller
     {
         $conn = $this->model->getDb();
         return $this->model->SearchStudents($this->CleanData($conn, $student));
+    }
+
+    //Select students based on the section
+    public function GetStudents(int $num_perpage, int $offset, string $section, string $glvl): mysqli_result
+    {
+        return $this->model->GetStudents($num_perpage, $offset, $section, $glvl);
     }
 }

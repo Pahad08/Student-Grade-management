@@ -539,7 +539,9 @@ nav ul a:not(.active):hover,
 }
 
 .input-body input,
-.input-body textarea {
+.input-body textarea,
+.input input,
+.input select {
   padding: 8px;
   border: 1px solid var(--gray);
   border-radius: 5px;
@@ -611,6 +613,81 @@ nav ul a:not(.active):hover,
 
 .sec:hover {
   color: var(--black);
+}
+
+.view {
+  background: var(--skyblue);
+  padding: 5px 20px;
+  display: flex;
+}
+
+.view img {
+  width: 20px;
+}
+
+.view:hover {
+  background: var(--darkblue);
+}
+
+/*edit grade */
+.student-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 4px;
+}
+
+.student-info + hr {
+  width: 99%;
+  margin-bottom: 10px;
+  color: #b12841;
+}
+
+#add-grade,
+.input {
+  display: flex;
+  justify-content: center;
+}
+
+#add-grade {
+  gap: 20px;
+  align-items: center;
+}
+
+.input {
+  flex-direction: column;
+}
+
+.button-grade {
+  align-self: flex-end;
+  display: flex;
+  gap: 5px;
+}
+
+#cancel {
+  background: var(--red);
+  border-radius: 3px;
+  padding: 5px 10px;
+  color: var(--black);
+}
+
+#cancel:hover {
+  background: var(--darkred);
+  color: var(--white);
+}
+
+#grade-add {
+  background: var(--skyblue);
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#grade-add:hover {
+  background: var(--darkblue);
+  color: var(--white);
 }
 
 /* Medium devices (landscape tablets, 768px and up) */

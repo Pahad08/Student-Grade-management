@@ -57,15 +57,24 @@ class Model
     }
 
     //Get All total Pages
-    public function TotalPages($num_perpage)
+    public function TotalPages($column, $num_perpage, $table, $section = "", $glvl = "")
     {
-        $sql = "SELECT count(subject_id) as total_pages from subjects";
-        $statement = $this->db->prepare($sql);
-        $statement->execute();
-        $count_result = $statement->get_result();
-        $count = $count_result->fetch_assoc();
-        $total_pages = ceil($count['total_pages'] / $num_perpage);
-
+        if (empty($section) && empty($glvl)) {
+            $sql = "SELECT count($column) as total_pages from $table";
+            $statement = $this->db->prepare($sql);
+            $statement->execute();
+            $count_result = $statement->get_result();
+            $count = $count_result->fetch_assoc();
+            $total_pages = ceil($count['total_pages'] / $num_perpage);
+        } else {
+            $sql = "SELECT count($column) as total_pages from $table where section = ? and grade_level = ?";
+            $statement = $this->db->prepare($sql);
+            $statement->bind_param("ss", $section, $glvl);
+            $statement->execute();
+            $count_result = $statement->get_result();
+            $count = $count_result->fetch_assoc();
+            $total_pages = ceil($count['total_pages'] / $num_perpage);
+        }
         return $total_pages;
     }
 
@@ -387,6 +396,30 @@ class Model
         $query = "SELECT * from students WHERE f_name LIKE ? or l_name LIKE ? LIMIT 5";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ss", $student, $student);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Select students based on the section
+    public function GetStudents($num_perpage, $offset, $section, $glvl)
+    {
+        $query = "SELECT account_id,f_name,l_name from students where section = ? and grade_level= ? 
+        order by grade_level,l_name,f_name LIMIT $num_perpage OFFSET $offset";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ss", $section, $glvl);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Retrieve all subjects
+    public function GetSubjects()
+    {
+        $query = "SELECT subject_id, `subject` from subjects";
+        $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
 

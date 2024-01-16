@@ -43,15 +43,17 @@ if (isset($_GET['acc_id'])) {
     $get_acc = $controller->GetAccount($_GET['acc_id']);
     $account = $get_acc->fetch_assoc();
 } else {
+    $id_column = "student_id";
+    $table = "students";
     $page_num = $_GET['page_num'];
-    $num_perpage = 5;
+    $num_perpage = 1;
     $next_page =  $_GET['page_num'] + 1;
     $prev_page =  $_GET['page_num'] - 1;
     $min = $page_num;
     $max = $page_num + 1;
     $offset = ($page_num * $num_perpage) - $num_perpage;
     $get_students = $controller->SelectStudents($num_perpage, $offset);
-    $total_pages = $controller->GetTotalpages($num_perpage);
+    $total_pages = $controller->GetTotalpages($id_column, $num_perpage, $table);
 }
 
 $controller->CloseDB();

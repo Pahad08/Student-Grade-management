@@ -23,7 +23,6 @@ $offset = ($page_num * $num_perpage) - $num_perpage;
 
 $controller = new controller("localhost", "root", "", "school");
 $get_subjects = $controller->GetSubjects($num_perpage, $offset);
-$total_pages = $controller->GetTotalpages($num_perpage);
 
 function Checkpage($total_pages, $page_num)
 {

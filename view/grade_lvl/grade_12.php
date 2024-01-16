@@ -17,7 +17,7 @@ if (!isset($_SESSION['admins_id'])) {
         <link rel="stylesheet" href="../css/admin.css">
         <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
         <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <title>Sections</title>
+        <title>Section</title>
     </head>
 
     <body>
@@ -127,33 +127,6 @@ if (!isset($_SESSION['admins_id'])) {
                                     <th class="table-head">Grade 10</th>
                                     <th class="table-head">Grade 11</th>
                                     <th class="table-head">Grade 12</th>
-                                </tr>
-
-                                <tr class="row">
-                                    <td class="data"><a href="grade_lvl/grade_7.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_8.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_9.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_10.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_11.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_12.php?sec=A" class="sec">A</a></td>
-                                </tr>
-
-                                <tr class="row">
-                                    <td class="data"><a href="grade_lvl/grade_7.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_8.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_9.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_10.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_11.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_12.php?sec=B" class="sec">B</a></td>
-                                </tr>
-
-                                <tr class="row">
-                                    <td class="data"><a href="grade_lvl/grade_7.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_8.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_9.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_10.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_11.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_12.php?sec=C" class="sec">C</a></td>
                                 </tr>
 
                             </table>

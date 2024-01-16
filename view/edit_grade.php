@@ -4,7 +4,26 @@ session_start();
 
 if (!isset($_SESSION['admins_id'])) {
     header("location: login.php");
+} else {
+    $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+    require_once $root . 'controller' . DIRECTORY_SEPARATOR . 'controller.php';
 }
+
+function Checkpage($total_pages, $page_num)
+{
+    return $total_pages == 1 || $page_num == $total_pages;
+}
+
+if (!isset($_GET['page_num']) || $_GET['page_num'] <= 0) {
+    $_GET['page_num'] = 1;
+}
+
+$controller = new controller("localhost", "root", "", "school");
+$subjects = $controller->SelectSubjects();
+$student = $controller->GetStudent($_GET['student']);
+$get_student = $student->fetch_assoc();
+$grade = substr($get_student['grade_level'], 6);
+$section = $get_student['section'];
 
 ?>
 
@@ -17,7 +36,7 @@ if (!isset($_SESSION['admins_id'])) {
         <link rel="stylesheet" href="../css/admin.css">
         <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
         <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <title>Sections</title>
+        <title>Grade 7</title>
     </head>
 
     <body>
@@ -107,7 +126,7 @@ if (!isset($_SESSION['admins_id'])) {
             <div class="info">
 
                 <div class="text">
-                    <h1>Sections</h1>
+                    <h1>Section A</h1>
                 </div>
 
                 <hr>
@@ -118,45 +137,59 @@ if (!isset($_SESSION['admins_id'])) {
 
                         <div class="table-body" style="padding: 4px;">
 
-                            <table id="table">
+                            <div class="student-info">
+                                <h2>Student</h2>
+                                <p><?php echo $get_student['f_name'] . " " . $get_student['l_name'] ?></p>
+                            </div>
+
+                            <hr>
+
+                            <div class="edit-grade">
+                                <form action="../ajax/add_grade.php" id="add-grade" method="post">
+
+                                    <input type="text" value="<?php echo $get_student['student_id'] ?>" hidden>
+                                    <div class="input">
+                                        <label for="select-sub" class="input-label">Subject</label>
+                                        <select name="subject" id="select-sub">
+                                            <?php while ($row = $subjects->fetch_assoc()) { ?>
+                                            <option value="<?php echo $row['subject_id'] ?>">
+                                                <?php echo $row['subject'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="input">
+                                        <label for="grade" class="input-label">Grade</label>
+                                        <input type="number" max="100" id="grade">
+                                    </div>
+
+                                    <div class="button-grade">
+                                        <button id="grade-add">Add</button>
+                                        <a href="<?php echo "grade_lvl/grade_{$grade}.php?sec={$section}" ?>"
+                                            id="cancel">Cancel</a>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <table id="table" style="margin-top: 10px;">
 
                                 <tr class="row">
-                                    <th class="table-head">Grade 7</th>
-                                    <th class="table-head">Grade 8</th>
-                                    <th class="table-head">Grade 9</th>
-                                    <th class="table-head">Grade 10</th>
-                                    <th class="table-head">Grade 11</th>
-                                    <th class="table-head">Grade 12</th>
+                                    <th class="table-head">Subject</th>
+                                    <th class="table-head">Grade</th>
+                                    <th class="table-head"></th>
                                 </tr>
 
                                 <tr class="row">
-                                    <td class="data"><a href="grade_lvl/grade_7.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_8.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_9.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_10.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_11.php?sec=A" class="sec">A</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_12.php?sec=A" class="sec">A</a></td>
-                                </tr>
 
-                                <tr class="row">
-                                    <td class="data"><a href="grade_lvl/grade_7.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_8.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_9.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_10.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_11.php?sec=B" class="sec">B</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_12.php?sec=B" class="sec">B</a></td>
-                                </tr>
+                                    <td class="data"></td>
+                                    <td class="data"></td>
+                                    <td class="data"></td>
 
-                                <tr class="row">
-                                    <td class="data"><a href="grade_lvl/grade_7.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_8.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_9.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_10.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_11.php?sec=C" class="sec">C</a></td>
-                                    <td class="data"><a href="grade_lvl/grade_12.php?sec=C" class="sec">C</a></td>
                                 </tr>
 
                             </table>
+
 
                         </div>
 
