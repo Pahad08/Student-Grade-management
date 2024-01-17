@@ -23,6 +23,8 @@ const username_body = document.querySelector("#username-body");
 const email_body = document.querySelector("#email-body");
 const input_student = document.querySelector("#acc-id");
 const edit_student = document.querySelector("#edit-studentform");
+const grade_form = document.querySelector("#add-grade");
+const grades_container = document.querySelector(".input");
 
 //check if the form is empty
 function EmptyInput(array) {
@@ -419,3 +421,31 @@ if (cancel_delete) {
     alert_body.classList.remove("show");
   });
 }
+
+//Check grades input
+grade_form.addEventListener("submit", (event) => {
+  const subject = document.querySelector("#select-sub");
+  const grade = document.querySelector("#grade");
+  const grade_input = document.querySelector("#grade-container");
+  const subject_input = document.querySelector("#subject-container");
+
+  if (subject.value.trim() == "" && grade.value == "") {
+    CreateParagraph("Subject Cannot be Empty", subject_input);
+    CreateParagraph("Grade Cannot be Empty", grade_input);
+    event.preventDefault();
+  }
+
+  if (subject.value.trim() == "") {
+    CreateParagraph("Subject Cannot be Empty", subject_input);
+    event.preventDefault();
+  } else {
+    RemoveParagraph(subject_input);
+  }
+
+  if (grade.value == "") {
+    CreateParagraph("Grade Cannot be Empty", grade_input);
+    event.preventDefault();
+  } else {
+    RemoveParagraph(grade_input);
+  }
+});

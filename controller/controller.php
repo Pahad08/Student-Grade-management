@@ -369,4 +369,31 @@ class controller
     {
         return $this->model->GetStudents($num_perpage, $offset, $section, $glvl);
     }
+
+    //Select student grades
+    public function GetGrades(int $id): mysqli_result
+    {
+        return $this->model->GetGrades($id);
+    }
+
+    //Add grades
+    public function AddGrade(int $student_id, int $grade, int $subject_id): string
+    {
+
+        if ($this->model->AddGrade($student_id,  $grade, $subject_id)) {
+            return 'success';
+        } else {
+            return 'fail';
+        }
+    }
+
+    //Delete grade
+    public function DeleteGrade(int $subject_id): string
+    {
+        if ($this->model->Deletegrade($subject_id)) {
+            return 'success';
+        } else {
+            return 'fail';
+        }
+    }
 }

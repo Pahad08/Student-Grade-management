@@ -405,7 +405,7 @@ class Model
     //Select students based on the section
     public function GetStudents($num_perpage, $offset, $section, $glvl)
     {
-        $query = "SELECT account_id,f_name,l_name from students where section = ? and grade_level= ? 
+        $query = "SELECT account_id,f_name,l_name,student_id from students where section = ? and grade_level= ? 
         order by grade_level,l_name,f_name LIMIT $num_perpage OFFSET $offset";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ss", $section, $glvl);
@@ -424,5 +424,56 @@ class Model
         $result = $stmt->get_result();
 
         return $result;
+    }
+
+    //Retrieve grades
+    public function GetGrades($id)
+    {
+        $query = "SELECT grades.grade_id, subjects.subject, grades.grade
+        from grades 
+        join subjects on grades.subject_id = subjects.subject_id
+        where grades.student_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Retrieve grades
+    public function AddGrade($student_id, $grade, $subject_id)
+    {
+        $sql = "INSERT INTO grades (grade, student_id, subject_id) VALUES(?,?,?)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("iii", $grade, $student_id, $subject_id);
+
+        try {
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                throw new mysqli_sql_exception("Error");
+            }
+        } catch (mysqli_sql_exception $e) {
+            return false;
+        }
+    }
+
+    //Delete Grade
+    public function Deletegrade($subject_id)
+    {
+        $sql = "DELETE FROM grades where grade_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $subject_id);
+
+        try {
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                throw new mysqli_sql_exception("Fail");
+            }
+        } catch (mysqli_sql_exception $e) {
+            return false;
+        }
     }
 }

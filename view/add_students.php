@@ -23,7 +23,6 @@ $offset = ($page_num * $num_perpage) - $num_perpage;
 
 $controller = new controller("localhost", "root", "", "school");
 $get_subjects = $controller->GetSubjects($num_perpage, $offset);
-$total_pages = $controller->GetTotalpages($num_perpage);
 
 function Checkpage($total_pages, $page_num)
 {
@@ -164,7 +163,15 @@ function Checkpage($total_pages, $page_num)
 
                                 <div class="input-body" id="glevel-body">
                                     <label for="g-level">Grade Level</label>
-                                    <input type="text" name="g-level" id="g-level">
+                                    <select name="g-level" id="" id="g-level">
+                                        <option value="">Select Grade Level</option>
+                                        <option value="Grade 7">Grade 7</option>
+                                        <option value="Grade 8">Grade 8</option>
+                                        <option value="Grade 9">Grade 9</option>
+                                        <option value="Grade 10">Grade 10</option>
+                                        <option value="Grade 11">Grade 11</option>
+                                        <option value="Grade 12">Grade 12</option>
+                                    </select>
                                 </div>
 
                                 <div class="input-body" id="image-body">

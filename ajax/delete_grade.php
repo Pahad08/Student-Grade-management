@@ -5,7 +5,7 @@ require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
 
-    $addgrade = $controller->AddGrade($_POST['student_id'], $_POST['grade'], $_POST['subject']);
+    $addgrade = $controller->DeleteGrade($_POST['subject_id']);
 
     $controller->CloseDB();
 

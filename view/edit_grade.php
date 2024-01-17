@@ -24,7 +24,9 @@ $student = $controller->GetStudent($_GET['student']);
 $get_student = $student->fetch_assoc();
 $grade = substr($get_student['grade_level'], 6);
 $section = $get_student['section'];
+$student_id = $get_student['student_id'];
 
+$student_grades = $controller->GetGrades($student_id);
 ?>
 
 <!DOCTYPE html>
@@ -147,10 +149,16 @@ $section = $get_student['section'];
                             <div class="edit-grade">
                                 <form action="../ajax/add_grade.php" id="add-grade" method="post">
 
-                                    <input type="text" value="<?php echo $get_student['student_id'] ?>" hidden>
-                                    <div class="input">
+                                    <input type="text" value="<?php echo $get_student['student_id'] ?>"
+                                        name="student_id" hidden>
+
+                                    <input type="text" value="<?php echo $get_student['account_id'] ?>"
+                                        name="account_id" hidden>
+
+                                    <div class="input" id="subject-container">
                                         <label for="select-sub" class="input-label">Subject</label>
                                         <select name="subject" id="select-sub">
+                                            <option value="">Select Subject</option>
                                             <?php while ($row = $subjects->fetch_assoc()) { ?>
                                             <option value="<?php echo $row['subject_id'] ?>">
                                                 <?php echo $row['subject'] ?></option>
@@ -158,9 +166,9 @@ $section = $get_student['section'];
                                         </select>
                                     </div>
 
-                                    <div class="input">
+                                    <div class="input" id="grade-container">
                                         <label for="grade" class="input-label">Grade</label>
-                                        <input type="number" max="100" id="grade">
+                                        <input type="number" max="100" id="grade" name="grade">
                                     </div>
 
                                     <div class="button-grade">
@@ -180,14 +188,25 @@ $section = $get_student['section'];
                                     <th class="table-head"></th>
                                 </tr>
 
+                                <?php while ($get_grades = $student_grades->fetch_assoc()) { ?>
                                 <tr class="row">
 
-                                    <td class="data"></td>
-                                    <td class="data"></td>
-                                    <td class="data"></td>
+                                    <td class="data"><?php echo $get_grades['subject'] ?></td>
+                                    <td class="data"><?php echo $get_grades['grade'] ?></td>
+                                    <td class="data action">
+                                        <form action="../ajax/delete_grade.php" method="post">
+                                            <input type="text" name="subject_id"
+                                                value="<?php echo $get_grades['grade_id'] ?>" hidden>
+                                            <input type="text" value="<?php echo $get_student['account_id'] ?>"
+                                                name="account_id" hidden>
+                                            <button class="btn-delete" data-id="<?php echo $students['account_id'] ?>">
+                                                <img src="../images/delete.png" alt="delete" class="delete-sub">
+                                            </button>
+                                        </form>
+                                    </td>
 
                                 </tr>
-
+                                <?php } ?>
                             </table>
 
 

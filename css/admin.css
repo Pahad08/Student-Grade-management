@@ -540,6 +540,7 @@ nav ul a:not(.active):hover,
 
 .input-body input,
 .input-body textarea,
+.input-body select,
 .input input,
 .input select {
   padding: 8px;
@@ -550,7 +551,8 @@ nav ul a:not(.active):hover,
 }
 
 .input-body input:focus,
-.input-body textarea:focus {
+.input-body textarea:focus,
+.input-body select:focus {
   border-radius: 5px;
   outline: 1px solid var(--darkblue);
 }

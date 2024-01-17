@@ -46,7 +46,7 @@ if (isset($_GET['acc_id'])) {
     $id_column = "student_id";
     $table = "students";
     $page_num = $_GET['page_num'];
-    $num_perpage = 1;
+    $num_perpage = 5;
     $next_page =  $_GET['page_num'] + 1;
     $prev_page =  $_GET['page_num'] - 1;
     $min = $page_num;
