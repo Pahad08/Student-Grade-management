@@ -238,7 +238,7 @@ class Model
     }
 
     //Add student
-    public function AddStudent($username, $email, $fname, $lname, $number, $section, $g_level, $pic)
+    public function AddStudent($username, $email, $fname, $lname, $gender, $number, $section, $g_level, $pic)
     {
 
         $default_password = password_hash("12345", PASSWORD_BCRYPT);
@@ -258,10 +258,10 @@ class Model
             }
         }
 
-        $sql2 = "INSERT INTO students (f_name, l_name, contact_number, section, grade_level, profile_pic, account_id) 
-        VALUES(?,?,?,?,?,?,?)";
+        $sql2 = "INSERT INTO students (f_name, l_name, gender, contact_number, section, grade_level, profile_pic, account_id) 
+        VALUES(?,?,?,?,?,?,?,?)";
         $stmt2 = $this->db->prepare($sql2);
-        $stmt2->bind_param("ssssssi", $fname, $lname, $number, $section, $g_level, $pic, $acc_id);
+        $stmt2->bind_param("sssssssi", $fname, $lname, $gender, $number, $section, $g_level, $pic, $acc_id);
 
         try {
             if ($stmt2->execute()) {
@@ -270,16 +270,14 @@ class Model
                 throw new mysqli_sql_exception("Error adding student");
             }
         } catch (mysqli_sql_exception $e) {
-            if ($e->getMessage() === "Error adding student") {
-                return 'error';
-            }
+            return 'error';
         }
     }
 
     //Select Profile Pic
-    public function SelectProfile($id)
+    public function SelectProfile($id, $table)
     {
-        $query = "SELECT profile_pic from students where account_id = ?";
+        $query = "SELECT profile_pic from $table where account_id = ?";
         $statement = $this->db->prepare($query);
         $statement->bind_param("i", $id);
         $statement->execute();
@@ -288,7 +286,7 @@ class Model
     }
 
     //Delete Student
-    public function Deletestudent($id)
+    public function DeleteAccount($id)
     {
 
         $sql = "DELETE FROM accounts where account_id = ?";
@@ -359,21 +357,21 @@ class Model
     }
 
     //Edit student
-    public function EditStudent($fname, $lname, $number, $section, $g_level, $pic, $id)
+    public function EditStudent($fname, $lname, $gender, $number, $section, $g_level, $pic, $id)
     {
         $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
         $picture = $path . $pic['name'];
 
         if ($pic['size'] > 0) {
-            $sql = "UPDATE students SET f_name = ?, l_name = ?, contact_number = ?, 
+            $sql = "UPDATE students SET f_name = ?, l_name = ?,gender=?, contact_number = ?, 
             section = ?, grade_level = ?, profile_pic = ? where account_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("ssssssi", $fname, $lname, $number, $section, $g_level, $picture, $id);
+            $stmt->bind_param("sssssssi", $fname, $lname, $gender, $number, $section, $g_level, $picture, $id);
         } else {
-            $sql = "UPDATE students SET f_name = ?, l_name = ?, contact_number = ?, 
+            $sql = "UPDATE students SET f_name = ?, l_name = ?,gender=?, contact_number = ?, 
             section = ?, grade_level = ? where account_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sssssi", $fname, $lname, $number, $section, $g_level, $id);
+            $stmt->bind_param("ssssssi", $fname, $lname, $gender, $number, $section, $g_level, $id);
         }
 
         try {
@@ -475,5 +473,140 @@ class Model
         } catch (mysqli_sql_exception $e) {
             return false;
         }
+    }
+
+    //Add teacher
+    public function AddTeacher($username, $email, $fname, $lname, $gender, $pic)
+    {
+
+        $default_password = password_hash("12345", PASSWORD_BCRYPT);
+        $sql1 = "INSERT INTO accounts (username, email, `password`) VALUES(?,?,?)";
+        $stmt1 = $this->db->prepare($sql1);
+        $stmt1->bind_param("sss", $username, $email, $default_password);
+
+        try {
+            if ($stmt1->execute()) {
+                $acc_id = $this->db->insert_id;
+            } else {
+                throw new mysqli_sql_exception("Duplicate Email");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                return 'duplicate email';
+            }
+        }
+
+        $sql2 = "INSERT INTO teachers(f_name, l_name, gender, profile_pic, account_id) 
+        VALUES(?,?,?,?,?)";
+        $stmt2 = $this->db->prepare($sql2);
+        $stmt2->bind_param("ssssi", $fname, $lname, $gender, $pic, $acc_id);
+
+        try {
+            if ($stmt2->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("Error adding student");
+            }
+        } catch (mysqli_sql_exception $e) {
+            return 'error';
+        }
+    }
+
+    //Select 5 teachers
+    public function SelectTeachers($num_perpage, $offset)
+    {
+        $query = "SELECT * from teachers LIMIT $num_perpage OFFSET $offset";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Get teacher
+    public function SelectTeacher($acc_id)
+    {
+        $query = "SELECT * from teachers where account_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $acc_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Edit Teacher
+    public function EditTeacher($fname, $lname, $gender, $pic, $id)
+    {
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        $picture = $path . $pic['name'];
+
+        if ($pic['size'] > 0) {
+            $sql = "UPDATE teachers SET f_name = ?, l_name = ?,gender=?, profile_pic = ? where account_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssssi", $fname, $lname, $gender, $picture, $id);
+        } else {
+            $sql = "UPDATE teachers SET f_name = ?, l_name = ?, gender = ? where account_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("sssi", $fname, $lname, $gender, $id);
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("fail");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() === "fail") {
+                return 'fail';
+            }
+        }
+    }
+
+    //search teacher
+    public function SearchTeacher($teacher)
+    {
+        $teacher = "%" . $teacher . "%";
+        $query = "SELECT * from teachers WHERE f_name LIKE ? or l_name LIKE ? LIMIT 5";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ss", $teacher, $teacher);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //teachers count
+    public function teacherscount()
+    {
+        $query = "SELECT COUNT(*) as total from teachers";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //students count
+    public function studentscount()
+    {
+        $query = "SELECT COUNT(*) as total from students";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //subjects count
+    public function subjectscount()
+    {
+        $query = "SELECT COUNT(*) as total from subjects";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
     }
 }

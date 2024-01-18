@@ -39,7 +39,7 @@ function Checkpage($total_pages, $page_num)
         <link rel="stylesheet" href="../css/admin.css">
         <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
         <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <title>Add Student</title>
+        <title>Add Teacher</title>
     </head>
 
     <body>
@@ -87,7 +87,7 @@ function Checkpage($total_pages, $page_num)
                     </ul>
                 </ul>
 
-                <ul class="dropdown-text active">
+                <ul class="dropdown-text">
                     <p>Students</p>
                     <img src="../images/arrow.png" alt="arrow" class="arrow">
                 </ul>
@@ -106,7 +106,7 @@ function Checkpage($total_pages, $page_num)
                     </ul>
                 </ul>
 
-                <ul class="dropdown-text">
+                <ul class="dropdown-text active">
                     <p>Teachers</p>
                     <img src="../images/arrow.png" alt="arrow" class="arrow">
                 </ul>
@@ -148,7 +148,7 @@ function Checkpage($total_pages, $page_num)
             <div class="info">
 
                 <div class="text">
-                    <h1>Add Student</h1>
+                    <h1>Add Teacher</h1>
                 </div>
 
                 <hr>
@@ -157,9 +157,9 @@ function Checkpage($total_pages, $page_num)
 
                     <div class="form-body">
 
-                        <form id="student-form" method="post" enctype="multipart/form-data">
+                        <form id="teacher-form" method="post" enctype="multipart/form-data">
 
-                            <div class="input-container student-form">
+                            <div class="input-container teacher-form">
                                 <div class="input-body" id="fname-body">
                                     <label for="fname">First Name</label>
                                     <input type="text" name="fname" id="fname">
@@ -179,29 +179,6 @@ function Checkpage($total_pages, $page_num)
                                     </select>
                                 </div>
 
-                                <div class="input-body" id="number-body">
-                                    <label for="number">Contact Number</label>
-                                    <input type="number" name="number" id="number" inputmode="numeric">
-                                </div>
-
-                                <div class="input-body" id="section-body">
-                                    <label for="section">Section</label>
-                                    <input type="text" name="section" id="section" maxlength="1">
-                                </div>
-
-                                <div class="input-body" id="glevel-body">
-                                    <label for="g-level">Grade Level</label>
-                                    <select name="g-level" id="" id="g-level">
-                                        <option value="">Select Grade Level</option>
-                                        <option value="Grade 7">Grade 7</option>
-                                        <option value="Grade 8">Grade 8</option>
-                                        <option value="Grade 9">Grade 9</option>
-                                        <option value="Grade 10">Grade 10</option>
-                                        <option value="Grade 11">Grade 11</option>
-                                        <option value="Grade 12">Grade 12</option>
-                                    </select>
-                                </div>
-
                                 <div class="input-body" id="image-body">
                                     <label for="image">Image</label>
                                     <input type="file" name="image" id="image" accept="image/*">
@@ -212,8 +189,8 @@ function Checkpage($total_pages, $page_num)
                                     <input type="text" name="username" id="username">
                                 </div>
 
-                                <div class="input-body" id="email-body">
-                                    <label for="email">Email</label>
+                                <div class="input-body" id="emailbody">
+                                    <label for=" email">Email</label>
                                     <input type="email" name="email" id="email">
                                 </div>
 

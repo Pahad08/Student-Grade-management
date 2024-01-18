@@ -291,32 +291,64 @@ nav ul a:not(.active):hover,
   color: var(--darkblue);
 }
 
+.card-container {
+  display: flex;
+}
+
 .main-body {
   display: flex;
-  /* overflow-x: auto; */
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow: auto;
+}
+
+.dashboard {
+  overflow: hidden;
+}
+
+.cards {
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .info-card {
   flex-basis: 200px;
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  justify-content: space-between;
   border: 2px solid var(--black);
   border-radius: 5px;
-  padding: 5px;
+  padding: 10px;
 }
 
 .info-card img {
   max-width: 100%;
-  width: 50px;
+  height: 80px;
   background: var(--skyblue);
   border-radius: 2px;
-  padding: 3px;
+  padding: 5px;
 }
 
 .info-card p {
+  font-weight: bold;
   color: var(--gray);
-  flex-grow: 1;
-  text-align: center;
+  font-size: 1.5rem;
+}
+
+.graph-body {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  gap: 10px;
+}
+
+.graph {
+  width: 50%;
+  border: 2px solid var(--black);
+  border-radius: 3px;
 }
 
 .table-container {
@@ -365,10 +397,6 @@ nav ul a:not(.active):hover,
   outline: none;
 }
 
-.table-body {
-  overflow-x: auto;
-}
-
 #table,
 .row,
 .table-head,
@@ -396,8 +424,13 @@ nav ul a:not(.active):hover,
   color: var(--gray);
 }
 
-.row .data:nth-child(5) {
+.row .data:nth-child(6) {
   max-width: 150px;
+  min-width: 100px;
+}
+
+.data-img {
+  max-width: 100px;
   min-width: 100px;
 }
 
@@ -523,6 +556,15 @@ nav ul a:not(.active):hover,
   display: grid;
   gap: 15px;
   grid-template-columns: 1fr 1fr;
+}
+
+.teacher-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#email-body {
+  grid-column: 1 / span 2;
 }
 
 #sub-form {
@@ -715,6 +757,14 @@ nav ul a:not(.active):hover,
   .student-form {
     grid-template-columns: 1fr;
   }
+
+  .teacher-form {
+    grid-template-columns: 1fr;
+  }
+
+  #email-body {
+    grid-column: 1;
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 576px and up) */
@@ -738,6 +788,12 @@ nav ul a:not(.active):hover,
   .student-form {
     grid-template-columns: 1fr;
   }
+  .teacher-form {
+    grid-template-columns: 1fr;
+  }
+  #email-body {
+    grid-column: 1;
+  }
 }
 
 /* Extra small devices (phones, 575px and down) */
@@ -759,5 +815,13 @@ nav ul a:not(.active):hover,
 
   .student-form {
     grid-template-columns: 1fr;
+  }
+
+  .teacher-form {
+    grid-template-columns: 1fr;
+  }
+
+  #email-body {
+    grid-column: 1;
   }
 }

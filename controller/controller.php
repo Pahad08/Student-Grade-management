@@ -74,7 +74,7 @@ class controller
 
                 $user =  $this->model->SelectUser($usertype, $username);
                 $user_info = $user->fetch_assoc();
-                $user_id = ($user->num_rows > 0) ? $user_info['admin_id'] : "";
+                $user_id = ($user->num_rows > 0) ? $user_info['student_id'] : "";
                 $username = ($user->num_rows > 0) ? $user_info['username'] : "";
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
@@ -225,6 +225,7 @@ class controller
         string  $email,
         string  $fname,
         string  $lname,
+        string $gender,
         string $number,
         string $section,
         string $g_level,
@@ -235,6 +236,7 @@ class controller
         $email = $this->CleanData($conn, $email);
         $fname = $this->CleanData($conn, $fname);
         $lname = $this->CleanData($conn, $lname);
+        $gender = $this->CleanData($conn, $gender);
         $number = $this->CleanData($conn, $number);
         $section = $this->CleanData($conn, $section);
         $g_level = $this->CleanData($conn, $g_level);
@@ -244,34 +246,41 @@ class controller
         } else {
             $profile_pic = $path . $this->CleanData($conn, $pic['name']);
         }
+        // $user_image = (empty($pic['size'])) ? 
         $add_student = $this->model->AddStudent(
             $username,
             $email,
             $fname,
             $lname,
+            $gender,
             $number,
             $section,
             $g_level,
             $profile_pic
         );
 
-        if ($add_student === 'success' && move_uploaded_file($pic['tmp_name'], $path . $pic['name'])) {
+        if ($add_student === 'success' && move_uploaded_file($pic['tmp_name'], $path . $profile_pic)) {
             return 'success';
+        } elseif ($add_student === 'success') {
+            return 'success';
+        } elseif ($add_student === 'duplicate email') {
+            return 'duplicate';
         } else {
             return 'fail';
         }
     }
 
     //Select student profile picture
-    public function SelectProfilePic(int $id): mysqli_result
+    public function SelectProfilePic(int $id, string $table): mysqli_result
     {
-        return $this->model->SelectProfile($id);
+        return $this->model->SelectProfile($id, $table);
     }
 
-    public function DeleteStudent($id)
+    //Delete account
+    public function DeleteAccount($id)
     {
 
-        if ($this->model->Deletestudent($id)) {
+        if ($this->model->DeleteAccount($id)) {
             return 'success';
         } else {
             return 'fail';
@@ -279,28 +288,28 @@ class controller
     }
 
     //Check if the student have a default profile
-    public function CheckProfile(string $delete_student, string $user_profile): void
+    public function CheckProfile(string $delete_student, string $user_profile, string $filename, string $usertype): void
     {
-        if ($user_profile == '../profile_pics/user.png') {
+        if ($user_profile == '..\profile_pics\user.png') {
             if ($delete_student == 'success') {
-                $_SESSION['deleted_student'] = 'Student Deleted!';
-                header('location: ../view/view_students.php');
+                $_SESSION['deleted_student'] = $usertype . ' Deleted!';
+                header('location: ../view/' . $filename);
                 exit();
             } else {
                 $_SESSION['delete_err'] = 'Theres an error, please try again!';
-                header('location: ../view/view_students.php');
+                header('location: ../view/' . $filename);
                 exit();
             }
         } else {
             if ($delete_student == 'success') {
                 if (unlink($user_profile)) {
-                    $_SESSION['deleted_student'] = 'Student Deleted!';
-                    header('location: ../view/view_students.php');
+                    $_SESSION['deleted_student'] = $usertype . ' Deleted!';
+                    header('location: ../view/' . $filename);
                     exit();
                 }
             } else {
                 $_SESSION['delete_err'] = 'Theres an error, please try again!';
-                header('location: ../view/view_students.php');
+                header('location:' . $filename);
                 exit();
             }
         }
@@ -325,6 +334,7 @@ class controller
         string $password,
         string $fname,
         string $lname,
+        string $gender,
         string $number,
         string $section,
         string $g_level,
@@ -342,7 +352,7 @@ class controller
         $number = $this->CleanData($conn, $number);
         $section = $this->CleanData($conn, $section);
         $g_level = $this->CleanData($conn, $g_level);
-        $editstudent = $this->model->EditStudent($fname, $lname, $number, $section, $g_level, $pic, $id);
+        $editstudent = $this->model->EditStudent($fname, $lname, $gender, $number, $section, $g_level, $pic, $id);
         $editacc = $this->model->EditAcc($username, $email, $password, $id);
 
         if ($editstudent == 'success' && $editacc == 'success') {
@@ -395,5 +405,117 @@ class controller
         } else {
             return 'fail';
         }
+    }
+
+    //Add Teacher
+    public function AddingTeacher(
+        string $username,
+        string  $email,
+        string  $fname,
+        string  $lname,
+        string $gender,
+        array $pic
+    ): string {
+        $conn = $this->model->getDb();
+        $username = $this->CleanData($conn, $username);
+        $email = $this->CleanData($conn, $email);
+        $fname = $this->CleanData($conn, $fname);
+        $lname = $this->CleanData($conn, $lname);
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        if (empty($pic['size'])) {
+            $profile_pic = $path . 'user.png';
+        } else {
+            $profile_pic = $path . $this->CleanData($conn, $pic['name']);
+        }
+        // $user_image = (empty($pic['size'])) ? 
+        $add_teacher = $this->model->AddTeacher(
+            $username,
+            $email,
+            $fname,
+            $lname,
+            $gender,
+            $profile_pic
+        );
+
+        if ($add_teacher === 'success' && move_uploaded_file($pic['tmp_name'], $path . $profile_pic)) {
+            return 'success';
+        } elseif ($add_teacher === 'success') {
+            return 'success';
+        } elseif ($add_teacher === 'duplicate email') {
+            return 'duplicate';
+        } else {
+            return 'fail';
+        }
+    }
+
+    //Select Teachers
+    public function SelectTeachers(int $num_perpage, int $offset): mysqli_result
+    {
+        return $this->model->SelectTeachers($num_perpage, $offset);
+    }
+
+    //Get Teachers
+    public function GetTeacher(int $id): mysqli_result
+    {
+        return $this->model->SelectTeacher($id);
+    }
+
+    //Edit Teacher
+    public function Editteacher(
+        string $username,
+        string $email,
+        string $password,
+        string $fname,
+        string $lname,
+        string $gender,
+        array $pic,
+        int $id
+    ): string {
+
+        $conn = $this->model->getDb();
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        $username = $this->CleanData($conn, $username);
+        $email = $this->CleanData($conn, $email);
+        $password = $this->CleanData($conn, password_hash($password, PASSWORD_BCRYPT));
+        $fname = $this->CleanData($conn, $fname);
+        $lname = $this->CleanData($conn, $lname);
+        $editteacher = $this->model->EditTeacher($fname, $lname, $gender, $pic, $id);
+        $editacc = $this->model->EditAcc($username, $email, $password, $id);
+
+        if ($editteacher == 'success' && $editacc == 'success') {
+            move_uploaded_file($pic['tmp_name'], $path . $pic['name']);
+            return 'success';
+        } elseif ($editacc == 'duplicate') {
+            return 'duplicate';
+        } elseif ($editteacher == 'fail' && $editacc == 'duplicate') {
+            return 'fail';
+        } else {
+            return 'error';
+        }
+    }
+
+    //Search Teacher
+    public function SearchTeacher(string $teacher): mysqli_result
+    {
+        $conn = $this->model->getDb();
+        return $this->model->SearchTeacher($this->CleanData($conn, $teacher));
+    }
+
+    //total teachers
+    public function TeachersCount(): mysqli_result
+    {
+        return $this->model->TeachersCount();
+    }
+
+    //total students
+    public function StudentsCount(): mysqli_result
+    {
+        return $this->model->StudentsCount();
+    }
+
+    //total subjects
+    public function SubjectCount(): mysqli_result
+    {
+        return $this->model->subjectscount();
     }
 }

@@ -12,7 +12,7 @@ if (
     $edit_subject = $controller->EditSub($_POST['code'], $_POST['subject'], $_POST['description'], $_POST['sub_id']);
     $controller->CloseDB();
     if ($edit_subject == 'success') {
-        echo json_encode(['status' => 'OK', 'message' => 'Subject Edited!']);
+        echo json_encode(['status' => 'edited', 'message' => 'Subject Edited!']);
     } else {
         echo json_encode(['error' => 'Subject already exist']);
     }

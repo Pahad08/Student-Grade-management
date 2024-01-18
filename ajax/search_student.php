@@ -10,6 +10,7 @@ if (isset($_GET['student'])) {
 
     echo "<tr class='row'>
     <th class='table-head'>Name</th>
+    <th class='table-head'>Gender</th>
     <th class='table-head'>Contact Number</th>
     <th class='table-head'>Section</th>
     <th class='table-head'>Grade Level</th>
@@ -20,6 +21,8 @@ if (isset($_GET['student'])) {
     while ($students = $search_students->fetch_assoc()) {
         echo "<tr class='row'>";
         echo "<td class='data'>" . $students['f_name'] . " " . $students['l_name'] . "</td>";
+        echo "<td class='data'>";
+        echo ($students['gender'] == "F") ? "Female" : "Male" . "</td>";
         echo "<td class='data'>" . $students['contact_number'] . "</td>";
         echo "<td class='data'>" . $students['section'] . "</td>";
         echo "<td class='data'>" . $students['grade_level'] . "</td>";

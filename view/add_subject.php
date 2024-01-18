@@ -106,6 +106,25 @@ function Checkpage($total_pages, $page_num)
                 </ul>
             </ul>
 
+            <ul class="dropdown-text">
+                <p>Teachers</p>
+                <img src="../images/arrow.png" alt="arrow" class="arrow">
+            </ul>
+
+            <ul class="dropdown">
+                <ul>
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_teachers.php">Add
+                            Teachers</a>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_teachers.php">View
+                            Teachers</a>
+                    </li>
+                </ul>
+            </ul>
+
             <ul class="sections">
                 <li> <a href="sections.php">Sections</a></li>
             </ul>

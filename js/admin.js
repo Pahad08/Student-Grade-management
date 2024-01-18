@@ -13,9 +13,12 @@ const edit_sub = document.querySelector("#edit-subform");
 const search_sub = document.querySelector("#search-sub");
 const input_sub = document.querySelector("#sub-id");
 const search_student = document.querySelector("#search-student");
+const search_teacher = document.querySelector("#search-teacher");
 const add_student = document.querySelector("#student-form");
+const add_teacher = document.querySelector("#teacher-form");
 const fname_body = document.querySelector("#fname-body");
 const lname_body = document.querySelector("#lname-body");
+const gender_body = document.querySelector("#gender-body");
 const number_body = document.querySelector("#number-body");
 const section_body = document.querySelector("#section-body");
 const glevel_body = document.querySelector("#glevel-body");
@@ -23,6 +26,7 @@ const username_body = document.querySelector("#username-body");
 const email_body = document.querySelector("#email-body");
 const input_student = document.querySelector("#acc-id");
 const edit_student = document.querySelector("#edit-studentform");
+const edit_teacher = document.querySelector("#edit-teacherform");
 const grade_form = document.querySelector("#add-grade");
 const grades_container = document.querySelector(".input");
 
@@ -105,6 +109,8 @@ function EditAddSubject(
           if (response.status == "OK") {
             form.reset();
             alert(response.message);
+          } else if (response.status == "edited") {
+            alert(response.message);
           } else {
             alert(response.error);
           }
@@ -162,6 +168,7 @@ function EditAddStudent(
     const formarray = Array.from(form_data);
     const fname = form_data.get("fname").trim();
     const lname = form_data.get("lname").trim();
+    const gender = form_data.get("gender").trim();
     const number = form_data.get("number").trim();
     const section = form_data.get("section").trim();
     const g_level = form_data.get("g-level").trim();
@@ -186,9 +193,15 @@ function EditAddStudent(
     }
 
     if (lname == "") {
-      CreateParagraph("Last Name be empty", lname_body);
+      CreateParagraph("Last name cannot be empty", lname_body);
     } else {
       RemoveParagraph(lname_body);
+    }
+
+    if (gender == "") {
+      CreateParagraph("Gender cannot be empty", gender_body);
+    } else {
+      RemoveParagraph(gender_body);
     }
 
     if (number == "") {
@@ -239,6 +252,8 @@ function EditAddStudent(
           if (response.status == "OK") {
             form.reset();
             alert(response.message);
+          } else if (response.status == "edited") {
+            alert(response.message);
           } else if (response.status == "duplicate") {
             alert(response.message);
           } else if (response.status == "fail") {
@@ -256,6 +271,7 @@ function EditAddStudent(
   form.addEventListener("reset", () => {
     RemoveParagraph(fname_body);
     RemoveParagraph(lname_body);
+    RemoveParagraph(gender_body);
     RemoveParagraph(number_body);
     RemoveParagraph(section_body);
     RemoveParagraph(glevel_body);
@@ -281,6 +297,119 @@ if (edit_student) {
   EditAddStudent(
     edit_student,
     "../ajax/edit_student.php",
+    CreateParagraph,
+    RemoveParagraph,
+    ShowLoader,
+    HideLoader
+  );
+}
+
+//Edit and adding teacher
+function EditAddTeacher(
+  form,
+  filename,
+  CreateParagraph,
+  RemoveParagraph,
+  ShowLoader,
+  HideLoader
+) {
+  const emailbody = document.querySelector("#emailbody");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form_data = new FormData(form);
+    const formarray = Array.from(form_data);
+    const fname = form_data.get("fname").trim();
+    const lname = form_data.get("lname").trim();
+    const username = form_data.get("username").trim();
+    const email = form_data.get("email").trim();
+
+    if (EmptyInput(formarray) === true) {
+      CreateParagraph("First Name cannot be empty", fname_body);
+      CreateParagraph("Last Name cannot be empty", lname_body);
+      CreateParagraph("Username cannot be empty", username_body);
+      CreateParagraph("Email cannot be empty", emailbody);
+      return;
+    }
+
+    if (fname == "") {
+      CreateParagraph("First Name cannot be empty", fname_body);
+    } else {
+      RemoveParagraph(fname_body);
+    }
+
+    if (lname == "") {
+      CreateParagraph("Last name cannot be empty", lname_body);
+    } else {
+      RemoveParagraph(lname_body);
+    }
+
+    if (username == "") {
+      CreateParagraph("Username cannot be empty", username_body);
+    } else {
+      RemoveParagraph(username_body);
+    }
+
+    if (email == "") {
+      CreateParagraph("Email cannot be empty", emailbody);
+    } else {
+      RemoveParagraph(emailbody);
+    }
+
+    if (CompleteForm(formarray) === true) {
+      const ajax = new XMLHttpRequest();
+      ajax.open("POST", `../ajax/${filename}`);
+      ShowLoader();
+      ajax.onreadystatechange = () => {
+        if (ajax.status == 200 && ajax.readyState == 4) {
+          const response = JSON.parse(ajax.responseText);
+          HideLoader();
+          if (response.status == "OK") {
+            form.reset();
+            alert(response.message);
+          } else if (response.status == "edited") {
+            alert(response.message);
+          } else if (response.status == "duplicate") {
+            alert(response.message);
+          } else if (response.status == "fail") {
+            alert(response.message);
+          } else {
+            alert(response.error);
+          }
+        }
+      };
+      ajax.send(form_data);
+    }
+  });
+
+  //remove error message if form reset
+  form.addEventListener("reset", () => {
+    RemoveParagraph(fname_body);
+    RemoveParagraph(lname_body);
+    RemoveParagraph(username_body);
+    RemoveParagraph(emailbody);
+  });
+}
+
+//add teacher
+if (add_teacher) {
+  //ajax for adding subject
+  EditAddTeacher(
+    add_teacher,
+    "add_teacher.php",
+    CreateParagraph,
+    RemoveParagraph,
+    ShowLoader,
+    HideLoader
+  );
+}
+
+//edit teacher
+if (edit_teacher) {
+  //ajax for adding subject
+  EditAddTeacher(
+    edit_teacher,
+    "edit_teacher.php",
     CreateParagraph,
     RemoveParagraph,
     ShowLoader,
@@ -379,6 +508,26 @@ if (search_student) {
   });
 }
 
+//search teachers
+if (search_teacher) {
+  search_teacher.addEventListener("input", () => {
+    const ajax = new XMLHttpRequest();
+    const teacher_value = search_teacher.value;
+
+    ajax.onload = () => {
+      if (ajax.status == 200 && ajax.readyState == 4) {
+        const table = document.querySelector("#table");
+        console.log(ajax.responseText);
+        table.innerHTML = ajax.responseText;
+        ShowDelete(input_student);
+      }
+    };
+
+    ajax.open("GET", `../ajax/search_teacher.php?teacher=${teacher_value}`);
+    ajax.send();
+  });
+}
+
 //prompt the alert delete
 function ShowDelete(id) {
   const btn_delete = document.querySelectorAll(".btn-delete");
@@ -423,29 +572,31 @@ if (cancel_delete) {
 }
 
 //Check grades input
-grade_form.addEventListener("submit", (event) => {
-  const subject = document.querySelector("#select-sub");
-  const grade = document.querySelector("#grade");
-  const grade_input = document.querySelector("#grade-container");
-  const subject_input = document.querySelector("#subject-container");
+if (grade_form) {
+  grade_form.addEventListener("submit", (event) => {
+    const subject = document.querySelector("#select-sub");
+    const grade = document.querySelector("#grade");
+    const grade_input = document.querySelector("#grade-container");
+    const subject_input = document.querySelector("#subject-container");
 
-  if (subject.value.trim() == "" && grade.value == "") {
-    CreateParagraph("Subject Cannot be Empty", subject_input);
-    CreateParagraph("Grade Cannot be Empty", grade_input);
-    event.preventDefault();
-  }
+    if (subject.value.trim() == "" && grade.value == "") {
+      CreateParagraph("Subject Cannot be Empty", subject_input);
+      CreateParagraph("Grade Cannot be Empty", grade_input);
+      event.preventDefault();
+    }
 
-  if (subject.value.trim() == "") {
-    CreateParagraph("Subject Cannot be Empty", subject_input);
-    event.preventDefault();
-  } else {
-    RemoveParagraph(subject_input);
-  }
+    if (subject.value.trim() == "") {
+      CreateParagraph("Subject Cannot be Empty", subject_input);
+      event.preventDefault();
+    } else {
+      RemoveParagraph(subject_input);
+    }
 
-  if (grade.value == "") {
-    CreateParagraph("Grade Cannot be Empty", grade_input);
-    event.preventDefault();
-  } else {
-    RemoveParagraph(grade_input);
-  }
-});
+    if (grade.value == "") {
+      CreateParagraph("Grade Cannot be Empty", grade_input);
+      event.preventDefault();
+    } else {
+      RemoveParagraph(grade_input);
+    }
+  });
+}
