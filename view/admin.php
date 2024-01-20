@@ -19,175 +19,181 @@ $students_total = $students_count['total'];
 $subject_count = $controller->SubjectCount()->fetch_assoc();
 $subject_total = $subject_count['total'];
 
+$students_gender = $controller->TotalStudents();
+
+$teachers_gender = $controller->TotalTeachers();
+
+$average = $controller->AverageGrade();
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/admin.css">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <title>Dashboard</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/admin.css">
+        <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+        <title>Dashboard</title>
+    </head>
 
-<body>
+    <body>
 
-    <div class="sidebar">
+        <div class="sidebar">
 
-        <div class="logo-header">
-            <img src="../images/logo.png" alt="logo">
-        </div>
-
-        <hr>
-
-        <div class="user-info">
-            <p>Administrator</p>
-        </div>
-
-        <hr>
-
-        <nav id="nav-bar" class="nav-bar">
-
-            <ul class="dashboard">
-                <li> <a href="admin.php" class="active">Dashboard</a></li>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Subjects</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
-                            Subjects</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
-                            Subjects</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Students</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">Add
-                            Students</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">View
-                            Students</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Teachers</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_teachers.php">Add
-                            Teachers</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_teachers.php">View
-                            Teachers</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="sections">
-                <li> <a href="sections.php">Sections</a></li>
-            </ul>
-
-            <ul class="logout">
-                <li><a href="logout.php">Logout</a></a></li>
-            </ul>
-
-        </nav>
-
-    </div>
-
-    <div class="body">
-
-        <div class="header">
-            <div class="menu-icon">
-                <img src="../images/menu.png" alt="menu" id="menu-icon">
-            </div>
-        </div>
-
-        <div class="info">
-
-            <div class="text">
-                <h1>Dashboard</h1>
+            <div class="logo-header">
+                <img src="../images/logo.png" alt="logo">
             </div>
 
             <hr>
 
-            <div class="main-body dashboard">
+            <div class="user-info">
+                <p>Administrator</p>
+            </div>
 
-                <div class="cards">
-                    <div class="info-card">
-                        <img src="../images/people.png" alt="students">
-                        <p><?php echo $students_total ?> <br> <span>Students</span></p>
-                    </div>
+            <hr>
 
-                    <div class="info-card">
-                        <img src="../images/people.png" alt="students">
-                        <p><?php echo $subject_total ?> <br> <span>Subjects</span></p>
-                    </div>
+            <nav id="nav-bar" class="nav-bar">
 
-                    <div class="info-card">
-                        <img src="../images/people.png" alt="students">
-                        <p><?php echo $teachers_total ?> <br> <span>Teachers</span></p>
-                    </div>
+                <ul class="dashboard">
+                    <li> <a href="admin.php" class="active">Dashboard</a></li>
+                </ul>
+
+                <ul class="dropdown-text">
+                    <p>Subjects</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
+
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
+                                Subjects</a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
+                                Subjects</a>
+                        </li>
+                    </ul>
+                </ul>
+
+                <ul class="dropdown-text">
+                    <p>Students</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
+
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">Add
+                                Students</a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">View
+                                Students</a>
+                        </li>
+                    </ul>
+                </ul>
+
+                <ul class="dropdown-text">
+                    <p>Teachers</p>
+                    <img src="../images/arrow.png" alt="arrow" class="arrow">
+                </ul>
+
+                <ul class="dropdown">
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_teachers.php">Add
+                                Teachers</a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_teachers.php">View
+                                Teachers</a>
+                        </li>
+                    </ul>
+                </ul>
+
+                <ul class="logout">
+                    <li><a href="logout.php">Logout</a></a></li>
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <div class="body">
+
+            <div class="header">
+                <div class="menu-icon">
+                    <img src="../images/menu.png" alt="menu" id="menu-icon">
+                </div>
+            </div>
+
+            <div class="info">
+
+                <div class="text">
+                    <h1>Dashboard</h1>
                 </div>
 
+                <hr>
 
-                <div class="graph-body">
+                <div class="main-body dashboard">
 
-                    <div class="graph">
-                        <div id="student-chart" style="max-width:900px;"></div>
+                    <div class="cards">
+                        <div class="info-card">
+                            <img src="../images/people.png" alt="students">
+                            <p><?php echo $students_total ?> <br> <span>Students</span></p>
+                        </div>
+
+                        <div class="info-card">
+                            <img src="../images/subject.png" alt="students">
+                            <p><?php echo $subject_total ?> <br> <span>Subjects</span></p>
+                        </div>
+
+                        <div class="info-card">
+                            <img src="../images/teacher.png" alt="students">
+                            <p><?php echo $teachers_total ?> <br> <span>Teachers</span></p>
+                        </div>
                     </div>
 
-                    <div class="graph">
-                        <div id="teacher-chart" style="max-width:900px;"></div>
+
+                    <div class="graph-body">
+
+                        <div class="graph">
+                            <div id="student-chart" style="max-width:90%; "></div>
+                        </div>
+
+                        <div class="graph">
+                            <div id="teacher-chart" style="max-width:90%;"></div>
+                        </div>
+
+                        <div class="graph">
+                            <div id="grade-chart" style="max-width:90%; padding:10px;"></div>
+                        </div>
+
                     </div>
 
                 </div>
-
 
             </div>
 
 
         </div>
 
-    </div>
+    </body>
 
-</body>
-
-<script src="../js/admin.js"></script>
-<script src="../js/nav.js"></script>
-<script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/nav.js"></script>
+    <script>
     const student_chart = document.querySelector("#student-chart");
     const teacher_chart = document.querySelector("#teacher-chart");
+    const grade_chart = document.querySelector("#grade-chart");
 
     //graphs
     if (student_chart) {
@@ -199,17 +205,18 @@ $subject_total = $subject_count['total'];
         function drawChart() {
             // Set Data
             const data = google.visualization.arrayToDataTable([
-                ["Contry", "Mhl"],
-                ["Italy", 54.8],
-                ["France", 48.6],
-                ["Spain", 44.4],
-                ["USA", 23.9],
-                ["Argentina", 14.5],
+                ["Gender Students", "Total"],
+                <?php while ($total_students = $students_gender->fetch_assoc()) {
+                    echo "[";
+                    echo ($total_students["gender"] === "M") ? '"' . "Male" . '"' :  '"' . "Female" . '"';
+                    echo "," . $total_students["total"] . "],";
+                } ?>
             ]);
+
 
             // Set Options
             const options = {
-                title: "World Wide Wine Production",
+                title: "Total Students Based on Gender",
             };
 
             // Draw
@@ -228,16 +235,16 @@ $subject_total = $subject_count['total'];
             // Set Data
             const data = google.visualization.arrayToDataTable([
                 ["Contry", "Mhl"],
-                ["Italy", 54.8],
-                ["France", 48.6],
-                ["Spain", 44.4],
-                ["USA", 23.9],
-                ["Argentina", 14.5],
+                <?php while ($total_teachers = $teachers_gender->fetch_assoc()) {
+                    echo "[";
+                    echo ($total_teachers["gender"] === "M") ? '"' . "Male" . '"' :  '"' . "Female" . '"';
+                    echo "," . $total_teachers["total"] . "],";
+                } ?>
             ]);
 
             // Set Options
             const options = {
-                title: "World Wide Wine Production",
+                title: "Total Teachers Based on Gender"
             };
 
             // Draw
@@ -245,6 +252,36 @@ $subject_total = $subject_count['total'];
             chart.draw(data, options);
         }
     }
-</script>
+
+    if (grade_chart) {
+        google.charts.load('current', {
+            'packages': ['bar']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Year Level', 'Grade'],
+                <?php while ($total_average = $average->fetch_assoc()) {
+                    echo "[";
+                    echo '"' . $total_average["grade_level"] . '"';
+                    echo "," . $total_average["average"] . "],";
+                } ?>
+            ]);
+
+            var options = {
+                chart: {
+                    title: 'Students Performance',
+                    subtitle: 'Average Grade Every Year Level',
+                },
+                bars: 'horizontal'
+            };
+
+            var chart = new google.charts.Bar(grade_chart);
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    }
+    </script>
 
 </html>

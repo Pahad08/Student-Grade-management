@@ -609,4 +609,50 @@ class Model
 
         return $result;
     }
+
+    //total student based on gender
+    public function TotalStudents()
+    {
+        $query = "SELECT COUNT(*) as total,gender from students GROUP BY gender;";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //total teacher based on gender
+    public function TotalTeachers()
+    {
+        $query = "SELECT COUNT(*) as total,gender from teachers GROUP BY gender;";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
+
+    //Average grade every year level
+    public function AverageGrade()
+    {
+        $query = "SELECT AVG(grades.grade) as average, students.grade_level
+        from grades
+        join students on grades.student_id = students.student_id
+        GROUP by students.grade_level
+        ORDER BY
+    CASE students.grade_level
+        WHEN 'Grade 7' THEN 1
+        WHEN 'Grade 8' THEN 2
+        WHEN 'Grade 9' THEN 3
+        WHEN 'Grade 10' THEN 4
+        WHEN 'Grade 11' THEN 5
+        WHEN 'Grade 12' THEN 6
+        ELSE 7
+    END;;";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
 }

@@ -70,6 +70,23 @@ class controller
 
                 break;
 
+            case 'teachers':
+
+                $user =  $this->model->SelectUser($usertype, $username);
+                $user_info = $user->fetch_assoc();
+                $user_id = ($user->num_rows > 0) ? $user_info['teacher_id'] : "";
+                $username = ($user->num_rows > 0) ? $user_info['username'] : "";
+                $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
+
+                if ($user->num_rows > 0 && password_verify($this->CleanData($conn, $password), $hashed_pass)) {
+                    $this->redirect($conn, "teacher.php", $user_id, $usertype);
+                } else {
+                    $conn->close();
+                    return "Incorrect Username or Password";
+                }
+
+                break;
+
             case 'students':
 
                 $user =  $this->model->SelectUser($usertype, $username);
@@ -517,5 +534,23 @@ class controller
     public function SubjectCount(): mysqli_result
     {
         return $this->model->subjectscount();
+    }
+
+    //total students based on gender
+    public function TotalStudents(): mysqli_result
+    {
+        return $this->model->TotalStudents();
+    }
+
+    //total students based on gender
+    public function TotalTeachers(): mysqli_result
+    {
+        return $this->model->TotalTeachers();
+    }
+
+    //Average grade every year level
+    public function AverageGrade(): mysqli_result
+    {
+        return $this->model->AverageGrade();
     }
 }

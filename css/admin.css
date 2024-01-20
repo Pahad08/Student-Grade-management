@@ -342,13 +342,17 @@ nav ul a:not(.active):hover,
   width: 100%;
   justify-content: space-between;
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .graph {
-  width: 50%;
+  flex-basis: 49%;
   border: 2px solid var(--black);
   border-radius: 3px;
+  flex-grow: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .table-container {

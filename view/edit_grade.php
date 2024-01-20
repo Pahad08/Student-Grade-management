@@ -2,7 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['admins_id'])) {
+if (!isset($_SESSION['teachers_id'])) {
     header("location: login.php");
 } else {
     $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
@@ -56,7 +56,7 @@ $student_grades = $controller->GetGrades($student_id);
         <hr>
 
         <div class="user-info">
-            <p>Admin/Teacher</p>
+            <p>Teacher</p>
         </div>
 
         <hr>
@@ -64,45 +64,7 @@ $student_grades = $controller->GetGrades($student_id);
         <nav id="nav-bar" class="nav-bar">
 
             <ul class="dashboard">
-                <li> <a href="admin.php">Dashboard</a></li>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Subjects</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_subject.php">Add
-                            Subjects</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_subject.php">View
-                            Subjects</a>
-                    </li>
-                </ul>
-            </ul>
-
-            <ul class="dropdown-text">
-                <p>Students</p>
-                <img src="../images/arrow.png" alt="arrow" class="arrow">
-            </ul>
-
-            <ul class="dropdown">
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="add_students.php">Add
-                            Students</a>
-                    </li>
-                </ul>
-
-                <ul>
-                    <li> <img src="../images/arrow.png" alt="arrow" class="arrow"><a href="view_students.php">View
-                            Students</a>
-                    </li>
-                </ul>
+                <li> <a href="teacher.php">Teacher</a></li>
             </ul>
 
             <ul class="sections">
