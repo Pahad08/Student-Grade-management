@@ -74,7 +74,7 @@ class controller
 
                 $user =  $this->model->SelectUser($usertype, $username);
                 $user_info = $user->fetch_assoc();
-                $user_id = ($user->num_rows > 0) ? $user_info['teacher_id'] : "";
+                $user_id = ($user->num_rows > 0) ? $user_info['account_id'] : "";
                 $username = ($user->num_rows > 0) ? $user_info['username'] : "";
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
@@ -91,7 +91,7 @@ class controller
 
                 $user =  $this->model->SelectUser($usertype, $username);
                 $user_info = $user->fetch_assoc();
-                $user_id = ($user->num_rows > 0) ? $user_info['student_id'] : "";
+                $user_id = ($user->num_rows > 0) ? $user_info['account_id'] : "";
                 $username = ($user->num_rows > 0) ? $user_info['username'] : "";
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
