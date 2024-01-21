@@ -21,7 +21,7 @@ $teacher = $teacher_info->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -82,28 +82,97 @@ $teacher = $teacher_info->fetch_assoc();
 
                 <div class="info-body">
 
-                    <div class="img">
-                        <img src="../profile_pics/user.png" alt="">
+                    <div class="btn-info">
+                        <div class="details-corner act-corner">
+                            <p>Basic Information</p>
+                        </div>
+
+                        <div class="acc-corner">
+                            <p>Account Information</p>
+                        </div>
                     </div>
 
-                    <div class="f_name">
-                        <h3>First Name</h3>
-                        <p><?php echo $teacher['f_name'] ?></p>
-                    </div>
+                    <div id="user-info">
 
-                    <div class="l_name">
-                        <h3>Last Name</h3>
-                        <p><?php echo $teacher['l_name'] ?></p>
-                    </div>
+                        <div class="profile-container">
+                            <img src="<?php echo $teacher['profile_pic'] ?>" alt="" class="user-profile">
+                        </div>
 
-                    <div class="gender">
-                        <h3>Gender</h3>
-                        <p><?php echo ($teacher['gender'] == "M") ? "Male" : "Female" ?></p>
+                        <div class="details">
+
+                            <div class="f_name">
+                                <h3>First Name</h3>
+                                <p><?php echo $teacher['f_name'] ?></p>
+                            </div>
+
+                            <div class="l_name">
+                                <h3>Last Name</h3>
+                                <p><?php echo $teacher['l_name'] ?></p>
+                            </div>
+
+                            <div class="gender">
+                                <h3>Gender</h3>
+                                <p><?php echo ($teacher['gender'] == "M") ? "Male" : "Female" ?></p>
+                            </div>
+
+                            <div class="edit-btnacc">
+                                <button id="btn-edit">Edit Profile</button>
+                            </div>
+
+                        </div>
+
+
                     </div>
 
                 </div>
 
-                <div class="form-body">
+                <div class="acc-body">
+
+                    <div class="btn-info">
+                        <div class="details-corner act-corner">
+                            <p>Basic Information</p>
+                        </div>
+
+                        <div class="acc-corner">
+                            <p>Account Information</p>
+                        </div>
+                    </div>
+
+                    <div id="user-info">
+
+                        <div class="profile-container">
+                            <img src="<?php echo $teacher['profile_pic'] ?>" alt="" class="user-profile">
+                        </div>
+
+                        <div class="details">
+
+                            <div class="f_name">
+                                <h3>First Name</h3>
+                                <p><?php echo $teacher['f_name'] ?></p>
+                            </div>
+
+                            <div class="l_name">
+                                <h3>Last Name</h3>
+                                <p><?php echo $teacher['l_name'] ?></p>
+                            </div>
+
+                            <div class="gender">
+                                <h3>Gender</h3>
+                                <p><?php echo ($teacher['gender'] == "M") ? "Male" : "Female" ?></p>
+                            </div>
+
+                            <div class="edit-btnacc">
+                                <button id="btn-edit">Edit Profile</button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="form-body" style="display: none;">
                     <form action="../ajax/edit_teacher.php" id="account-form">
 
                         <div class="input-containers">
@@ -116,8 +185,7 @@ $teacher = $teacher_info->fetch_assoc();
 
                                 <div class="input-body" id="lname-body">
                                     <label for="lname">Last Name</label>
-                                    <input type="text" name="lname" id="lname"
-                                        value="<?php echo $teacher['l_name']   ?>">
+                                    <input type="text" name="lname" id="lname" value="<?php echo $teacher['l_name']   ?>">
                                 </div>
 
                                 <div class="input-body" id="lname-body">
