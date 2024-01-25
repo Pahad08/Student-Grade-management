@@ -5,24 +5,22 @@ require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
-    $password = (isset($_POST['password'])) ? $_POST['password'] : "";
-    $profile_pic = $controller->SelectProfilePic($_POST['acc_id'], "teachers");
+    $profile_pic = $controller->SelectProfilePic($_POST['teacher-id'], "teachers", "teacher_id");
     $profile = $profile_pic->fetch_assoc();
     $user_profile = $profile['profile_pic'];
 
     $edit_teacher = $controller->Editteacher(
-        $_POST['username'],
-        $_POST['email'],
-        $password,
         $_POST['fname'],
         $_POST['lname'],
         $_POST['gender'],
         $_FILES['image'],
-        $_POST['acc_id']
+        $_POST['username'],
+        $_POST['email'],
+        $_POST['teacher-id']
     );
     $controller->CloseDB();
-    if ($edit_teacher == 'success' && file_exists($user_profile)) {
-        if ($_FILES['image']['size'] !== 0) {
+    if ($edit_teacher == 'success') {
+        if ($_FILES['image']['size'] !== 0 && $user_profile !== "..\profile_pics\user.png") {
             unlink($user_profile);
         }
         echo json_encode(['status' => 'edited', 'message' => 'Teacher Edited!']);

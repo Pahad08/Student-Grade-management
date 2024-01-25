@@ -23,8 +23,8 @@ if (isset($_GET['teacher'])) {
         echo '<td class="data data-img"><img src="../profile_pics/' . $teacher['profile_pic'] . '"' . "id='profile-pic'>
                                         </td>";
         echo '<td class="data action">';
-        echo '<button class="btn-delete" data-id="' . $teacher['account_id'] . '"' . "><img src='../images/delete.png' alt='delete' class='delete-sub'></button>";
-        echo '<button class="btn-edit"> <a href=' . htmlspecialchars("../view/view_teachers.php" . "?acc_id=" . $teacher['account_id']) .
+        echo '<button class="btn-delete" data-id="' . $teacher['teacher_id'] . '"' . "><img src='../images/delete.png' alt='delete' class='delete-sub'></button>";
+        echo '<button class="btn-edit"> <a href=' . htmlspecialchars("../view/view_teachers.php" . "?teacher_id=" . $teacher['teacher_id']) .
             '><img src="../images/edit.png" alt="Edit" class="edit-sub"></a></button>';
 
         echo "</td>";

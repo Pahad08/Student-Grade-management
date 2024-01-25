@@ -23,9 +23,7 @@ class Model
     //Retrieve User
     public function SelectUser($usertype, $username)
     {
-        $stmt = $this->db->prepare("SELECT * from accounts
-        join $usertype on accounts.account_id = $usertype.account_id
-        where accounts.username = ?");
+        $stmt = $this->db->prepare("SELECT * from $usertype where username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -81,8 +79,12 @@ class Model
     //Select User Email
     public function SelectEmail($email)
     {
-        $query = $this->db->prepare("SELECT email from accounts where email = ?;");
-        $query->bind_param("s", $email);
+        $query = $this->db->prepare("SELECT email FROM students WHERE email = ?
+                UNION
+                SELECT email FROM teachers WHERE email = ?
+                UNION
+                SELECT email FROM admins WHERE email = ?;");
+        $query->bind_param("sss", $email, $email, $email);
         $query->execute();
         $result = $query->get_result();
 
@@ -124,6 +126,7 @@ class Model
     //Reset user password
     public function ResetPass($token, $new_pass)
     {
+
         $sql1 = "SELECT email from token where token = ?";
         $stmt1 = $this->db->prepare($sql1);
         $stmt1->bind_param("s", $token);
@@ -131,9 +134,27 @@ class Model
         $result1 = $stmt1->get_result();
         $row = $result1->fetch_assoc();
         $email = $row['email'];
-        $password = password_hash($new_pass, PASSWORD_BCRYPT);
+        $password = password_hash($new_pass, PASSWORD_DEFAULT);
 
-        $sql2 = "UPDATE accounts SET `password` = ? where email = ?";
+        $query = "SELECT 'admins' AS user_type
+        FROM admins
+        WHERE email = ?
+        UNION
+        SELECT 'teachers' AS user_type
+        FROM teachers
+        WHERE email = ?
+        UNION
+        SELECT 'students' AS user_type
+        FROM students
+        WHERE email = ?;";
+        $statement = $this->db->prepare($query);
+        $statement->bind_param("sss", $email, $email, $email);
+        $statement->execute();
+        $res = $statement->get_result();
+        $row = $res->fetch_assoc();
+        $table_name = $row['user_type'];
+
+        $sql2 = "UPDATE $table_name SET `password` = ? where email = ?";
         $stmt2 = $this->db->prepare($sql2);
         $stmt2->bind_param("ss", $password, $email);
 
@@ -241,27 +262,12 @@ class Model
     public function AddStudent($username, $email, $fname, $lname, $gender, $number, $section, $g_level, $pic)
     {
 
-        $default_password = password_hash("12345", PASSWORD_BCRYPT);
-        $sql1 = "INSERT INTO accounts (username, email, `password`) VALUES(?,?,?)";
-        $stmt1 = $this->db->prepare($sql1);
-        $stmt1->bind_param("sss", $username, $email, $default_password);
+        $default_password = password_hash("12345", PASSWORD_DEFAULT);
 
-        try {
-            if ($stmt1->execute()) {
-                $acc_id = $this->db->insert_id;
-            } else {
-                throw new mysqli_sql_exception("Duplicate Email");
-            }
-        } catch (mysqli_sql_exception $e) {
-            if ($e->getCode() == 1062) {
-                return 'duplicate email';
-            }
-        }
-
-        $sql2 = "INSERT INTO students (f_name, l_name, gender, contact_number, section, grade_level, profile_pic, account_id) 
-        VALUES(?,?,?,?,?,?,?,?)";
+        $sql2 = "INSERT INTO students (f_name, l_name, gender, contact_number, section, grade_level, profile_pic,username,`password`,email) 
+        VALUES(?,?,?,?,?,?,?,?,?,?)";
         $stmt2 = $this->db->prepare($sql2);
-        $stmt2->bind_param("sssssssi", $fname, $lname, $gender, $number, $section, $g_level, $pic, $acc_id);
+        $stmt2->bind_param("ssssssssss", $fname, $lname, $gender, $number, $section, $g_level, $pic, $username, $default_password, $email);
 
         try {
             if ($stmt2->execute()) {
@@ -270,14 +276,19 @@ class Model
                 throw new mysqli_sql_exception("Error adding student");
             }
         } catch (mysqli_sql_exception $e) {
-            return 'error';
+
+            if ($e->getCode() == 1062) {
+                return 'duplicate';
+            } else {
+                return 'error';
+            }
         }
     }
 
     //Select Profile Pic
-    public function SelectProfile($id, $table)
+    public function SelectProfile($id, $table, $column)
     {
-        $query = "SELECT profile_pic from $table where account_id = ?";
+        $query = "SELECT profile_pic from $table where $column = ?";
         $statement = $this->db->prepare($query);
         $statement->bind_param("i", $id);
         $statement->execute();
@@ -285,11 +296,11 @@ class Model
         return $result;
     }
 
-    //Delete Student
-    public function DeleteAccount($id)
+    //Delete Account
+    public function DeleteUser($id, $table, $column)
     {
 
-        $sql = "DELETE FROM accounts where account_id = ?";
+        $sql = "DELETE FROM $table where $column = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
 
@@ -309,69 +320,31 @@ class Model
     //Get Student
     public function SelectStudent($acc_id)
     {
-        $query = "SELECT * from students where account_id = ?";
+        $query = "SELECT * from students where student_id = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("i", $acc_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
         return $result;
-    }
-
-    //Get Account
-    public function SelectAccount($acc_id)
-    {
-        $query = "SELECT * from accounts where account_id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("i", $acc_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result;
-    }
-
-    //Edit Account
-    public function EditAcc($username, $email, $password, $acc_id)
-    {
-        if (empty($password)) {
-            $sql = "UPDATE accounts SET username = ?, `email` = ? where account_id = ?";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("ssi", $username, $email, $acc_id);
-        } else {
-            $sql = "UPDATE accounts SET username = ?, `email` = ?, `password` = ? where account_id = ?";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sssi", $username, $email, $password, $acc_id);
-        }
-
-        try {
-            if ($stmt->execute()) {
-                return 'success';
-            } else {
-                throw new mysqli_sql_exception("duplicate");
-            }
-        } catch (mysqli_sql_exception $e) {
-            if ($e->getCode() == 1062) {
-                return 'duplicate';
-            }
-        }
     }
 
     //Edit student
-    public function EditStudent($fname, $lname, $gender, $number, $section, $g_level, $pic, $id)
+    public function EditStudent($fname, $lname, $gender, $number, $section, $g_level, $pic, $id, $username, $email)
     {
         $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
         $picture = $path . $pic['name'];
 
         if ($pic['size'] > 0) {
             $sql = "UPDATE students SET f_name = ?, l_name = ?,gender=?, contact_number = ?, 
-            section = ?, grade_level = ?, profile_pic = ? where account_id = ?";
+            section = ?, grade_level = ?, profile_pic = ?, username = ? , email = ?  where student_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sssssssi", $fname, $lname, $gender, $number, $section, $g_level, $picture, $id);
+            $stmt->bind_param("sssssssssi", $fname, $lname, $gender, $number, $section, $g_level, $picture, $username, $email, $id);
         } else {
             $sql = "UPDATE students SET f_name = ?, l_name = ?,gender=?, contact_number = ?, 
-            section = ?, grade_level = ? where account_id = ?";
+            section = ?, grade_level = ?, username = ? , email = ? where student_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("ssssssi", $fname, $lname, $gender, $number, $section, $g_level, $id);
+            $stmt->bind_param("ssssssssi", $fname, $lname, $gender, $number, $section, $g_level, $username, $email, $id);
         }
 
         try {
@@ -381,8 +354,10 @@ class Model
                 throw new mysqli_sql_exception("fail");
             }
         } catch (mysqli_sql_exception $e) {
-            if ($e->getMessage() === "fail") {
-                return 'fail';
+            if ($e->getCode() == 1062) {
+                return 'duplicate';
+            } else {
+                return "error";
             }
         }
     }
@@ -480,35 +455,23 @@ class Model
     {
 
         $default_password = password_hash("12345", PASSWORD_BCRYPT);
-        $sql1 = "INSERT INTO accounts (username, email, `password`) VALUES(?,?,?)";
-        $stmt1 = $this->db->prepare($sql1);
-        $stmt1->bind_param("sss", $username, $email, $default_password);
+        $sql = "INSERT INTO teachers(f_name, l_name, gender, profile_pic, username,email,`password`) 
+        VALUES(?,?,?,?,?,?,?)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("sssssss", $fname, $lname, $gender, $pic, $username, $email, $default_password);
 
         try {
-            if ($stmt1->execute()) {
-                $acc_id = $this->db->insert_id;
-            } else {
-                throw new mysqli_sql_exception("Duplicate Email");
-            }
-        } catch (mysqli_sql_exception $e) {
-            if ($e->getCode() == 1062) {
-                return 'duplicate email';
-            }
-        }
-
-        $sql2 = "INSERT INTO teachers(f_name, l_name, gender, profile_pic, account_id) 
-        VALUES(?,?,?,?,?)";
-        $stmt2 = $this->db->prepare($sql2);
-        $stmt2->bind_param("ssssi", $fname, $lname, $gender, $pic, $acc_id);
-
-        try {
-            if ($stmt2->execute()) {
+            if ($stmt->execute()) {
                 return 'success';
             } else {
                 throw new mysqli_sql_exception("Error adding student");
             }
         } catch (mysqli_sql_exception $e) {
-            return 'error';
+            if ($e->getCode() == 1062) {
+                return 'duplicate';
+            } else {
+                return 'error';
+            }
         }
     }
 
@@ -524,11 +487,11 @@ class Model
     }
 
     //Get teacher
-    public function SelectTeacher($acc_id)
+    public function SelectTeacher($teacher_id)
     {
-        $query = "SELECT * from teachers where account_id = ?";
+        $query = "SELECT * from teachers where teacher_id = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("i", $acc_id);
+        $stmt->bind_param("i", $teacher_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -536,19 +499,19 @@ class Model
     }
 
     //Edit Teacher
-    public function EditTeacher($fname, $lname, $gender, $pic, $id)
+    public function EditTeacher($fname, $lname, $gender, $pic, $username, $email, $id)
     {
         $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
         $picture = $path . $pic['name'];
 
         if ($pic['size'] > 0) {
-            $sql = "UPDATE teachers SET f_name = ?, l_name = ?,gender=?, profile_pic = ? where account_id = ?";
+            $sql = "UPDATE teachers SET f_name = ?, l_name = ?,gender=?, profile_pic = ?, username = ?, email = ? where teacher_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("ssssi", $fname, $lname, $gender, $picture, $id);
+            $stmt->bind_param("ssssssi", $fname, $lname, $gender, $picture, $username, $email, $id);
         } else {
-            $sql = "UPDATE teachers SET f_name = ?, l_name = ?, gender = ? where account_id = ?";
+            $sql = "UPDATE teachers SET f_name = ?, l_name = ?, gender = ?, username = ?, email = ? where teacher_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sssi", $fname, $lname, $gender, $id);
+            $stmt->bind_param("sssssi", $fname, $lname, $gender, $username, $email, $id);
         }
 
         try {

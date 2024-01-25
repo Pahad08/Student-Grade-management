@@ -3,7 +3,7 @@
 $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 
-if (isset($_POST['email'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
 
     $send_email = $controller->SelectEmail($_POST['email']);

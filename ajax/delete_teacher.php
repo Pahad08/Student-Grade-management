@@ -7,12 +7,13 @@ $controller = new controller("localhost", "root", "", "school");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     session_start();
-    $profile_pic = $controller->SelectProfilePic($_POST['acc-id'], "teachers");
+    $profile_pic = $controller->SelectProfilePic($_POST['teacher-id'], "teachers", "teacher_id");
     $profile = $profile_pic->fetch_assoc();
     $user_profile = $profile['profile_pic'];
+    $profile_dir = $root  . "profile_pics" . DIRECTORY_SEPARATOR . basename($user_profile);
 
-    if (file_exists($user_profile)) {
-        $delete_student = $controller->DeleteAccount($_POST['acc-id']);
+    if (file_exists($profile_dir)) {
+        $delete_student = $controller->DeleteAccount($_POST['teacher-id'], "teachers", "teacher_id");
         $controller->CloseDB();
         $controller->CheckProfile($delete_student, $user_profile, "../view/view_teachers.php", "Teacher");
     } else {

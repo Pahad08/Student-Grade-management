@@ -5,15 +5,13 @@ require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" || isset($_POST['add'])) {
     $controller = new controller("localhost", "root", "", "school");
-    $password = (isset($_POST['password'])) ? $_POST['password'] : "";
-    $profile_pic = $controller->SelectProfilePic($_POST['acc_id'], "students");
+    $profile_pic = $controller->SelectProfilePic($_POST['student_id'], "students", "student_id");
     $profile = $profile_pic->fetch_assoc();
     $user_profile = $profile['profile_pic'];
 
     $edit_student = $controller->Editstudent(
         $_POST['username'],
         $_POST['email'],
-        $password,
         $_POST['fname'],
         $_POST['lname'],
         $_POST['gender'],
@@ -21,18 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" || isset($_POST['add'])) {
         $_POST['section'],
         $_POST['g-level'],
         $_FILES['image'],
-        $_POST['acc_id']
+        $_POST['student_id']
     );
     $controller->CloseDB();
-    if ($edit_student == 'success' && file_exists($user_profile)) {
-        if ($_FILES['image']['size'] !== 0) {
+    if ($edit_student == 'success') {
+        if ($_FILES['image']['size'] !== 0 && $user_profile !== "..\profile_pics\user.png") {
             unlink($user_profile);
         }
         echo json_encode(['status' => 'edited', 'message' => 'Student Edited!']);
     } elseif ($edit_student == 'duplicate') {
         echo json_encode(['status' => 'duplicate', 'message' => 'Email already exist!']);
-    } elseif ($edit_student == 'fail') {
-        echo json_encode(['status' => 'fail', 'message' => 'Theres an failure in editing student']);
     } else {
         echo json_encode(['error' => 'Error, please try again']);
     }

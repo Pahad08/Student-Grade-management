@@ -1,6 +1,6 @@
 <?php
 
-if (isset($_POST['password']) && isset($_POST['token'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
     require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";

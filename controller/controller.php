@@ -74,7 +74,7 @@ class controller
 
                 $user =  $this->model->SelectUser($usertype, $username);
                 $user_info = $user->fetch_assoc();
-                $user_id = ($user->num_rows > 0) ? $user_info['account_id'] : "";
+                $user_id = ($user->num_rows > 0) ? $user_info['teacher_id'] : "";
                 $username = ($user->num_rows > 0) ? $user_info['username'] : "";
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
@@ -118,7 +118,7 @@ class controller
             $token = bin2hex(random_bytes(32));
             $expiration_date = date('Y-m-d H:i:s', time() + (5 * 60));
             $this->model->InsertToken($token, $expiration_date, $email);
-            $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentmanagement" : $_SERVER['HTTP_HOST'] . ".com";
+            $base_url = ($_SERVER['HTTP_HOST'] == "localhost") ? "localhost/studentgrademanagement" : $_SERVER['HTTP_HOST'] . ".com";
             $resetLink =  $base_url . "/view/reset_password.php?token=" . urlencode($token);
 
             try {
@@ -128,11 +128,11 @@ class controller
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'mastahpahad@gmail.com';
-                $mail->Password   = 'gaocjcwwezyylzvk';
+                $mail->Password   = 'azowoluzslbupajq';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->Port = 465;
 
-                $mail->setFrom('mastahpahad@gmail.com');
+                $mail->setFrom('sample@email.com');
                 $mail->addAddress($email);
 
                 $mail->isHTML(true);
@@ -140,6 +140,8 @@ class controller
                 $mail->Body =  "<a href='$resetLink'>Click here to reset your password</a>";
                 if ($mail->send()) {
                     return 'success';
+                } else {
+                    throw new Exception("Error");
                 }
             } catch (Exception $e) {
                 return 'fail';
@@ -280,7 +282,7 @@ class controller
             return 'success';
         } elseif ($add_student === 'success') {
             return 'success';
-        } elseif ($add_student === 'duplicate email') {
+        } elseif ($add_student === 'duplicate') {
             return 'duplicate';
         } else {
             return 'fail';
@@ -288,16 +290,16 @@ class controller
     }
 
     //Select student profile picture
-    public function SelectProfilePic(int $id, string $table): mysqli_result
+    public function SelectProfilePic(int $id, string $table, string $column): mysqli_result
     {
-        return $this->model->SelectProfile($id, $table);
+        return $this->model->SelectProfile($id, $table, $column);
     }
 
-    //Delete account
-    public function DeleteAccount($id)
+    //Delete Account
+    public function DeleteAccount(int $id, string $table, string  $column): string
     {
 
-        if ($this->model->DeleteAccount($id)) {
+        if ($this->model->DeleteUser($id, $table, $column)) {
             return 'success';
         } else {
             return 'fail';
@@ -338,17 +340,10 @@ class controller
         return $this->model->SelectStudent($id);
     }
 
-    //Get student account
-    public function GetAccount(int $id): mysqli_result
-    {
-        return $this->model->SelectAccount($id);
-    }
-
     //Edit Student
     public function Editstudent(
         string $username,
         string $email,
-        string $password,
         string $fname,
         string $lname,
         string $gender,
@@ -356,29 +351,24 @@ class controller
         string $section,
         string $g_level,
         array $pic,
-        int $id
+        int $id,
     ): string {
 
         $conn = $this->model->getDb();
         $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
         $username = $this->CleanData($conn, $username);
         $email = $this->CleanData($conn, $email);
-        $password = $this->CleanData($conn, password_hash($password, PASSWORD_BCRYPT));
         $fname = $this->CleanData($conn, $fname);
         $lname = $this->CleanData($conn, $lname);
         $number = $this->CleanData($conn, $number);
         $section = $this->CleanData($conn, $section);
         $g_level = $this->CleanData($conn, $g_level);
-        $editstudent = $this->model->EditStudent($fname, $lname, $gender, $number, $section, $g_level, $pic, $id);
-        $editacc = $this->model->EditAcc($username, $email, $password, $id);
-
-        if ($editstudent == 'success' && $editacc == 'success') {
+        $editstudent = $this->model->EditStudent($fname, $lname, $gender, $number, $section, $g_level, $pic, $id, $username, $email);
+        if ($editstudent == 'success') {
             move_uploaded_file($pic['tmp_name'], $path . $pic['name']);
             return 'success';
-        } elseif ($editacc == 'duplicate') {
+        } elseif ($editstudent == 'duplicate') {
             return 'duplicate';
-        } elseif ($editstudent == 'fail' && $editacc == 'duplicate') {
-            return 'fail';
         } else {
             return 'error';
         }
@@ -479,13 +469,12 @@ class controller
 
     //Edit Teacher
     public function Editteacher(
-        string $username,
-        string $email,
-        string $password,
         string $fname,
         string $lname,
         string $gender,
         array $pic,
+        string $username,
+        string $email,
         int $id
     ): string {
 
@@ -493,19 +482,15 @@ class controller
         $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
         $username = $this->CleanData($conn, $username);
         $email = $this->CleanData($conn, $email);
-        $password = $this->CleanData($conn, password_hash($password, PASSWORD_BCRYPT));
         $fname = $this->CleanData($conn, $fname);
         $lname = $this->CleanData($conn, $lname);
-        $editteacher = $this->model->EditTeacher($fname, $lname, $gender, $pic, $id);
-        $editacc = $this->model->EditAcc($username, $email, $password, $id);
+        $editteacher = $this->model->EditTeacher($fname, $lname, $gender, $pic, $username, $email, $id);
 
-        if ($editteacher == 'success' && $editacc == 'success') {
+        if ($editteacher == 'success') {
             move_uploaded_file($pic['tmp_name'], $path . $pic['name']);
             return 'success';
-        } elseif ($editacc == 'duplicate') {
+        } elseif ($editteacher == 'duplicate') {
             return 'duplicate';
-        } elseif ($editteacher == 'fail' && $editacc == 'duplicate') {
-            return 'fail';
         } else {
             return 'error';
         }

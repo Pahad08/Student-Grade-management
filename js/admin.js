@@ -24,7 +24,8 @@ const section_body = document.querySelector("#section-body");
 const glevel_body = document.querySelector("#glevel-body");
 const username_body = document.querySelector("#username-body");
 const email_body = document.querySelector("#email-body");
-const input_student = document.querySelector("#acc-id");
+const input_student = document.querySelector("#student-id");
+const input_teacher = document.querySelector("#teacher-id");
 const edit_student = document.querySelector("#edit-studentform");
 const edit_teacher = document.querySelector("#edit-teacherform");
 const grade_form = document.querySelector("#add-grade");
@@ -548,6 +549,10 @@ if (input_sub) {
 
 if (input_student) {
   ShowDelete(input_student);
+}
+
+if (input_teacher) {
+  ShowDelete(input_teacher);
 }
 
 //remove the show class in the alert body

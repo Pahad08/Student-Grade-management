@@ -29,8 +29,8 @@ if (isset($_GET['student'])) {
         echo '<td class="data"><img src="../profile_pics/' . $students['profile_pic'] . '"' . "id='profile-pic'>
                                         </td>";
         echo '<td class="data action">';
-        echo '<button class="btn-delete" data-id="' . $students['account_id'] . '"' . "><img src='../images/delete.png' alt='delete' class='delete-sub'></button>";
-        echo '<button class="btn-edit"> <a href=' . htmlspecialchars("../view/view_students.php" . "?acc_id=" . $students['account_id']) .
+        echo '<button class="btn-delete" data-id="' . $students['student_id'] . '"' . "><img src='../images/delete.png' alt='delete' class='delete-sub'></button>";
+        echo '<button class="btn-edit"> <a href=' . htmlspecialchars("../view/view_students.php?" . "student_id=" . $students['student_id']) .
             '><img src="../images/edit.png" alt="Edit" class="edit-sub"></a></button>';
 
         echo "</td>";

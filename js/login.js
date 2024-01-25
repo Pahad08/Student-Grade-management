@@ -29,7 +29,7 @@ if (email_form) {
         HideLoader();
         if (response.status == "OK") {
           alert(response.message);
-        } else if (response.status == "error") {
+        } else if (response.status == "fail") {
           alert(response.error);
         } else {
           alert(response.empty);
