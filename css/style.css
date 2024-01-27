@@ -774,7 +774,6 @@ nav ul a:not(.active):hover,
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  /* width: 188px; */
   border-radius: 5px;
   color: var(--gray);
 }
@@ -785,17 +784,64 @@ nav ul a:not(.active):hover,
   color: var(--white);
 }
 
-#btn-edit {
-  background: var(--skyblue);
+.personal-details,
+.account-details {
+  background: var(--gray);
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.personal-details div:first-child,
+.account-details div:first-child {
+  color: var(--black);
+}
+
+.personal-details div,
+.account-details div {
+  padding: 10px;
+  color: var(--darkblue);
+}
+
+.personal-details div:not(.edit-btnacc),
+.account-details div:not(.edit-btnacc) {
+  border-bottom: 1px solid var(--lightblue);
+}
+
+.personal-details div:not(:first-child),
+.account-details div:not(:first-child) {
+  display: flex;
+}
+
+.personal-details div h4,
+.account-details div h4 {
+  flex-basis: 50%;
+}
+
+.personal-details div p,
+.account-details div p {
+  color: var(--black);
+  flex-basis: 50%;
+}
+
+.f_name {
+  color: var(--darkblue);
+}
+
+.edit-btnacc {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-editacc {
   border: none;
   padding: 5px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   cursor: pointer;
   border-radius: 5px;
 }
 
-#btn-edit:hover {
-  background: var(--darkblue);
+.btn-editacc:hover {
+  background: var(--lightblue);
   color: var(--white);
 }
 

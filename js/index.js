@@ -610,15 +610,14 @@ if (grade_form) {
 //user profuke
 if (btn_file) {
   btn_file.addEventListener("change", () => {
-    console.log(btn_file);
     const img = document.querySelector("#image");
     if (img.files && img.files[0]) {
       const user_pic = img.files[0];
       const user_profile = document.querySelector(".user-profile");
       const file_reader = new FileReader();
 
-      file_reader.onload = (e) => {
-        user_profile.src = e.target.result;
+      file_reader.onload = () => {
+        user_profile.src = file_reader.result;
       };
 
       file_reader.readAsDataURL(user_pic);

@@ -18,100 +18,129 @@ $teacher = $teacher_info->fetch_assoc();
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <title>Teacher</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+        <title>Teacher</title>
+    </head>
 
-<body>
+    <body>
 
-    <div class="sidebar">
+        <div class="sidebar">
 
-        <div class="logo-header">
-            <img src="../images/logo.png" alt="logo">
-        </div>
-
-        <hr>
-
-        <div class="user-info">
-            <p>Teacher</p>
-        </div>
-
-        <hr>
-
-        <nav id="nav-bar" class="nav-bar">
-
-            <ul class="dashboard">
-                <li> <a href="teacher.php" class="active">Account</a></li>
-            </ul>
-
-            <ul class="sections">
-                <li> <a href="sections.php">Sections</a></li>
-            </ul>
-
-            <ul class="logout">
-                <li><a href="logout.php">Logout</a></a></li>
-            </ul>
-
-        </nav>
-
-    </div>
-
-    <div class="body">
-
-        <div class="header">
-            <div class="menu-icon">
-                <img src="../images/menu.png" alt="menu" id="menu-icon">
-            </div>
-        </div>
-
-        <div class="info">
-
-            <div class="text">
-                <h1>Account Info</h1>
+            <div class="logo-header">
+                <img src="../images/logo.png" alt="logo">
             </div>
 
             <hr>
 
-            <div class="main-body">
+            <div class="user-info">
+                <p>Teacher</p>
+            </div>
 
-                <div class="info-body">
+            <hr>
 
-                    <div id="user-info">
+            <nav id="nav-bar" class="nav-bar">
 
-                        <div class="profile-container">
-                            <img src="<?php echo $teacher['profile_pic'] ?>" class="user-profile">
-                            <form action="" method="post" enctype="multipart/form-data">
-                                <input type="file" name="image" id="image" accept="image/*">
-                                <button name="btn" id="btn-file" value="btn">Edit Profile</button>
-                                <input type="reset" value="Reset">
-                            </form>
+                <ul class="dashboard">
+                    <li> <a href="teacher.php" class="active">Account</a></li>
+                </ul>
+
+                <ul class="sections">
+                    <li> <a href="sections.php">Sections</a></li>
+                </ul>
+
+                <ul class="logout">
+                    <li><a href="logout.php">Logout</a></a></li>
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <div class="body">
+
+            <div class="header">
+                <div class="menu-icon">
+                    <img src="../images/menu.png" alt="menu" id="menu-icon">
+                </div>
+            </div>
+
+            <div class="info">
+
+                <div class="text">
+                    <h1>Account Info</h1>
+                </div>
+
+                <hr>
+
+                <div class="main-body">
+
+                    <div class="info-body">
+
+                        <div id="user-info">
+
+                            <div class="profile-container">
+                                <img src="<?php echo $teacher['profile_pic'] ?>" class="user-profile">
+                                <form action="" method="post" enctype="multipart/form-data" class="form-img">
+                                    <input type="file" name="image" id="image" accept="image/*">
+                                    <button name="btn" id="btn-file" value="btn">Edit Profile</button>
+                                    <input type="reset" value="Reset" id="reset">
+                                </form>
+                            </div>
+
+                            <div class="personal-details">
+
+                                <div class="details-header">
+                                    <h3>Personal Info</h3>
+                                </div>
+
+                                <div class="f_name">
+                                    <h4>First Name</h4>
+                                    <p><?php echo $teacher['f_name'] ?></p>
+                                </div>
+
+                                <div class="l_name">
+                                    <h4>Last Name</h4>
+                                    <p><?php echo $teacher['l_name'] ?></p>
+                                </div>
+
+                                <div class="gender">
+                                    <h4>Gender</h4>
+                                    <p><?php echo ($teacher['gender'] == "M") ? "Male" : "Female" ?></p>
+                                </div>
+
+                                <div class="edit-btnacc">
+                                    <button id="btn-edit" class="btn-editacc">Edit Profile</button>
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="personal-details">
+                        <div class="account-details">
 
-                            <div class="f_name">
-                                <h3>First Name</h3>
-                                <p><?php echo $teacher['f_name'] ?></p>
+                            <div class="account-header">
+                                <h3>Account Details</h3>
                             </div>
 
-                            <div class="l_name">
-                                <h3>Last Name</h3>
-                                <p><?php echo $teacher['l_name'] ?></p>
+                            <div class="username">
+                                <h4>UserName</h4>
+                                <p><?php echo $teacher['username'] ?></p>
                             </div>
 
-                            <div class="gender">
-                                <h3>Gender</h3>
-                                <p><?php echo ($teacher['gender'] == "M") ? "Male" : "Female" ?></p>
+                            <div class="email">
+                                <h4>Email</h4>
+                                <p><?php echo $teacher['email'] ?></p>
                             </div>
 
                             <div class="edit-btnacc">
-                                <button id="btn-edit">Edit Profile</button>
+                                <button id="btn-edit" class="btn-editacc">Edit Profile</button>
+                                <button class="btn-editacc">Change Password</button>
                             </div>
 
                         </div>
@@ -121,7 +150,11 @@ $teacher = $teacher_info->fetch_assoc();
 
                 </div>
 
-                <!-- <div class="form-body" style="display: none;">
+
+            </div>
+
+
+            <!-- <div class="form-body" style="display: none;">
                     <form action="../ajax/edit_teacher.php" id="account-form">
 
                         <div class="input-containers">
@@ -172,17 +205,29 @@ $teacher = $teacher_info->fetch_assoc();
                     </form>
                 </div> -->
 
-            </div>
+        </div>
 
         </div>
 
 
-    </div>
+        </div>
 
-</body>
+    </body>
 
-<script src="../js/index.js"></script>
-<script src="../js/nav.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/nav.js"></script>
+    <script>
+    const form_img = document.querySelector(".form-img");
+    const user_profile = document.querySelector(".user-profile");
+    const default_img = <?php echo '"' . $teacher['profile_pic'] . '"' ?>;
+    const dot = default_img.substring(0, 2) + '\\';
+    const folder = default_img.substring(2, 14);
+    const file_name = default_img.substring(14)
 
+    form_img.addEventListener("reset", () => {
+
+        user_profile.src = `${dot}${folder}\\${file_name}`;
+    })
+    </script>
 
 </html>
