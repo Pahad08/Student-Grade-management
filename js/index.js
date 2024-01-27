@@ -30,6 +30,7 @@ const edit_student = document.querySelector("#edit-studentform");
 const edit_teacher = document.querySelector("#edit-teacherform");
 const grade_form = document.querySelector("#add-grade");
 const grades_container = document.querySelector(".input");
+const btn_file = document.querySelector("#image");
 
 //check if the form is empty
 function EmptyInput(array) {
@@ -602,6 +603,25 @@ if (grade_form) {
       event.preventDefault();
     } else {
       RemoveParagraph(grade_input);
+    }
+  });
+}
+
+//user profuke
+if (btn_file) {
+  btn_file.addEventListener("change", () => {
+    console.log(btn_file);
+    const img = document.querySelector("#image");
+    if (img.files && img.files[0]) {
+      const user_pic = img.files[0];
+      const user_profile = document.querySelector(".user-profile");
+      const file_reader = new FileReader();
+
+      file_reader.onload = (e) => {
+        user_profile.src = e.target.result;
+      };
+
+      file_reader.readAsDataURL(user_pic);
     }
   });
 }

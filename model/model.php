@@ -378,7 +378,7 @@ class Model
     //Select students based on the section
     public function GetStudents($num_perpage, $offset, $section, $glvl)
     {
-        $query = "SELECT account_id,f_name,l_name,student_id from students where section = ? and grade_level= ? 
+        $query = "SELECT student_id,f_name,l_name,student_id from students where section = ? and grade_level= ? 
         order by grade_level,l_name,f_name LIMIT $num_perpage OFFSET $offset";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ss", $section, $glvl);
