@@ -81,7 +81,7 @@ a {
   display: none;
 }
 
-.show {
+.show-alert {
   display: block;
 }
 
@@ -238,7 +238,7 @@ nav ul a:not(.active):hover,
   object-fit: contain;
 }
 
-.show {
+.show-dropdown {
   display: block;
 }
 
@@ -832,7 +832,7 @@ nav ul a:not(.active):hover,
   gap: 10px;
 }
 
-.btn-editacc {
+.btn-editinfo {
   border: none;
   padding: 5px;
   font-size: 1rem;
@@ -840,8 +840,123 @@ nav ul a:not(.active):hover,
   border-radius: 5px;
 }
 
-.btn-editacc:hover {
+.btn-editinfo:hover {
   background: var(--lightblue);
+  color: var(--white);
+}
+
+/* personal information form */
+.personal-form,
+.account-form,
+.password-form {
+  display: none;
+}
+
+.show {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#personal-form,
+#account-form,
+#password-form {
+  width: clamp(300px, 50%, 500px);
+  animation: showform 0.8s;
+}
+
+@keyframes showform {
+  0% {
+    margin-top: -500px;
+  }
+
+  100% {
+    margin-top: 0px;
+  }
+}
+
+.form-header,
+.body-inputs {
+  padding: 10px;
+}
+
+.form-header {
+  display: flex;
+  background: var(--gray);
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-header p {
+  cursor: pointer;
+  font-size: 1.3rem;
+  align-self: center;
+}
+
+.form-header p:hover {
+  transform: scale(1.2);
+}
+
+.body-inputs {
+  background: var(--white);
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-containers input,
+.input-containers select {
+  width: 100%;
+  padding: 5px;
+  outline: none;
+  border: 1px solid var(--lightblue);
+  border-radius: 5px;
+}
+
+.input-containers input:focus,
+.input-containers select:focus {
+  outline: 1px solid var(--skyblue);
+}
+
+.edit-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btns > * {
+  font-size: 1rem;
+  padding: 3px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.edit-btns button {
+  background: var(--lightblue);
+}
+
+.edit-btns button:hover {
+  background: var(--darkblue);
+  color: var(--white);
+}
+
+.edit-btns input {
+  background: var(--skyblue);
+}
+
+.edit-btns input:hover {
+  background: var(--darkblue);
   color: var(--white);
 }
 

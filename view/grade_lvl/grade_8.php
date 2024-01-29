@@ -70,7 +70,7 @@ $controller->CloseDB();
             <nav id="nav-bar" class="nav-bar">
 
                 <ul class="dashboard">
-                    <li> <a href="teacher.php">Teacher</a></li>
+                    <li> <a href="../teacher.php">Account</a></li>
                 </ul>
 
 
@@ -123,7 +123,7 @@ $controller->CloseDB();
                                     <td class="data"><?php echo $students['l_name']  ?></td>
                                     <td class="data action">
                                         <a class="view"
-                                            href="../edit_grade.php?student=<?php echo $students['account_id'] ?>">
+                                            href="../edit_grade.php?student=<?php echo $students['student_id'] ?>">
                                             <img src="../../images/open-eye.png" alt="">
                                         </a>
 

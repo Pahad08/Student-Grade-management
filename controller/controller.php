@@ -405,9 +405,9 @@ class controller
     }
 
     //Delete grade
-    public function DeleteGrade(int $subject_id): string
+    public function DeleteGrade(int $grade_id): string
     {
-        if ($this->model->Deletegrade($subject_id)) {
+        if ($this->model->Deletegrade($grade_id)) {
             return 'success';
         } else {
             return 'fail';
@@ -537,5 +537,67 @@ class controller
     public function AverageGrade(): mysqli_result
     {
         return $this->model->AverageGrade();
+    }
+
+    //change profile pic
+    public function ChangeProfile(int $id, string $usertype, array $pic): string
+    {
+        $pic_name = $pic['name'];
+        $path = ".." . DIRECTORY_SEPARATOR . 'profile_pics' . DIRECTORY_SEPARATOR;
+        $change_profile = $this->model->ChangeProfile($id, $usertype, $path . $pic_name);
+
+        if ($change_profile == "success" && move_uploaded_file($pic['tmp_name'], $path . $pic_name)) {
+            return  'success';
+        } else {
+            return 'fail';
+        }
+    }
+
+    //change personal details
+    public function ChangePersonal(
+        int $id,
+        string $usertype,
+        string $fname,
+        string $lname,
+        string $gender,
+        string $contact_number = "",
+        string $section = "",
+        string $grade_level = ""
+    ): string {
+        $change_personal = $this->model->ChangePersonal($id, $usertype, $fname, $lname, $gender, $contact_number, $section, $grade_level);
+
+        if ($change_personal == "success") {
+            return  'success';
+        } else {
+            return 'fail';
+        }
+    }
+
+    //change account details
+    public function ChangeAccount(int $id,  string $usertype, string $username, string $email): string
+    {
+        $change_account = $this->model->ChangeAccount($id, $usertype, $username, $email);
+
+        if ($change_account == "success") {
+            return  'success';
+        } elseif ($change_account == 'duplicate') {
+            return 'duplicate';
+        } else {
+            return 'fail';
+        }
+    }
+
+    //change password
+    public function ChangePassword(int $id, string $usertype, string $password, string $newpass): string
+    {
+        $change_pass = $this->model->ChangePassword($id, $usertype, $password, $newpass);
+
+        if ($change_pass == "success") {
+            return  'success';
+        } elseif ($change_pass == 'wrong') {
+            return 'wrong';
+        } else {
+            return 'fail';
+        }
     }
 }

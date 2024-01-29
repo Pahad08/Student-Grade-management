@@ -10,10 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller->CloseDB();
 
     if ($addgrade == 'success') {
-        header("location: ../view/edit_grade.php?student={$_POST['account_id']}");
+        header("location: ../view/edit_grade.php?student={$_POST['student_id']}");
         exit();
     } elseif ($addgrade == 'fail') {
-        header("location: ../view/edit_grade.php?student={$_POST['account_id']}");
+        header("location: ../view/edit_grade.php?student={$_POST['student_id']}");
         exit();
     }
 }

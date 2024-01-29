@@ -70,7 +70,7 @@ $controller->CloseDB();
             <nav id="nav-bar" class="nav-bar">
 
                 <ul class="dashboard">
-                    <li> <a href="teacher.php">Teacher</a></li>
+                    <li> <a href="../teacher.php">Account</a></li>
                 </ul>
 
                 <ul class="sections">

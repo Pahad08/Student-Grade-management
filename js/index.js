@@ -31,6 +31,13 @@ const edit_teacher = document.querySelector("#edit-teacherform");
 const grade_form = document.querySelector("#add-grade");
 const grades_container = document.querySelector(".input");
 const btn_file = document.querySelector("#image");
+const btn_editpersonal = document.querySelector("#btn-editinfo");
+const btn_editacc = document.querySelector("#btn-acc");
+const btn_pass = document.querySelector("#btn-pass");
+const close_form = document.querySelectorAll(".close");
+const personal_form = document.querySelector(".personal-form");
+const account_form = document.querySelector(".account-form");
+const password_form = document.querySelector(".password-form");
 
 //check if the form is empty
 function EmptyInput(array) {
@@ -437,12 +444,12 @@ if (dropdown) {
       const dropdown_body = element.nextElementSibling;
       const arrow = element.lastElementChild;
 
-      if (dropdown_body.classList.contains("show")) {
-        dropdown_body.classList.toggle("show");
+      if (dropdown_body.classList.contains("show-dropdown")) {
+        dropdown_body.classList.remove("show-dropdown");
         arrow.style.transform = "rotate(0deg)";
       } else if (dropdown_body.classList.contains("dropdown")) {
         arrow.style.transform = "rotate(-180deg)";
-        dropdown_body.classList.toggle("show");
+        dropdown_body.classList.add("show-dropdown");
       }
     });
   });
@@ -536,7 +543,7 @@ function ShowDelete(id) {
   if (btn_delete) {
     btn_delete.forEach((element) => {
       element.addEventListener("click", () => {
-        alert_body.classList.toggle("show");
+        alert_body.classList.toggle("show-alert");
         const sub_id = element.getAttribute("data-id");
         id.value = sub_id;
       });
@@ -560,11 +567,11 @@ if (input_teacher) {
 if (alert_body) {
   alert_body.addEventListener("click", (event) => {
     if (
-      event.target.className == "alert-body show" &&
-      alert_body.classList.contains("show")
+      event.target.className == "alert-body show-alert" &&
+      alert_body.classList.contains("show-alert")
     ) {
       delete_data.removeAttribute("data-id");
-      alert_body.classList.remove("show");
+      alert_body.classList.remove("show-alert");
     }
   });
 }
@@ -573,7 +580,7 @@ if (alert_body) {
 if (cancel_delete) {
   cancel_delete.addEventListener("click", () => {
     delete_data.removeAttribute("data-id");
-    alert_body.classList.remove("show");
+    alert_body.classList.remove("show-alert");
   });
 }
 
@@ -621,6 +628,74 @@ if (btn_file) {
       };
 
       file_reader.readAsDataURL(user_pic);
+    }
+  });
+}
+
+//show edit personal form
+if (btn_editpersonal) {
+  btn_editpersonal.addEventListener("click", () => {
+    personal_form.classList.add("show");
+  });
+}
+
+//close edit form
+if (close_form) {
+  close_form.forEach((element) => {
+    element.addEventListener("click", () => {
+      if (personal_form.classList.contains("show")) {
+        personal_form.classList.remove("show");
+      } else if (account_form.classList.contains("show")) {
+        account_form.classList.remove("show");
+      } else if (password_form.classList.contains("show")) {
+        password_form.classList.remove("show");
+      }
+    });
+  });
+}
+
+//show edit acc form
+if (btn_editacc) {
+  btn_editacc.addEventListener("click", () => {
+    account_form.classList.add("show");
+  });
+}
+
+//show change password form
+if (btn_pass) {
+  btn_pass.addEventListener("click", () => {
+    password_form.classList.add("show");
+  });
+
+  password_form.addEventListener("submit", (e) => {
+    const newpass = document.querySelector("#new-pass");
+    const retype_pass = document.querySelector("#retype-pass");
+    const newpass_body = document.querySelector("#newpass-body");
+    const retype_body = document.querySelector("#retype-body");
+
+    if (newpass.value.trim() !== retype_pass.value.trim()) {
+      e.preventDefault();
+      RemoveParagraph(newpass_body);
+      RemoveParagraph(retype_body);
+      CreateParagraph("Password didnt match", newpass_body);
+      CreateParagraph("Password didnt match", retype_body);
+      return;
+    }
+
+    if (newpass.value.trim().length < 10) {
+      e.preventDefault();
+      RemoveParagraph(newpass_body);
+      CreateParagraph("Password must be 10 characters", newpass_body);
+    } else {
+      RemoveParagraph(newpass_body);
+    }
+
+    if (retype_pass.value.trim().length < 10) {
+      e.preventDefault();
+      RemoveParagraph(retype_body);
+      CreateParagraph("Password must be 10 characters", retype_body);
+    } else {
+      RemoveParagraph(retype_body);
     }
   });
 }

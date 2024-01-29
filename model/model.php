@@ -378,7 +378,7 @@ class Model
     //Select students based on the section
     public function GetStudents($num_perpage, $offset, $section, $glvl)
     {
-        $query = "SELECT student_id,f_name,l_name,student_id from students where section = ? and grade_level= ? 
+        $query = "SELECT student_id,f_name,l_name from students where section = ? and grade_level= ? 
         order by grade_level,l_name,f_name LIMIT $num_perpage OFFSET $offset";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ss", $section, $glvl);
@@ -433,11 +433,11 @@ class Model
     }
 
     //Delete Grade
-    public function Deletegrade($subject_id)
+    public function Deletegrade($grade_id)
     {
         $sql = "DELETE FROM grades where grade_id = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $subject_id);
+        $stmt->bind_param("i", $grade_id);
 
         try {
             if ($stmt->execute()) {
@@ -454,7 +454,7 @@ class Model
     public function AddTeacher($username, $email, $fname, $lname, $gender, $pic)
     {
 
-        $default_password = password_hash("12345", PASSWORD_BCRYPT);
+        $default_password = password_hash("12345", PASSWORD_DEFAULT);
         $sql = "INSERT INTO teachers(f_name, l_name, gender, profile_pic, username,email,`password`) 
         VALUES(?,?,?,?,?,?,?)";
         $stmt = $this->db->prepare($sql);
@@ -610,12 +610,146 @@ class Model
         WHEN 'Grade 10' THEN 4
         WHEN 'Grade 11' THEN 5
         WHEN 'Grade 12' THEN 6
-        ELSE 7
-    END;;";
+    END;";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
 
         return $result;
+    }
+
+    //change user profile
+    public function ChangeProfile($id, $usertype, $pic)
+    {
+        if ($usertype == "teachers") {
+            $sql = "UPDATE teachers SET profile_pic = ? where teacher_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("si", $pic, $id);
+        } else {
+            $sql = "UPDATE students SET profile_pic = ? where student_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("si", $pic, $id);
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("error");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "error") {
+                return 'fail';
+            }
+        }
+    }
+
+    //change user personal details
+    public function ChangePersonal($id, $usertype, $fname, $lname, $gender, $contact_number, $section, $grade_level)
+    {
+        if ($usertype == "teachers") {
+            $sql = "UPDATE teachers SET f_name = ?, l_name = ?,gender = ? where teacher_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("sssi", $fname, $lname, $gender, $id);
+        } else {
+            $sql = "UPDATE students SET f_name = ?, l_name = ?,gender = ?, contact_number = ?,
+            section = ?, grade_level = ? where student_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssssssi", $fname, $lname, $gender, $contact_number, $section, $grade_level, $id);
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("error");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "error") {
+                return 'fail';
+            }
+        }
+    }
+
+    //change user account details
+    public function ChangeAccount($id, $usertype, $username, $email)
+    {
+        if ($usertype == "teachers") {
+            $sql = "UPDATE teachers SET username = ?, email = ? where teacher_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssi", $username, $email, $id);
+        } else {
+            $sql = "UPDATE students SET username = ?, email = ? where student_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssi", $username, $email, $id);
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("error");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                return 'duplicate';
+            }
+            if ($e->getMessage() == "error") {
+                return 'fail';
+            }
+        }
+    }
+
+    //change user password
+    public function ChangePassword($id, $usertype, $password, $new_pass)
+    {
+
+        if ($usertype == "teachers") {
+
+            $stmt = $this->db->prepare("SELECT `password` from teachers where teacher_id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $pass = $result->fetch_assoc();
+            $curr_pass = $pass['password'];
+
+            if (password_verify($password, $curr_pass)) {
+                $new_pass = password_hash($new_pass, PASSWORD_DEFAULT);
+                $sql = "UPDATE teachers SET `password` = ? where teacher_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bind_param("si", $new_pass, $id);
+            } else {
+                return 'wrong';
+            }
+        } else {
+
+            $stmt = $this->db->prepare("SELECT `password` from students where student_id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $pass = $result->fetch_assoc();
+            $curr_pass = $pass['password'];
+
+            if (password_verify($password, $curr_pass)) {
+                $new_pass = password_hash($password, PASSWORD_DEFAULT);
+                $sql = "UPDATE students SET `password` = ? where student_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bind_param("si", $new_pass, $id);
+            } else {
+                return 'wrong';
+            }
+        }
+
+        try {
+            if ($stmt->execute()) {
+                return 'success';
+            } else {
+                throw new mysqli_sql_exception("error");
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getMessage() == "error") {
+                return 'fail';
+            }
+        }
     }
 }

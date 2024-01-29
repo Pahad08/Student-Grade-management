@@ -5,15 +5,15 @@ require_once $root . "controller" . DIRECTORY_SEPARATOR . "controller.php";
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
 
-    $addgrade = $controller->DeleteGrade($_POST['subject_id']);
+    $addgrade = $controller->DeleteGrade($_POST['grade_id']);
 
     $controller->CloseDB();
 
     if ($addgrade == 'success') {
-        header("location: ../view/edit_grade.php?student={$_POST['account_id']}");
+        header("location: ../view/edit_grade.php?student={$_POST['student_id']}");
         exit();
     } elseif ($addgrade == 'fail') {
-        header("location: ../view/edit_grade.php?student={$_POST['account_id']}");
+        header("location: ../view/edit_grade.php?student={$_POST['student_id']}");
         exit();
     }
 }
