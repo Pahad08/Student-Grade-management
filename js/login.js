@@ -73,10 +73,10 @@ if (show_password) {
     const password = document.querySelector("#password");
     if (password.type == "password") {
       password.type = "text";
-      show_password.src = "images/open-eye.png";
+      show_password.src = "../images/open-eye.png";
     } else {
       password.type = "password";
-      show_password.src = "images/close-eye.png";
+      show_password.src = "../images/close-eye.png";
     }
   });
 }

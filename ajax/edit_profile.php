@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
     $id = (isset($_POST['teacher_id'])) ? $_POST['teacher_id'] : $_POST['student_id'];
     $table = (isset($_POST['teacher_id'])) ? "teachers" : "students";
-    $column = (isset($_POST['teacher_id'])) ? $_POST['teacher_id'] : $_POST['student_id'];
+    $column = (isset($_POST['teacher_id'])) ? "teacher_id" : "student_id";
     $profile_pic = $controller->SelectProfilePic($id, $table, $column);
     $profile = $profile_pic->fetch_assoc();
     $user_profile = $profile['profile_pic'];

@@ -91,7 +91,7 @@ class controller
 
                 $user =  $this->model->SelectUser($usertype, $username);
                 $user_info = $user->fetch_assoc();
-                $user_id = ($user->num_rows > 0) ? $user_info['account_id'] : "";
+                $user_id = ($user->num_rows > 0) ? $user_info['student_id'] : "";
                 $username = ($user->num_rows > 0) ? $user_info['username'] : "";
                 $hashed_pass = ($user->num_rows > 0) ? $user_info['password'] : "";
 
@@ -547,7 +547,7 @@ class controller
         $change_profile = $this->model->ChangeProfile($id, $usertype, $path . $pic_name);
 
         if ($change_profile == "success" && move_uploaded_file($pic['tmp_name'], $path . $pic_name)) {
-            return  'success';
+            return 'success';
         } else {
             return 'fail';
         }

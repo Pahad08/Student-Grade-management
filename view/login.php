@@ -7,7 +7,7 @@ if (isset($_SESSION['admins_id'])) {
     header("location: admin.php");
 } elseif (isset($_SESSION['teachers_id'])) {
     header("location: teacher.php");
-} elseif (isset($_SESSION['student_id'])) {
+} elseif (isset($_SESSION['students_id'])) {
     header("location: student.php");
 }
 
@@ -35,42 +35,41 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/login.css">
-        <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <title>Login</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <title>Login</title>
+</head>
 
-    <body>
+<body>
 
-        <div class="loader-body">
-            <div id="loader"></div>
+    <div class="loader-body">
+        <div id="loader"></div>
+    </div>
+
+    <div class="login-container">
+
+        <div class="form-header">
+            <img src="../images/logo.png" alt="school">
+            <?php if (!isset($_GET['r'])) { ?>
+                <h1>School Management System</h1>
+            <?php } else { ?>
+                <p id="text-forgot">You forgot your password? Here you can <br> easily retrieve a new password.</p>
+            <?php } ?>
         </div>
 
-        <div class="login-container">
 
-            <div class="form-header">
-                <img src="../images/logo.png" alt="school">
-                <?php if (!isset($_GET['r'])) { ?>
-                <h1>School Management System</h1>
-                <?php } else { ?>
-                <p id="text-forgot">You forgot your password? Here you can <br> easily retrieve a new password.</p>
-                <?php } ?>
-            </div>
-
-
-            <?php if (!isset($_GET['r'])) { ?>
-            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="login-form" method="POST"
-                class="form">
+        <?php if (!isset($_GET['r'])) { ?>
+            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="login-form" method="POST" class="form">
 
                 <div class="input-body">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Enter Your Username">
                     <?php if (isset($mess_failed)) { ?>
-                    <p><?php echo $mess_failed; ?></p>
+                        <p><?php echo $mess_failed; ?></p>
                     <?php } ?>
                 </div>
 
@@ -79,7 +78,7 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" id="password" name="password" placeholder="Enter Your Password">
                     <img src="../images/close-eye.png" id="eye">
                     <?php if (isset($mess_failed)) { ?>
-                    <p><?php echo $mess_failed; ?></p>
+                        <p><?php echo $mess_failed; ?></p>
                     <?php unset($mess_failed);
                     } ?>
                 </div>
@@ -95,7 +94,7 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <button name="login" id="login-btn" value="login">Login</button>
             </form>
-            <?php } else { ?>
+        <?php } else { ?>
             <form id="email-form" method="POST" class="form">
 
                 <div class="input-body">
@@ -106,22 +105,22 @@ if (isset($_POST['login']) && $_SERVER["REQUEST_METHOD"] == "POST") {
                 <button name="submit" id="send-btn" value="submit">Submit</button>
             </form>
 
-            <?php } ?>
+        <?php } ?>
 
-            <hr>
+        <hr>
 
-            <?php if (!isset($_GET['r'])) { ?>
+        <?php if (!isset($_GET['r'])) { ?>
 
             <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?r=forgotpass")  ?>" id="forgot-pass">Forgot
                 Password</a>
-            <?php } else { ?>
+        <?php } else { ?>
             <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" id="forgot-pass">Login Here</a>
-            <?php } ?>
+        <?php } ?>
 
-        </div>
+    </div>
 
-    </body>
+</body>
 
-    <script src="../js/login.js"></script>
+<script src="../js/login.js"></script>
 
 </html>
