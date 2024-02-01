@@ -963,7 +963,7 @@ nav ul a:not(.active):hover,
 /* Medium devices (landscape tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {
   .sidebar {
-    left: -230px;
+    left: -240px;
     z-index: 1;
   }
 
@@ -996,7 +996,7 @@ nav ul a:not(.active):hover,
 /* Small devices (portrait tablets and large phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767px) {
   .sidebar {
-    left: -230px;
+    left: -240px;
     z-index: 0;
   }
   .body {
@@ -1038,7 +1038,7 @@ nav ul a:not(.active):hover,
 /* Extra small devices (phones, 575px and down) */
 @media (max-width: 575px) {
   .sidebar {
-    left: -230px;
+    left: -240px;
     z-index: 1;
   }
   .body {

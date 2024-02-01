@@ -414,6 +414,22 @@ class Model
         return $result;
     }
 
+    //get average
+    public function GetAverage($id)
+    {
+        $query = "SELECT AVG(grades.grade) as avg
+        from subjects
+        join grades on subjects.subject_id = grades.subject_id
+        where grades.student_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $get_Avg = $result->fetch_assoc();
+        $avg = $get_Avg['avg'];
+        return $avg;
+    }
+
     //Retrieve grades
     public function AddGrade($student_id, $grade, $subject_id)
     {

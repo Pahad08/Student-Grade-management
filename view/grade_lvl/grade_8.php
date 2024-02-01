@@ -3,7 +3,7 @@
 session_start();
 
 if (!isset($_SESSION['teachers_id'])) {
-    header("location: login.php");
+    header("location: ../login.php");
 } else {
     $root = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
     require_once $root . 'controller' . DIRECTORY_SEPARATOR . 'controller.php';
@@ -38,133 +38,126 @@ $controller->CloseDB();
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../../css/style.css">
-        <link rel="shortcut icon" href="../../images/logo.png" type="image/x-icon">
-        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-        <title>Grade 8</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="shortcut icon" href="../../images/logo.png" type="image/x-icon">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <title>Grade 8</title>
+</head>
 
-    <body>
+<body>
 
-        <div class="loader-body">
-            <div id="loader"></div>
+    <div class="loader-body">
+        <div id="loader"></div>
+    </div>
+
+    <div class="sidebar">
+
+        <div class="logo-header">
+            <img src="../../images/logo.png" alt="logo">
         </div>
 
-        <div class="sidebar">
+        <hr>
 
-            <div class="logo-header">
-                <img src="../../images/logo.png" alt="logo">
+        <div class="user-info">
+            <p>Teacher</p>
+        </div>
+
+        <hr>
+
+        <nav id="nav-bar" class="nav-bar">
+
+            <ul class="dashboard">
+                <li> <a href="../teacher.php">Account</a></li>
+            </ul>
+
+
+            <ul class="sections">
+                <li> <a href="../sections.php" class="active">Sections</a></li>
+            </ul>
+
+            <ul class="logout">
+                <li><a href="../logout.php">Logout</a></a></li>
+            </ul>
+
+        </nav>
+
+    </div>
+
+    <div class="body">
+
+        <div class="header">
+            <div class="menu-icon">
+                <img src="../../images/menu.png" alt="menu" id="menu-icon">
+            </div>
+        </div>
+
+        <div class="info">
+
+            <div class="text">
+                <h1><?php echo "Section " . $_GET['sec'] ?></h1>
             </div>
 
             <hr>
 
-            <div class="user-info">
-                <p>Teacher</p>
-            </div>
+            <div class="main-body">
 
-            <hr>
+                <div class="table-container">
 
-            <nav id="nav-bar" class="nav-bar">
+                    <div class="table-body" style="padding: 4px;">
 
-                <ul class="dashboard">
-                    <li> <a href="../teacher.php">Account</a></li>
-                </ul>
+                        <table id="table">
 
+                            <tr class="row">
+                                <th class="table-head">First Name</th>
+                                <th class="table-head">Last Name</th>
+                                <th class="table-head">Grades</th>
+                            </tr>
 
-                <ul class="sections">
-                    <li> <a href="../sections.php" class="active">Sections</a></li>
-                </ul>
-
-                <ul class="logout">
-                    <li><a href="../logout.php">Logout</a></a></li>
-                </ul>
-
-            </nav>
-
-        </div>
-
-        <div class="body">
-
-            <div class="header">
-                <div class="menu-icon">
-                    <img src="../../images/menu.png" alt="menu" id="menu-icon">
-                </div>
-            </div>
-
-            <div class="info">
-
-                <div class="text">
-                    <h1><?php echo "Section " . $_GET['sec'] ?></h1>
-                </div>
-
-                <hr>
-
-                <div class="main-body">
-
-                    <div class="table-container">
-
-                        <div class="table-body" style="padding: 4px;">
-
-                            <table id="table">
-
-                                <tr class="row">
-                                    <th class="table-head">First Name</th>
-                                    <th class="table-head">Last Name</th>
-                                    <th class="table-head">Grades</th>
-                                </tr>
-
-                                <?php while ($students = $get_students->fetch_assoc()) { ?>
+                            <?php while ($students = $get_students->fetch_assoc()) { ?>
                                 <tr class="row">
 
                                     <td class="data"><?php echo $students['f_name'] ?></td>
                                     <td class="data"><?php echo $students['l_name']  ?></td>
                                     <td class="data action">
-                                        <a class="view"
-                                            href="../edit_grade.php?student=<?php echo $students['student_id'] ?>">
+                                        <a class="view" href="../edit_grade.php?student=<?php echo $students['student_id'] ?>">
                                             <img src="../../images/open-eye.png" alt="">
                                         </a>
 
                                     </td>
 
                                 </tr>
+                            <?php } ?>
+
+                        </table>
+
+
+                        <div class="pagination">
+
+                            <div class="pagination-info">
+                                <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
+                            </div>
+
+                            <ul class="pagination-body">
+                                <li id="previous"><a <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}&sec=A") ?>>Previous</a>
+                                </li>
+
+                                <li class="active-page">
+                                    <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}&sec=A"  ?>"><?php echo $min ?></a>
+                                </li>
+
+                                <?php if ($page_num != $total_pages && $total_pages != 0) { ?>
+                                    <li class="next-page">
+                                        <a href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}&sec=A" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
+                                    </li>
                                 <?php } ?>
 
-                            </table>
-
-
-                            <div class="pagination">
-
-                                <div class="pagination-info">
-                                    <p>Showing <?php echo $page_num . " to " . $total_pages ?></p>
-                                </div>
-
-                                <ul class="pagination-body">
-                                    <li id="previous"><a
-                                            <?php echo ($page_num == 1) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$prev_page}&sec=A") ?>>Previous</a>
-                                    </li>
-
-                                    <li class="active-page">
-                                        <a
-                                            href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$min}&sec=A"  ?>"><?php echo $min ?></a>
-                                    </li>
-
-                                    <?php if ($page_num != $total_pages) { ?>
-                                    <li class="next-page">
-                                        <a
-                                            href="<?php echo (Checkpage($total_pages, $page_num)) ? "" : htmlspecialchars($_SERVER['PHP_SELF']) . "?page_num={$max}&sec=A" ?>"><?php echo (Checkpage($total_pages, $page_num)) ? "" : $max ?></a>
-                                    </li>
-                                    <?php } ?>
-
-                                    <li id="next">
-                                        <a
-                                            <?php echo ($page_num == $total_pages) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}&sec=A"); ?>>Next</a>
-                                    </li>
-                                </ul>
-
-                            </div>
+                                <li id="next">
+                                    <a <?php echo ($page_num == $total_pages || $total_pages == 0) ? "" : "href=" . htmlspecialchars($_SERVER['PHP_SELF'] . "?page_num={$next_page}&sec=A"); ?>>Next</a>
+                                </li>
+                            </ul>
 
                         </div>
 
@@ -172,14 +165,16 @@ $controller->CloseDB();
 
                 </div>
 
-
             </div>
+
 
         </div>
 
-    </body>
+    </div>
 
-    <script src="../../js/admin.js"></script>
-    <script src="../../js/nav.js"></script>
+</body>
+
+<script src="../../js/admin.js"></script>
+<script src="../../js/nav.js"></script>
 
 </html>

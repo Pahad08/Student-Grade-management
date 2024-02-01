@@ -92,8 +92,7 @@ $student = $student_info->fetch_assoc();
 
                         <div class="profile-container">
                             <img src="<?php echo $student['profile_pic'] ?>" class="user-profile">
-                            <form action="../ajax/edit_profile.php" method="post" enctype="multipart/form-data"
-                                class="form-img">
+                            <form action="../ajax/edit_profile.php" method="post" enctype="multipart/form-data" class="form-img">
                                 <input type="text" value="students" name="students" hidden>
                                 <input type="number" value="<?php echo $acc_id ?>" name="student_id" hidden>
                                 <input type="file" name="image" id="image" accept="image/*" required>
@@ -202,8 +201,7 @@ $student = $student_info->fetch_assoc();
                         <label for="contact_num">
                             <h4>Contact Number</h4>
                         </label>
-                        <input type="number" name="contact_num" id="contact_num"
-                            value="<?php echo $student['contact_number']   ?>" required>
+                        <input type="number" name="contact_num" id="contact_num" value="<?php echo $student['contact_number']   ?>" required>
                     </div>
 
                     <div class="input-containers" id="lname-containers">
@@ -246,8 +244,7 @@ $student = $student_info->fetch_assoc();
                         <label for="username">
                             <h4>Username</h4>
                         </label>
-                        <input type="text" name="username" id="username" value="<?php echo $student['username'] ?>"
-                            required>
+                        <input type="text" name="username" id="username" value="<?php echo $student['username'] ?>" required>
                     </div>
 
                     <div class="input-containers" id="email-body">
@@ -321,17 +318,17 @@ $student = $student_info->fetch_assoc();
 <script src="../js/index.js"></script>
 <script src="../js/nav.js"></script>
 <script>
-const form_img = document.querySelector(".form-img");
-const user_profile = document.querySelector(".user-profile");
-const default_img =
-    <?php header('Content-Type: text/html; charset=iso-8859-15');
+    const form_img = document.querySelector(".form-img");
+    const user_profile = document.querySelector(".user-profile");
+    const default_img =
+        <?php header('Content-Type: text/html; charset=iso-8859-15');
         echo '"' . $teacher['profile_pic'] . '"' ?>;
-const dot = default_img.substring(0, 2) + '\\';
-const folder = default_img.substring(2, 14) + '\\';
-const file_name = default_img.substring(14);
-form_img.addEventListener("reset", () => {
-    user_profile.src = `${dot}${folder}${file_name}`;
-})
+    const dot = default_img.substring(0, 2) + '\\';
+    const folder = default_img.substring(2, 14) + '\\';
+    const file_name = default_img.substring(14);
+    form_img.addEventListener("reset", () => {
+        user_profile.src = `${dot}${folder}${file_name}`;
+    })
 </script>
 
 </html>

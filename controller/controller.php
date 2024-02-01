@@ -393,6 +393,12 @@ class controller
         return $this->model->GetGrades($id);
     }
 
+    //Get Average
+    public function GetAverage(int $id): float
+    {
+        return (float)$this->model->GetAverage($id);
+    }
+
     //Add grades
     public function AddGrade(int $student_id, int $grade, int $subject_id): string
     {
