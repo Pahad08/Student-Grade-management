@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2024 at 10:58 AM
+-- Generation Time: Feb 01, 2024 at 04:32 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,7 +41,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`admin_id`, `f_name`, `l_name`, `username`, `password`, `email`) VALUES
-(2, 'Fahad', 'Bagundang', 'admin', '$2y$10$wGqLNdka1zzkyBu8jbC0Y.woBClr6KsDZWQwn/QtQ6oWzEanXWlXq', 'mastahpahad@gmail.com');
+(2, 'admin', 'admin', 'admin', '$2y$10$aCxDnAO/RZuJzlDcPNHvh.g7/VNoYPv3OxrawYgqP67cgZplWVuNG', 'mastahpahad@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -89,16 +89,6 @@ CREATE TABLE `subjects` (
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `subjects`
---
-
-INSERT INTO `subjects` (`subject_id`, `code`, `subject`, `description`) VALUES
-(69, 'TLE', 'Technology and Livelihood Education', 'One of the learning areas of the Secondary Education Curriculum used in Philippine secondary schools.'),
-(71, 'AP', 'Araling Panlipunan', 'Sample'),
-(72, 'ENG', 'English', 'English'),
-(73, 'FIL', 'Filipino', 'Filipino');
-
 -- --------------------------------------------------------
 
 --
@@ -115,13 +105,6 @@ CREATE TABLE `teachers` (
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `teachers`
---
-
-INSERT INTO `teachers` (`teacher_id`, `f_name`, `l_name`, `gender`, `profile_pic`, `username`, `password`, `email`) VALUES
-(9, 'Sweet', 'Lamanero', 'F', '..\\profile_pics\\20220225_193728.jpg', 'sweetyy', '$2y$10$KicywE4cQ2fdRyWlv29PK.sKIWRkEzlKIGot/EYte/VG3Lu1T0VnK', 'sweetlamanero21@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -196,13 +179,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `grade_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `grade_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `subjects`
@@ -214,13 +197,13 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `token`
 --
 ALTER TABLE `token`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
