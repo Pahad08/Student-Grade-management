@@ -13,15 +13,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller->CloseDB();
     if ($edit_pass == 'success') {
         $_SESSION['message'] = "Successfully Changed!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
         exit();
     } elseif ($edit_pass == 'wrong') {
         $_SESSION['message'] = "Wrong Password!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
         exit();
     } else {
-        $_SESSION['message'] = "Error in editing personal information!";
-        header('location: ../view/teacher.php');
+        $_SESSION['message'] = "Error in editing password!";
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
         exit();
     }
 }

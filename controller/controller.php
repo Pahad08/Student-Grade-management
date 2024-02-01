@@ -560,11 +560,9 @@ class controller
         string $fname,
         string $lname,
         string $gender,
-        string $contact_number = "",
-        string $section = "",
-        string $grade_level = ""
+        string $contact_number = ""
     ): string {
-        $change_personal = $this->model->ChangePersonal($id, $usertype, $fname, $lname, $gender, $contact_number, $section, $grade_level);
+        $change_personal = $this->model->ChangePersonal($id, $usertype, $fname, $lname, $gender, $contact_number);
 
         if ($change_personal == "success") {
             return  'success';

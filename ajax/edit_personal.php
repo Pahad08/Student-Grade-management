@@ -8,16 +8,30 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller = new controller("localhost", "root", "", "school");
     $id = (isset($_POST['teacher_id'])) ? $_POST['teacher_id'] : $_POST['student_id'];
     $usertype = (isset($_POST['teacher_id'])) ? "teachers" : "students";
+    if (isset($_POST['teacher_id'])) {
+        $edit_personal = $controller->ChangePersonal($id, $usertype, $_POST['fname'], $_POST['lname'], $_POST['gender']);
+    } else {
+        $edit_personal = $controller->ChangePersonal($id, $usertype, $_POST['fname'], $_POST['lname'], $_POST['gender'], $_POST['contact_num']);
+    }
 
-    $edit_personal = $controller->ChangePersonal($id, $usertype, $_POST['fname'], $_POST['lname'], $_POST['gender']);
     $controller->CloseDB();
     if ($edit_personal == 'success') {
+
         $_SESSION['message'] = "Successfully Changed!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
+
         exit();
     } else {
         $_SESSION['message'] = "Error in editing personal information!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
         exit();
     }
 }

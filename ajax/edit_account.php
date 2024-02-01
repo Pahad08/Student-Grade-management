@@ -13,15 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $controller->CloseDB();
     if ($edit_account == 'success') {
         $_SESSION['message'] = "Successfully Changed!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
         exit();
     } elseif ($edit_account == 'duplicate') {
         $_SESSION['message'] = "Email already taken!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
+
         exit();
     } else {
         $_SESSION['message'] = "Error in editing personal information!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
+
         exit();
     }
 }

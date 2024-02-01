@@ -645,17 +645,16 @@ class Model
     }
 
     //change user personal details
-    public function ChangePersonal($id, $usertype, $fname, $lname, $gender, $contact_number, $section, $grade_level)
+    public function ChangePersonal($id, $usertype, $fname, $lname, $gender, $contact_number)
     {
         if ($usertype == "teachers") {
             $sql = "UPDATE teachers SET f_name = ?, l_name = ?,gender = ? where teacher_id = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("sssi", $fname, $lname, $gender, $id);
         } else {
-            $sql = "UPDATE students SET f_name = ?, l_name = ?,gender = ?, contact_number = ?,
-            section = ?, grade_level = ? where student_id = ?";
+            $sql = "UPDATE students SET f_name = ?, l_name = ?,gender = ?, contact_number = ? where student_id = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("ssssssi", $fname, $lname, $gender, $contact_number, $section, $grade_level, $id);
+            $stmt->bind_param("ssssi", $fname, $lname, $gender, $contact_number, $id);
         }
 
         try {
@@ -731,7 +730,7 @@ class Model
             $curr_pass = $pass['password'];
 
             if (password_verify($password, $curr_pass)) {
-                $new_pass = password_hash($password, PASSWORD_DEFAULT);
+                $new_pass = password_hash($new_pass, PASSWORD_DEFAULT);
                 $sql = "UPDATE students SET `password` = ? where student_id = ?";
                 $stmt = $this->db->prepare($sql);
                 $stmt->bind_param("si", $new_pass, $id);

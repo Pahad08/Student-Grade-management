@@ -12,17 +12,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $profile_pic = $controller->SelectProfilePic($id, $table, $column);
     $profile = $profile_pic->fetch_assoc();
     $user_profile = $profile['profile_pic'];
-
     $edit_profile = $controller->ChangeProfile($id, $table, $_FILES['image']);
     $controller->CloseDB();
     if ($edit_profile == 'success') {
-        unlink($user_profile);
+        if ($user_profile !== "..\\profile_pics\\user.png") {
+            unlink($user_profile);
+        }
         $_SESSION['message'] = "Successfully Changed!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
+
         exit();
     } else {
         $_SESSION['message'] = "Error in editing profile!";
-        header('location: ../view/teacher.php');
+        if (isset($_POST['teacher_id'])) {
+            header('location: ../view/teacher.php');
+        } else {
+            header('location: ../view/student.php');
+        }
         exit();
     }
 }
